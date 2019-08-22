@@ -1,0 +1,30 @@
+apiVersion: xl-deploy/v1
+kind: Applications
+spec:
+- name: .NET
+  type: core.Directory
+  children:
+  - name: core-backend
+    type: udm.Application
+    children:
+    - name: '1.0.0'
+      type: udm.DeploymentPackage
+      deployables:
+      - name: back
+        type: file.File
+        targetPath: C:\CORE_APP\BACK
+        createTargetPath: True
+        targetFileName: backend.exe
+        file: !file "../bin/backend.exe"
+  - name: core-frontend
+    type: udm.Application
+    children:
+    - name: '1.0.0'
+      type: udm.DeploymentPackage
+      deployables:
+      - name: front
+        type: file.File
+        targetPath: C:\CORE_APP\FRONT
+        createTargetPath: True
+        file: !file "../bin/frontend.exe"
+        targetFileName: frontend.exe
