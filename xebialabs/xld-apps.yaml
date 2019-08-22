@@ -7,7 +7,7 @@ spec:
   - name: core-backend
     type: udm.Application
     children:
-    - name: '1.0.0'
+    - name: '1.0.1'
       type: udm.DeploymentPackage
       deployables:
       - name: back
@@ -16,6 +16,19 @@ spec:
         createTargetPath: True
         targetFileName: backend.exe
         file: !file "../bin/backend.exe"
+      - name: backend-service
+        type: windows.ServiceSpec
+        serviceName: BackendService
+        serviceDisplayName: Core Backend Service
+        serviceDescription: The core backend service
+        binaryPathName: C:\CORE_APP\BACK\backend.exe
+        startupType: Automatic
+        startTimeout: "30"
+        stopTimeout: "30"
+      - name: test backend service
+        type: smoketest.HttpRequestTest
+        url: http://192.168.1.76:8000/
+        expectedResponseText: Successful Requests
   - name: core-frontend
     type: udm.Application
     children:
