@@ -21,4 +21,5 @@ spec:
         listen.port: "8080"
         suffix: dev
         TITLE: Dogs and Cats
+        alternate.color: blue
 

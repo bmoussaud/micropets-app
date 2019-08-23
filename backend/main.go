@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/kardianos/service"
+	"github.com/magiconair/properties"
 	"io"
 	"log"
 	"net/http"
@@ -22,7 +23,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	msg := fmt.Sprintf("* Host: %s\n* Successful Requests: %d\n* %s \n", host, count, GetLocation("config.properties"))
+	msg := fmt.Sprintf("**** Host: %s\n* Successful Requests: %d\n* %s \n", host, count, GetLocation("config.properties"))
 	count += 1
 
 	io.WriteString(w, msg)
@@ -51,10 +52,11 @@ func (p *program) run() {
 
 	configLocation := GetLocation("config.properties")
 	fmt.Printf("******* %s\n", configLocation)
+	properties := properties.MustLoadFile(configLocation, properties.UTF8)
+	port := properties.GetString("listen.port", "8001")
 	http.HandleFunc("/", index)
-	port := ":8000"
 	fmt.Printf("******* Starting to service on port %s\n", port)
-	http.ListenAndServe(port, nil)
+	log.Fatal(http.ListenAndServe(port, nil))
 	// Do work here
 }
 func (p *program) Stop(s service.Service) error {

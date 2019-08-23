@@ -7,37 +7,42 @@ spec:
   - name: core-backend
     type: udm.Application
     children:
-    - name: '1.0.1'
+    - name: '1.0.4'
       type: udm.DeploymentPackage
       deployables:
       - name: back
-        type: file.File
+        type: file.Folder
         targetPath: C:\CORE_APP\BACK
         createTargetPath: True
-        targetFileName: backend.exe
-        file: !file "../bin/backend.exe"
+        file: !file "../bin/backend"
       - name: backend-service
         type: windows.ServiceSpec
         serviceName: BackendService
         serviceDisplayName: Core Backend Service
         serviceDescription: The core backend service
         binaryPathName: C:\CORE_APP\BACK\backend.exe
-        startupType: Automatic
-        startTimeout: "30"
-        stopTimeout: "30"
       - name: test backend service
         type: smoketest.HttpRequestTest
-        url: http://192.168.1.76:8000/
+        url: http://192.168.1.76:8002/
         expectedResponseText: Successful Requests
   - name: core-frontend
     type: udm.Application
     children:
-    - name: '1.0.0'
+    - name: '1.0.2'
       type: udm.DeploymentPackage
       deployables:
       - name: front
-        type: file.File
+        type: file.Folder
         targetPath: C:\CORE_APP\FRONT
         createTargetPath: True
-        file: !file "../bin/frontend.exe"
-        targetFileName: frontend.exe
+        file: !file "../bin/frontend"
+      - name: frontend-service
+        type: windows.ServiceSpec
+        serviceName: FrontendService
+        serviceDisplayName: Core Frontend Service
+        serviceDescription: The core backend service
+        binaryPathName: C:\CORE_APP\FRONT\frontend.exe
+      - name: test frontend service
+        type: smoketest.HttpRequestTest
+        url: http://192.168.1.76:8010/
+        expectedResponseText: Successful Requests
