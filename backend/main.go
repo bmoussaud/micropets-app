@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 )
 
 var count = 1
@@ -21,7 +22,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	msg := fmt.Sprintf("* Host: %s\n* Successful Requests: %d", host, count)
+	msg := fmt.Sprintf("* Host: %s\n* Successful Requests: %d\n* %s \n", host, count, GetLocation("config.properties"))
 	count += 1
 
 	io.WriteString(w, msg)
@@ -36,7 +37,20 @@ func (p *program) Start(s service.Service) error {
 	go p.run()
 	return nil
 }
+
+func GetLocation(file string) string {
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	exPath := filepath.Dir(ex)
+	return filepath.Join(exPath, file)
+}
+
 func (p *program) run() {
+
+	configLocation := GetLocation("config.properties")
+	fmt.Printf("******* %s\n", configLocation)
 	http.HandleFunc("/", index)
 	port := ":8000"
 	fmt.Printf("******* Starting to service on port %s\n", port)
@@ -49,7 +63,7 @@ func (p *program) Stop(s service.Service) error {
 }
 
 func main() {
-	fmt.Printf("******* Backend Service")
+	fmt.Printf("******* Backend Service 1.0.4 \n")
 	svcConfig := &service.Config{
 		Name:        "BackendService",
 		DisplayName: "Core Backend Service",
