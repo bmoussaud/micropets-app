@@ -55,10 +55,10 @@ func (p *program) run() {
 	properties := properties.MustLoadFile(configLocation, properties.UTF8)
 	port := properties.GetString("listen.port", "8001")
 	http.HandleFunc("/", index)
-	fmt.Printf("******* Starting to service on port %s\n", port)
+	fmt.Printf("******* Starting to backend service on port %s\n", port)
 	log.Fatal(http.ListenAndServe(port, nil))
-	// Do work here
 }
+
 func (p *program) Stop(s service.Service) error {
 	// Stop should not block. Return with a few seconds.
 	return nil

@@ -28,7 +28,7 @@ spec:
   - name: core-frontend
     type: udm.Application
     children:
-    - name: '1.0.2'
+    - name: '1.0.4'
       type: udm.DeploymentPackage
       deployables:
       - name: front
@@ -44,5 +44,5 @@ spec:
         binaryPathName: C:\CORE_APP\FRONT\frontend.exe
       - name: test frontend service
         type: smoketest.HttpRequestTest
-        url: http://192.168.1.76:8010/
+        url: http://192.168.1.76:8003/
         expectedResponseText: Successful Requests
