@@ -1,0 +1,58 @@
+apiVersion: xl-deploy/v1
+kind: Applications
+spec:
+- name: .NET
+  type: core.Directory
+  children:
+  - name: services
+    type: core.Directory
+    children:
+    - name: dogs
+      type: udm.Application
+      children:
+      - name: '1.0.4'
+        type: udm.DeploymentPackage
+        deployables:
+        - name: dog
+          type: file.Folder
+          targetPath: C:\SERVICES\DOGS
+          createTargetPath: True
+          file: !file "."
+        - name: dog-service
+          type: windows.ServiceSpec
+          serviceName: dogService
+          serviceDisplayName: Core dog Service
+          serviceDescription: The core dog service
+          binaryPathName: C:\SERVICES\DOGS\dog.exe
+        - name: test dog service
+          type: smoketest.HttpRequestTest
+          url: http://{{REMOTE_IP}}:8005/
+          expectedResponseText: Total
+---
+apiVersion: xl-deploy/v1
+kind: Environments
+spec:
+- name: Dev
+  type: core.Directory
+  children:
+  - name: micropet.dev
+    type: udm.Environment
+    members:
+    - Infrastructure/Windows/win2012r2-dev/testrunner
+    - Infrastructure/Windows/win2012r2-dev
+    - Infrastructure/Windows/win2012r2-dev/sql.server
+    dictionaries:
+    - Environments/Dev/Dict/Dict-core-dev
+  - directory: Dict
+    children:
+    - name: Dict-core-dev
+      type: udm.Dictionary
+      entries:
+        TIMEOUT: "1000"
+        listen.port: "8080"
+        suffix: dev
+        TITLE: Dogs and dogs
+        alternate.color: blue
+        REMOTE_IP: 172.20.10.13
+
+
