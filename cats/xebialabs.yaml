@@ -1,0 +1,58 @@
+apiVersion: xl-deploy/v1
+kind: Applications
+spec:
+- name: .NET
+  type: core.Directory
+  children:
+  - name: services
+    type: core.Directory
+    children:
+    - name: cats
+      type: udm.Application
+      children:
+      - name: '1.0.4'
+        type: udm.DeploymentPackage
+        deployables:
+        - name: cat
+          type: file.Folder
+          targetPath: C:\SERVICES\CATS
+          createTargetPath: True
+          file: !file "."
+        - name: cat-service
+          type: windows.ServiceSpec
+          serviceName: catService
+          serviceDisplayName: Core cat Service
+          serviceDescription: The core cat service
+          binaryPathName: C:\SERVICES\CATS\cat.exe
+        - name: test cat service
+          type: smoketest.HttpRequestTest
+          url: http://{{REMOTE_IP}}:8004/
+          expectedResponseText: Total
+---
+apiVersion: xl-deploy/v1
+kind: Environments
+spec:
+- name: Dev
+  type: core.Directory
+  children:
+  - name: micropet.dev
+    type: udm.Environment
+    members:
+    - Infrastructure/Windows/win2012r2-dev/testrunner
+    - Infrastructure/Windows/win2012r2-dev
+    - Infrastructure/Windows/win2012r2-dev/sql.server
+    dictionaries:
+    - Environments/Dev/Dict/Dict-core-dev
+  - directory: Dict
+    children:
+    - name: Dict-core-dev
+      type: udm.Dictionary
+      entries:
+        TIMEOUT: "1000"
+        listen.port: "8080"
+        suffix: dev
+        TITLE: Dogs and Cats
+        alternate.color: blue
+        REMOTE_IP: 172.20.10.13
+
+
