@@ -22,10 +22,17 @@ type Cat struct {
 
 type Cats struct {
 	Total int
-	Cats  []Cat
+	Cats  []Cat `json:"Pets"`
+}
+
+func setupResponse(w *http.ResponseWriter, req *http.Request) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
+	setupResponse(&w, r)
 	fmt.Printf("Handling %+v\n", r)
 	cat1 := Cat{"Orphee", "Persan", 12, "https://www.pets4homes.co.uk/images/breeds/21/db349a9afb9b6973fa3b40f684a37bb9.jpg"}
 	cat2 := Cat{"Pirouette", "Bengal", 1, "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/934px-Paintedcats_Red_Star_standing.jpg"}
@@ -67,7 +74,7 @@ func (p *program) run() {
 	configLocation := GetLocation("config.properties")
 	fmt.Printf("******* %s\n", configLocation)
 	properties, err := properties.LoadFile(configLocation, properties.UTF8)
-	var port = ":7000"
+	var port = ":7002"
 	if err != nil {
 		fmt.Printf("config file not found, use default values\n")
 	} else {

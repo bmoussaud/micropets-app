@@ -1,0 +1,8 @@
+{
+  "port":":7001",
+  "backends": [
+    {"type":"cats","url":"http://localhost:7002"},
+    {"type":"dogs","url":"http://localhost:7003"}
+
+  ]
+}

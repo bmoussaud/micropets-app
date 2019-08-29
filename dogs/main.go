@@ -22,16 +22,23 @@ type Dog struct {
 
 type Dogs struct {
 	Total int
-	Dogs  []Dog
+	Dogs  []Dog `json:"Pets"`
+}
+
+func setupResponse(w *http.ResponseWriter, req *http.Request) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
+	setupResponse(&w, r)
 	fmt.Printf("Handling %+v\n", r)
 	pet1 := Dog{"Medor", "BullDog", 18, "https://www.petmd.com/sites/default/files/10New_Bulldog_0.jpeg"}
 	pet2 := Dog{"Bil", "Bull Terrier", 12, "https://www.petmd.com/sites/default/files/07New_Collie.jpeg"}
 	pet3 := Dog{"Rantaplan", "Labrador Retriever", 24, "https://www.petmd.com/sites/default/files/01New_GoldenRetriever.jpeg"}
 	pet4 := Dog{"Lassie", "Golden Retriever", 20, "https://www.petmd.com/sites/default/files/11New_MixedBreed.jpeg"}
-	pets := Dogs{3, []Dog{pet1, pet2, pet3, pet4}}
+	pets := Dogs{4, []Dog{pet1, pet2, pet3, pet4}}
 
 	js, err := json.Marshal(pets)
 	if err != nil {
@@ -68,7 +75,7 @@ func (p *program) run() {
 	configLocation := GetLocation("config.properties")
 	fmt.Printf("******* %s\n", configLocation)
 	properties, err := properties.LoadFile(configLocation, properties.UTF8)
-	var port = ":7000"
+	var port = ":7003"
 	if err != nil {
 		fmt.Printf("config file not found, use default values\n")
 	} else {
