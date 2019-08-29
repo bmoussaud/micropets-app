@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { map } from 'rxjs/operators'
 import { MatTableDataSource} from '@angular/material';
+import { ConfigAssetLoaderService} from '../config-asset-loader.service';
+
 
 @Component({
   selector: 'app-pets',
@@ -15,9 +17,15 @@ export class PetsComponent implements OnInit {
   public pets: any[] = []
   public dataSource: MatTableDataSource<any>;
 
+  private config: Configuration
+
   displayedColumns = ['name','kind','age','pic']
 
-  constructor(private http: HttpClient, private router: Router, private location: Location) {
+  constructor(private http: HttpClient, private router: Router, private location: Location, private configService: ConfigAssetLoaderService) {
+    this.configService.loadConfigurations().subscribe(data =>   this.config = {
+      petServiceUrl: (data as any).petServiceUrl,
+      stage:  (data as any).stage,
+    });
   }
 
   ngOnInit() {
@@ -28,7 +36,7 @@ export class PetsComponent implements OnInit {
   }
 
   private refresh() {
-    this.http.get("http://localhost:7001")
+    this.http.get(this.config.petServiceUrl)
       .pipe(map(result => result['Pets']))
       .subscribe(result => {
         this.pets = result;

@@ -1,0 +1,4 @@
+{
+  "petServiceUrl":"http://192.168.130.142:8001",
+  "stage": "dev"
+}
