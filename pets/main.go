@@ -38,6 +38,8 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
+var configLocation string = "config.json"
+
 func queryPets(backend string) Pets {
 	var pets Pets
 	var emptyPets Pets
@@ -70,7 +72,6 @@ func queryPets(backend string) Pets {
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	configLocation := "/Users/bmoussaud/Workspace/bmoussaud/go-windows-services/pets/config.json"
 	setupResponse(&w, r)
 	fmt.Printf("Handling %+v\n", r)
 	config := LoadConfiguration(configLocation)
@@ -117,8 +118,15 @@ func GetLocation(file string) string {
 }
 
 func LoadConfiguration(file string) Config {
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	exPath := filepath.Dir(ex)
+	fullPath := filepath.Join(exPath, file)
+
 	var config Config
-	configFile, err := os.Open(file)
+	configFile, err := os.Open(fullPath)
 	defer configFile.Close()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -130,7 +138,6 @@ func LoadConfiguration(file string) Config {
 
 func (p *program) run() {
 
-	configLocation := "/Users/bmoussaud/Workspace/bmoussaud/go-windows-services/pets/config.json"
 	fmt.Printf("******* %s\n", configLocation)
 	config := LoadConfiguration(configLocation)
 	port := config.ListenPort

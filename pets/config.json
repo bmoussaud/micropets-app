@@ -1,8 +1,7 @@
 {
-  "port":":7001",
+  "port":":{{pets.listen.port}}",
   "backends": [
-    {"type":"cats","url":"http://localhost:7002"},
-    {"type":"dogs","url":"http://localhost:7003"}
-
+    {"type":"cats","url":"http://localhost:{{cats.listen.port}}"},
+    {"type":"dogs","url":"http://localhost:{{dogs.listen.port}}"}
   ]
 }

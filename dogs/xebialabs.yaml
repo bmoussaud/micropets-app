@@ -21,12 +21,12 @@ spec:
         - name: dog-service
           type: windows.ServiceSpec
           serviceName: dogService
-          serviceDisplayName: Core dog Service
+          serviceDisplayName: MicroPet Dog Service
           serviceDescription: The core dog service
           binaryPathName: C:\SERVICES\DOGS\dog.exe
         - name: test dog service
           type: smoketest.HttpRequestTest
-          url: http://{{REMOTE_IP}}:8005/
+          url: http://{{remote.ip}}:{{dogs.listen.port}}
           expectedResponseText: Total
 ---
 apiVersion: xl-deploy/v1
@@ -48,11 +48,7 @@ spec:
     - name: Dict-core-dev
       type: udm.Dictionary
       entries:
-        TIMEOUT: "1000"
-        listen.port: "8080"
-        suffix: dev
-        TITLE: Dogs and dogs
-        alternate.color: blue
-        REMOTE_IP: 172.20.10.13
+        dogs.listen.port: 8003
+        remote.ip: 192.168.130.142
 
 

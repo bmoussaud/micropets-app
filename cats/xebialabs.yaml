@@ -21,12 +21,12 @@ spec:
         - name: cat-service
           type: windows.ServiceSpec
           serviceName: catService
-          serviceDisplayName: Core cat Service
+          serviceDisplayName: MicroPet Cat Service
           serviceDescription: The core cat service
           binaryPathName: C:\SERVICES\CATS\cat.exe
         - name: test cat service
           type: smoketest.HttpRequestTest
-          url: http://{{REMOTE_IP}}:8004/
+          url: http://{{remote.ip}}:{{cats.listen.port}}
           expectedResponseText: Total
 ---
 apiVersion: xl-deploy/v1
@@ -48,11 +48,8 @@ spec:
     - name: Dict-core-dev
       type: udm.Dictionary
       entries:
-        TIMEOUT: "1000"
-        listen.port: "8080"
-        suffix: dev
-        TITLE: Dogs and Cats
-        alternate.color: blue
-        REMOTE_IP: 172.20.10.13
+        cats.listen.port: 8002
+        remote.ip: 192.168.130.142
+
 
 
