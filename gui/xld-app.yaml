@@ -1,0 +1,37 @@
+apiVersion: xl-deploy/v1
+kind: Applications
+spec:
+- name: .NET
+  type: core.Directory
+  children:
+  - name: services
+    type: core.Directory
+    children:
+    - name: gui
+      type: udm.Application
+      children:
+      - name: '1.0.4'
+        type: udm.DeploymentPackage
+        deployables:
+        - name: content
+          type: iis.WebContent
+          targetPath: C:\SERVICES\GUI
+          file: !file "dist/gui"
+        - name: MicroPet-applicationPool
+          type: iis.ApplicationPoolSpec
+          applicationPoolName: MicroPet-applicationPool-{{env}}
+          managedRuntimeVersion: v4.0
+        - name: MicroPet WebSite
+          type: iis.WebsiteSpec
+          websiteName: MicroPet-{{env}}
+          physicalPath: C:\SERVICES\GUI
+          applicationPoolName: MicroPet-applicationPool-{{env}}
+          bindings:
+          - name: Bindings-{{gui.listen.port}}
+            type: iis.WebsiteBindingSpec
+            port: '{{gui.listen.port}}'
+        - name: test gui service
+          type: smoketest.HttpRequestTest
+          url: http://{{remote.ip}}:{{gui.listen.port}}
+          expectedResponseText: Gui
+

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { map } from 'rxjs/operators'
 import { MatTableDataSource} from '@angular/material';
-import { ConfigAssetLoaderService} from '../config-asset-loader.service';
+import { ConfigAssetLoaderService, Configuration} from '../config-asset-loader.service';
 
 
 @Component({
@@ -17,7 +17,7 @@ export class PetsComponent implements OnInit {
   public pets: any[] = []
   public dataSource: MatTableDataSource<any>;
 
-  private config: Configuration
+  public config: Configuration
 
   displayedColumns = ['name','kind','age','pic']
 

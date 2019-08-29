@@ -1,0 +1,29 @@
+apiVersion: xl-deploy/v1
+kind: Environments
+spec:
+- name: Dev
+  type: core.Directory
+  children:
+  - name: micropet.dev
+    type: udm.Environment
+    members:
+    - Infrastructure/Windows/win2012r2-dev/testrunner
+    - Infrastructure/Windows/win2012r2-dev
+    - Infrastructure/Windows/win2012r2-dev/iis
+    - Infrastructure/Windows/win2012r2-dev/sql.server
+    dictionaries:
+    - Environments/Dev/Dict/Dict-core-dev
+  - directory: Dict
+    children:
+    - name: Dict-core-dev
+      type: udm.Dictionary
+      entries:
+        pets.listen.port: 8001
+        cats.listen.port: 8002
+        dogs.listen.port: 8003
+        gui.listen.port: 8004
+        remote.ip: 192.168.130.142
+        env: dev
+ 
+
+
