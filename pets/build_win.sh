@@ -5,5 +5,5 @@ rm *.exe
 
 env GOOS=windows GOARCH=386  go build -o pets.exe -v main.go
 xl apply -s --proceed-when-dirty -f xebialabs.yaml
-../xld.sh Applications/.NET/services/pets/1.0.4  Environments/Dev/micropet.dev
+../xld.sh Applications/.NET/services/pets/1.0.4  Environments/MicroPet/Dev/micropet.dev
 

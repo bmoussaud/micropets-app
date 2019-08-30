@@ -2,3 +2,4 @@
 *.exe
 backend/main
 bin
+secrets.xlvals

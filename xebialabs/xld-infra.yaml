@@ -1,25 +1,104 @@
-apiVersion: xl-deploy/v1
-kind: Environments
-spec:
-- name: Dev
-  type: core.Directory
-  children:
-  - name: core.dev
-    type: udm.Environment
-    members:
-    - Infrastructure/Windows/win2012r2-dev/testrunner
-    - Infrastructure/Windows/win2012r2-dev
-    - Infrastructure/Windows/win2012r2-dev/sql.server
-    dictionaries:
-    - Environments/Dev/Dict/Dict-core-dev
-  - directory: Dict
-    children:
-    - name: Dict-core-dev
-      type: udm.Dictionary
-      entries:
-        TIMEOUT: "1000"
-        listen.port: "8080"
-        suffix: dev
-        TITLE: Dogs and Cats
-        alternate.color: blue
 
+apiVersion: xl-deploy/v1
+kind: Infrastructure
+spec:
+- name: Infrastructure/MicroPet
+  type: core.Directory
+---
+apiVersion: xl-deploy/v1
+kind: Infrastructure
+spec:
+- name: Infrastructure/MicroPet/Windows
+  type: core.Directory
+---
+apiVersion: xl-deploy/v1
+kind: Infrastructure
+spec:
+- directory: Infrastructure/MicroPet/Windows
+  children:
+  - name: win2012r2-test
+    type: overthere.CifsHost
+    address: !value "windows_vm_ip"
+    username: Admin
+    password: !value "windows_vm_password"
+    children:
+    - name: iis
+      type: iis.Server
+    - name: sql.server
+      type: sql.MsSqlClient
+      serverName: .\SQLEXPRESS
+    - name: testrunner
+      type: smoketest.Runner
+      powershellInstalled: true
+  - name: win2012r2-qa
+    type: overthere.CifsHost
+    address: !value "windows_vm_ip"
+    username: Admin
+    password: !value "windows_vm_password"
+    children:
+    - name: sql.server
+      type: sql.MsSqlClient
+      serverName: .\SQLEXPRESS
+    - name: testrunner
+      type: smoketest.Runner
+      powershellInstalled: true
+    - name: iis
+      type: iis.Server
+  - name: win2012r2-prod-sql
+    type: overthere.CifsHost
+    address: !value "windows_vm_ip"
+    username: Admin
+    password: !value "windows_vm_password"
+    children:
+    - name: sql.server
+      type: sql.MsSqlClient
+      deploymentGroup: 1
+      serverName: .\SQLEXPRESS
+  - name: win2012r2-prod.1
+    type: overthere.CifsHost
+    stagingDirectoryPath: c:/temp/stagings/prod.1
+    address: !value "windows_vm_ip"
+    username: Admin
+    password: !value "windows_vm_password"
+    children:
+    - name: iis-prod-1
+      type: iis.Server
+      deploymentGroup: 3
+      bigIpPool: main
+      bigIpAddress: bigip.xebialabs.demo
+      bigIpPort: 1111
+    - name: testrunner-1
+      type: smoketest.Runner
+      deploymentGroup: 3
+      powershellInstalled: true
+  - name: win2012r2-prod.2
+    type: overthere.CifsHost
+    stagingDirectoryPath: c:/temp/stagings/prod.2
+    address: !value "windows_vm_ip"
+    username: Admin
+    password: !value "windows_vm_password"
+    children:
+    - name: iis-prod-2
+      type: iis.Server
+      deploymentGroup: 5
+      bigIpPool: main
+      bigIpAddress: bigip.xebialabs.demo
+      bigIpPort: 1111
+    - name: testrunner-2
+      type: smoketest.Runner
+      deploymentGroup: 5
+      powershellInstalled: true
+  - name: win2012r2-dev
+    type: overthere.CifsHost
+    address: !value "windows_vm_ip"
+    username: Admin
+    password: !value "windows_vm_password"
+    children:
+    - name: sql.server
+      type: sql.MsSqlClient
+      serverName: .\SQLEXPRESS
+    - name: iis
+      type: iis.Server
+    - name: testrunner
+      type: smoketest.Runner
+      powershellInstalled: true

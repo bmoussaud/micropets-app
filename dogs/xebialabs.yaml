@@ -4,3 +4,4 @@ metadata:
   imports:
   - xld-app.yaml
   - ../xebialabs/xld-env.yaml
+  - ../xebialabs/xld-infra.yaml
