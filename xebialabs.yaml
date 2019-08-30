@@ -1,7 +1,0 @@
-apiVersion: xl/v1
-kind: Import
-metadata:
-  imports:
-  - cats/xld-apps.yaml
-  - xebialabs/xld-apps.yaml
-  - xebialabs/xld-infra.yaml
