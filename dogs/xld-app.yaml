@@ -1,0 +1,31 @@
+apiVersion: xl-deploy/v1
+kind: Applications
+spec:
+- name: .NET
+  type: core.Directory
+  children:
+  - name: services
+    type: core.Directory
+    children:
+    - name: dogs
+      type: udm.Application
+      children:
+      - name: '1.0.4'
+        type: udm.DeploymentPackage
+        deployables:
+        - name: dog
+          type: file.Folder
+          targetPath: C:\SERVICES\DOGS
+          createTargetPath: True
+          file: !file "."
+        - name: dog-service
+          type: windows.ServiceSpec
+          serviceName: dogService
+          serviceDisplayName: MicroPet Dog Service
+          serviceDescription: The core dog service
+          binaryPathName: C:\SERVICES\DOGS\dog.exe
+        - name: test dog service
+          type: smoketest.HttpRequestTest
+          url: http://{{remote.ip}}:{{dogs.listen.port}}
+          expectedResponseText: Total
+

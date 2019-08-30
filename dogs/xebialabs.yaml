@@ -1,54 +1,6 @@
-apiVersion: xl-deploy/v1
-kind: Applications
-spec:
-- name: .NET
-  type: core.Directory
-  children:
-  - name: services
-    type: core.Directory
-    children:
-    - name: dogs
-      type: udm.Application
-      children:
-      - name: '1.0.4'
-        type: udm.DeploymentPackage
-        deployables:
-        - name: dog
-          type: file.Folder
-          targetPath: C:\SERVICES\DOGS
-          createTargetPath: True
-          file: !file "."
-        - name: dog-service
-          type: windows.ServiceSpec
-          serviceName: dogService
-          serviceDisplayName: MicroPet Dog Service
-          serviceDescription: The core dog service
-          binaryPathName: C:\SERVICES\DOGS\dog.exe
-        - name: test dog service
-          type: smoketest.HttpRequestTest
-          url: http://{{remote.ip}}:{{dogs.listen.port}}
-          expectedResponseText: Total
----
-apiVersion: xl-deploy/v1
-kind: Environments
-spec:
-- name: Dev
-  type: core.Directory
-  children:
-  - name: micropet.dev
-    type: udm.Environment
-    members:
-    - Infrastructure/Windows/win2012r2-dev/testrunner
-    - Infrastructure/Windows/win2012r2-dev
-    - Infrastructure/Windows/win2012r2-dev/sql.server
-    dictionaries:
-    - Environments/Dev/Dict/Dict-core-dev
-  - directory: Dict
-    children:
-    - name: Dict-core-dev
-      type: udm.Dictionary
-      entries:
-        dogs.listen.port: 8003
-        remote.ip: 192.168.130.142
-
-
+apiVersion: xl/v1
+kind: Import
+metadata:
+  imports:
+  - xld-app.yaml
+  - ../xebialabs/xld-env.yaml

@@ -1,0 +1,31 @@
+apiVersion: xl-deploy/v1
+kind: Applications
+spec:
+- name: .NET
+  type: core.Directory
+  children:
+  - name: services
+    type: core.Directory
+    children:
+    - name: cats
+      type: udm.Application
+      children:
+      - name: '1.0.4'
+        type: udm.DeploymentPackage
+        deployables:
+        - name: cat
+          type: file.Folder
+          targetPath: C:\SERVICES\CATS
+          createTargetPath: True
+          file: !file "."
+        - name: cat-service
+          type: windows.ServiceSpec
+          serviceName: catService
+          serviceDisplayName: MicroPet Cat Service
+          serviceDescription: The core cat service
+          binaryPathName: C:\SERVICES\CATS\cat.exe
+        - name: test cat service
+          type: smoketest.HttpRequestTest
+          url: http://{{remote.ip}}:{{cats.listen.port}}
+          expectedResponseText: Total
+

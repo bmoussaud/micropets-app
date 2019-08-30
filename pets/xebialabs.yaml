@@ -1,57 +1,7 @@
-apiVersion: xl-deploy/v1
-kind: Applications
-spec:
-- name: .NET
-  type: core.Directory
-  children:
-  - name: services
-    type: core.Directory
-    children:
-    - name: pets
-      type: udm.Application
-      children:
-      - name: '1.0.4'
-        type: udm.DeploymentPackage
-        deployables:
-        - name: pet
-          type: file.Folder
-          targetPath: C:\SERVICES\PETS
-          createTargetPath: True
-          file: !file "."
-        - name: pet-service
-          type: windows.ServiceSpec
-          serviceName: petService
-          serviceDisplayName: MicroPet Pet Service
-          serviceDescription: The core Pet service
-          binaryPathName: C:\SERVICES\PETS\pets.exe
-        - name: test pets service
-          type: smoketest.HttpRequestTest
-          url: http://{{remote.ip}}:{{pets.listen.port}}
-          expectedResponseText: Total
----
-apiVersion: xl-deploy/v1
-kind: Environments
-spec:
-- name: Dev
-  type: core.Directory
-  children:
-  - name: micropet.dev
-    type: udm.Environment
-    members:
-    - Infrastructure/Windows/win2012r2-dev/testrunner
-    - Infrastructure/Windows/win2012r2-dev
-    - Infrastructure/Windows/win2012r2-dev/sql.server
-    dictionaries:
-    - Environments/Dev/Dict/Dict-core-dev
-  - directory: Dict
-    children:
-    - name: Dict-core-dev
-      type: udm.Dictionary
-      entries:
-        pets.listen.port: 8001
-        cats.listen.port: 8002
-        dogs.listen.port: 8003
-        remote.ip: 192.168.130.142
- 
-
-
+apiVersion: xl/v1
+kind: Import
+metadata:
+  imports:
+  - cats/xld-apps.yaml
+  - xebialabs/xld-apps.yaml
+  - xebialabs/xld-infra.yaml

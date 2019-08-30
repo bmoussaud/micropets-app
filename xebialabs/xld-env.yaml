@@ -22,7 +22,7 @@ spec:
         cats.listen.port: 8002
         dogs.listen.port: 8003
         gui.listen.port: 8004
-        remote.ip: 192.168.130.142
+        remote.ip: 192.168.130.148
         env: dev
  
 
