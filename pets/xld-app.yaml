@@ -10,7 +10,7 @@ spec:
     - name: pets
       type: udm.Application
       children:
-      - name: '1.0.4'
+      - name: !value version
         type: udm.DeploymentPackage
         deployables:
         - name: pet

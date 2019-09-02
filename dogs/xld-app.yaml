@@ -10,9 +10,12 @@ spec:
     - name: dogs
       type: udm.Application
       children:
-      - name: '1.0.4'
+      - name: !value version
         type: udm.DeploymentPackage
         deployables:
+        - name: dog-sql
+          type: sql.SqlScripts
+          file: !file sql
         - name: dog
           type: file.Folder
           targetPath: C:\SERVICES\DOGS

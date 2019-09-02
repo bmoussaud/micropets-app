@@ -10,7 +10,7 @@ spec:
     - name: gui
       type: udm.Application
       children:
-      - name: '1.0.4'
+      - name: !value version
         type: udm.DeploymentPackage
         deployables:
         - name: content
@@ -33,5 +33,5 @@ spec:
         - name: test gui service
           type: smoketest.HttpRequestTest
           url: http://{{remote.ip}}:{{gui.listen.port}}
-          expectedResponseText: Gui
+          expectedResponseText: Gui {{env}}
 

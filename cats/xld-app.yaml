@@ -10,9 +10,12 @@ spec:
     - name: cats
       type: udm.Application
       children:
-      - name: '1.0.4'
+      - name: !value version
         type: udm.DeploymentPackage
         deployables:
+        - name: cat-sql
+          type: sql.SqlScripts
+          file: !file sql
         - name: cat
           type: file.Folder
           targetPath: C:\SERVICES\CATS
