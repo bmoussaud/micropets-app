@@ -6,5 +6,6 @@ export XL_VALUE_version=$1
 
 env GOOS=windows GOARCH=386  go build -o pets.exe -v main.go
 xl apply -s --proceed-when-dirty -f xebialabs.yaml
-../xld.sh Applications/.NET/services/pets/$XL_VALUE_version  Environments/MicroPet/Dev/micropet.dev
+xl preview -f deploy.yaml
+xl apply -f deploy.yaml
 
