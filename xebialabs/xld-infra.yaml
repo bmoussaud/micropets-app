@@ -60,6 +60,7 @@ spec:
     address: !value "windows_vm_ip"
     username: Admin
     password: !value "windows_vm_password"
+    deploymentGroup: 3
     children:
     - name: iis-prod-1
       type: iis.Server
@@ -77,6 +78,7 @@ spec:
     address: !value "windows_vm_ip"
     username: Admin
     password: !value "windows_vm_password"
+    deploymentGroup: 5  
     children:
     - name: iis-prod-2
       type: iis.Server

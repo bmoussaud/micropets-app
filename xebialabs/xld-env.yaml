@@ -54,5 +54,51 @@ spec:
         remote.ip: !value windows_vm_ip
         env: dev
 
-
+---
+apiVersion: xl-deploy/v1
+kind: Environments
+spec:
+- directory: Environments/MicroPet/Ops
+  children:
+  - name: micropet.prod
+    type: udm.Environment
+    members:
+    - Infrastructure/MicroPet/Windows/win2012r2-prod.2/testrunner-2
+    - Infrastructure/MicroPet/Windows/win2012r2-prod.2
+    - Infrastructure/MicroPet/Windows/win2012r2-prod.2/iis-prod-2
+    - Infrastructure/MicroPet/Windows/win2012r2-prod-sql/sql.server
+    - Infrastructure/MicroPet/Windows/win2012r2-prod.1/testrunner-1
+    - Infrastructure/MicroPet/Windows/win2012r2-prod.1
+    - Infrastructure/MicroPet/Windows/win2012r2-prod.1/iis-prod-1    
+    dictionaries:
+    - Environments/MicroPet/Ops/Dict/micropet.prod.1.config
+    - Environments/MicroPet/Ops/Dict/micropet.prod.2.config
+  - directory: Dict
+    children:
+    - name: micropet.prod.1.config
+      type: udm.Dictionary
+      entries:
+        pets.listen.port: 9001
+        cats.listen.port: 9002
+        dogs.listen.port: 9003
+        gui.listen.port: 9004
+        remote.ip: !value windows_vm_ip
+        env: prod-1   
+      restrictToContainers:
+      - Infrastructure/MicroPet/Windows/win2012r2-prod.1/testrunner-1
+      - Infrastructure/MicroPet/Windows/win2012r2-prod.1
+      - Infrastructure/MicroPet/Windows/win2012r2-prod.1/iis-prod-1  
+    - name: micropet.prod.2.config
+      type: udm.Dictionary
+      entries:
+        pets.listen.port: 10001
+        cats.listen.port: 10002
+        dogs.listen.port: 10003
+        gui.listen.port: 10004
+        remote.ip: !value windows_vm_ip
+        env: prod-2
+      restrictToContainers:
+      - Infrastructure/MicroPet/Windows/win2012r2-prod.2/testrunner-2
+      - Infrastructure/MicroPet/Windows/win2012r2-prod.2
+      - Infrastructure/MicroPet/Windows/win2012r2-prod.2/iis-prod-2
 

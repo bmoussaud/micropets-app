@@ -18,17 +18,19 @@ spec:
           file: !file sql
         - name: dog
           type: file.Folder
-          targetPath: C:\SERVICES\DOGS
+          targetPath: C:\SERVICES\{{env}}\DOGS
           createTargetPath: True
           file: !file "."
         - name: dog-service
           type: windows.ServiceSpec
-          serviceName: dogService
-          serviceDisplayName: MicroPet Dog Service
+          serviceName: dogService{{env}}
+          serviceDisplayName: MicroPet-{{env}} Dog Service
           serviceDescription: The core dog service
-          binaryPathName: C:\SERVICES\DOGS\dog.exe
+          binaryPathName: C:\SERVICES\{{env}}\DOGS\dog.exe
         - name: test dog service
           type: smoketest.HttpRequestTest
           url: http://localhost:{{dogs.listen.port}}
           expectedResponseText: Total
+        orchestrator:
+          - sequential-by-deployment-group
 

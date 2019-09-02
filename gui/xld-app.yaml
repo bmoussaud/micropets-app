@@ -12,10 +12,12 @@ spec:
       children:
       - name: !value version
         type: udm.DeploymentPackage
+        orchestrator:
+          - sequential-by-deployment-group
         deployables:
         - name: content
           type: iis.WebContent
-          targetPath: C:\SERVICES\GUI
+          targetPath: C:\SERVICES\{{env}}\GUI
           file: !file "dist/gui"
         - name: MicroPet-applicationPool
           type: iis.ApplicationPoolSpec
@@ -24,7 +26,7 @@ spec:
         - name: MicroPet WebSite
           type: iis.WebsiteSpec
           websiteName: MicroPet-{{env}}
-          physicalPath: C:\SERVICES\GUI
+          physicalPath: C:\SERVICES\{{env}}\GUI
           applicationPoolName: MicroPet-applicationPool-{{env}}
           bindings:
           - name: Bindings-{{gui.listen.port}}
@@ -34,4 +36,5 @@ spec:
           type: smoketest.HttpRequestTest
           url: http://localhost:{{gui.listen.port}}
           expectedResponseText: Gui {{env}}
+        
 

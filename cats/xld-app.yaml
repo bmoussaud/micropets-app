@@ -18,17 +18,19 @@ spec:
           file: !file sql
         - name: cat
           type: file.Folder
-          targetPath: C:\SERVICES\CATS
+          targetPath: C:\SERVICES\{{env}}\CATS
           createTargetPath: True
           file: !file "."
         - name: cat-service
           type: windows.ServiceSpec
-          serviceName: catService
-          serviceDisplayName: MicroPet Cat Service
+          serviceName: catService{{env}}
+          serviceDisplayName: MicroPet-{{env}} Cat Service
           serviceDescription: The core cat service
-          binaryPathName: C:\SERVICES\CATS\cat.exe
+          binaryPathName: C:\SERVICES\{{env}}\CATS\cat.exe
         - name: test cat service
           type: smoketest.HttpRequestTest
           url: http://localhost:{{cats.listen.port}}
           expectedResponseText: Total
+        orchestrator:
+          - sequential-by-deployment-group
 

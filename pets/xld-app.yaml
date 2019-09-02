@@ -15,22 +15,22 @@ spec:
         deployables:
         - name: pet
           type: file.Folder
-          targetPath: C:\SERVICES\PETS
+          targetPath: C:\SERVICES\{{env}}\PETS
           createTargetPath: True
           file: !file "."
         - name: pet-service
           type: windows.ServiceSpec
-          serviceName: petService
-          serviceDisplayName: MicroPet Pet Service
+          serviceName: petService{{env}}
+          serviceDisplayName: MicroPet-{{env}} Pet Service
           serviceDescription: The core Pet service
-          binaryPathName: C:\SERVICES\PETS\pets.exe
+          binaryPathName: C:\SERVICES\{{env}}\PETS\pets.exe
         - name: test pets service
           type: smoketest.HttpRequestTest
           url: http://localhost:{{pets.listen.port}}
           expectedResponseText: Total
           #applicationDependencies:
           #dogs: '[1.0.0,2.0.0)'
-          #cats: '[1.0.0,2.0.0)'
-          #orchestrator:
-          #- sequential-by-dependency
+          #cats: '[1.0.0,2.0.0)'          
+        orchestrator:
+        - parallel-by-deployment-group
 
