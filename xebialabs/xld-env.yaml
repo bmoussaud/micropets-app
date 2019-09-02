@@ -69,7 +69,8 @@ spec:
     - Infrastructure/MicroPet/Windows/win2012r2-prod-sql/sql.server
     - Infrastructure/MicroPet/Windows/win2012r2-prod.1/testrunner-1
     - Infrastructure/MicroPet/Windows/win2012r2-prod.1
-    - Infrastructure/MicroPet/Windows/win2012r2-prod.1/iis-prod-1    
+    - Infrastructure/MicroPet/Windows/win2012r2-prod.1/iis-prod-1
+    - Infrastructure/MicroPet/Windows/win2012r2-lb/BigIP    
     dictionaries:
     - Environments/MicroPet/Ops/Dict/micropet.prod.1.config
     - Environments/MicroPet/Ops/Dict/micropet.prod.2.config

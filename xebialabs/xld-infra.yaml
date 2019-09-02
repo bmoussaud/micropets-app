@@ -90,6 +90,23 @@ spec:
       type: smoketest.Runner
       deploymentGroup: 5
       powershellInstalled: true
+  - name: win2012r2-lb
+    type: overthere.CifsHost
+    address: !value "windows_vm_ip"
+    username: Admin
+    password: !value "windows_vm_password"
+    children:
+    - name: BigIP
+      type: big-ip.LocalTrafficManager
+      address: micropet.prod.xebialabs.io
+      username: scott
+      password: tiger
+      partition: main
+      managedServers:      
+      - Infrastructure/MicroPet/Windows/win2012r2-prod.1
+      - Infrastructure/MicroPet/Windows/win2012r2-prod.1/iis-prod-1        
+      - Infrastructure/MicroPet/Windows/win2012r2-prod.2
+      - Infrastructure/MicroPet/Windows/win2012r2-prod.2/iis-prod-2    
   - name: win2012r2-dev
     type: overthere.CifsHost
     address: !value "windows_vm_ip"
