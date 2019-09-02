@@ -32,6 +32,6 @@ spec:
             port: '{{gui.listen.port}}'
         - name: test gui service
           type: smoketest.HttpRequestTest
-          url: http://{{remote.ip}}:{{gui.listen.port}}
+          url: http://localhost:{{gui.listen.port}}
           expectedResponseText: Gui {{env}}
 

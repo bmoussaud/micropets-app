@@ -29,6 +29,6 @@ spec:
           binaryPathName: C:\SERVICES\DOGS\dog.exe
         - name: test dog service
           type: smoketest.HttpRequestTest
-          url: http://{{remote.ip}}:{{dogs.listen.port}}
+          url: http://localhost:{{dogs.listen.port}}
           expectedResponseText: Total
 

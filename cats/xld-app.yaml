@@ -29,6 +29,6 @@ spec:
           binaryPathName: C:\SERVICES\CATS\cat.exe
         - name: test cat service
           type: smoketest.HttpRequestTest
-          url: http://{{remote.ip}}:{{cats.listen.port}}
+          url: http://localhost:{{cats.listen.port}}
           expectedResponseText: Total
 

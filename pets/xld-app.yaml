@@ -26,11 +26,11 @@ spec:
           binaryPathName: C:\SERVICES\PETS\pets.exe
         - name: test pets service
           type: smoketest.HttpRequestTest
-          url: http://{{remote.ip}}:{{pets.listen.port}}
+          url: http://localhost:{{pets.listen.port}}
           expectedResponseText: Total
-        applicationDependencies:
-          dogs: '[1.0.0,2.0.0)'
-          cats: '[1.0.0,2.0.0)'
-        orchestrator:
-        - sequential-by-dependency
+          #applicationDependencies:
+          #dogs: '[1.0.0,2.0.0)'
+          #cats: '[1.0.0,2.0.0)'
+          #orchestrator:
+          #- sequential-by-dependency
 
