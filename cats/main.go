@@ -3,23 +3,24 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/kardianos/service"
-	"github.com/magiconair/properties"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
+
+	"github.com/magiconair/properties"
 )
 
-var count = 1
-
+//Cat Struct
 type Cat struct {
 	Name string
 	Kind string
 	Age  int
-	Url  string
+	URL  string
 }
 
+//Cats Struct
 type Cats struct {
 	Total int
 	Cats  []Cat `json:"Pets"`
@@ -50,16 +51,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 }
 
-var logger service.Logger
-
-type program struct{}
-
-func (p *program) Start(s service.Service) error {
-	// Start should not block. Do the actual work async.
-	go p.run()
-	return nil
-}
-
+//GetLocation returns the full path of the config file based on the current executable location
 func GetLocation(file string) string {
 	ex, err := os.Executable()
 	if err != nil {
@@ -69,47 +61,28 @@ func GetLocation(file string) string {
 	return filepath.Join(exPath, file)
 }
 
-func (p *program) run() {
+func main() {
+	var port = ":7002"
 
 	configLocation := GetLocation("config.properties")
 	fmt.Printf("******* %s\n", configLocation)
 	properties, err := properties.LoadFile(configLocation, properties.UTF8)
-	var port = ":7002"
+
 	if err != nil {
 		fmt.Printf("config file not found, use default values\n")
 	} else {
-		port = properties.GetString("listen.port", port)
+		var readPort string
+		readPort = properties.GetString("listen.port", port)
+		//fmt.Printf(readPort)
+		if strings.HasPrefix(readPort, ":{{") {
+			fmt.Printf("config file fount but it contains unreplaced values %s\n", readPort)
+		} else {
+			port = readPort
+		}
+
 	}
 
 	http.HandleFunc("/", index)
-	fmt.Printf("******* Starting to the Cat service on port %s\n", port)
+	fmt.Printf("******* Starting to the Cats service on port %s\n", port)
 	log.Fatal(http.ListenAndServe(port, nil))
-}
-
-func (p *program) Stop(s service.Service) error {
-	// Stop should not block. Return with a few seconds.
-	return nil
-}
-
-func main() {
-	fmt.Printf("******* Cat Service 1.0.4 \n")
-	svcConfig := &service.Config{
-		Name:        "CatService",
-		DisplayName: "Core Cat Service",
-		Description: "The core cat service",
-	}
-
-	prg := &program{}
-	s, err := service.New(prg, svcConfig)
-	if err != nil {
-		log.Fatal(err)
-	}
-	logger, err = s.Logger(nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = s.Run()
-	if err != nil {
-		logger.Error(err)
-	}
 }

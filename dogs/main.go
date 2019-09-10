@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/kardianos/service"
 	"github.com/magiconair/properties"
 )
 
@@ -55,16 +54,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 }
 
-var logger service.Logger
-
-type program struct{}
-
-func (p *program) Start(s service.Service) error {
-	// Start should not block. Do the actual work async.
-	go p.run()
-	return nil
-}
-
 //GetLocation returns the full path of the config file based on the current executable location
 func GetLocation(file string) string {
 	ex, err := os.Executable()
@@ -75,8 +64,7 @@ func GetLocation(file string) string {
 	return filepath.Join(exPath, file)
 }
 
-func (p *program) run() {
-
+func main() {
 	configLocation := GetLocation("config.properties")
 	fmt.Printf("******* %s\n", configLocation)
 	properties, err := properties.LoadFile(configLocation, properties.UTF8)
@@ -98,32 +86,4 @@ func (p *program) run() {
 	http.HandleFunc("/", index)
 	fmt.Printf("******* Starting to the Dog service on port %s\n", port)
 	log.Fatal(http.ListenAndServe(port, nil))
-}
-
-func (p *program) Stop(s service.Service) error {
-	// Stop should not block. Return with a few seconds.
-	return nil
-}
-
-func main() {
-	fmt.Printf("******* Dog Service 1.0.4 \n")
-	svcConfig := &service.Config{
-		Name:        "DogService",
-		DisplayName: "Core Dog Service",
-		Description: "The core cat service",
-	}
-
-	prg := &program{}
-	s, err := service.New(prg, svcConfig)
-	if err != nil {
-		log.Fatal(err)
-	}
-	logger, err = s.Logger(nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = s.Run()
-	if err != nil {
-		logger.Error(err)
-	}
 }
