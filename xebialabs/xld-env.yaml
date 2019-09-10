@@ -50,7 +50,7 @@ spec:
         pets.listen.port: 8001
         cats.listen.port: 8002
         dogs.listen.port: 8003
-        gui.listen.port: 8004
+        gui.listen.port: 8009
         remote.ip: !value windows_vm_ip
         env: dev
 

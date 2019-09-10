@@ -3,23 +3,27 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/kardianos/service"
-	"github.com/magiconair/properties"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
+
+	"github.com/kardianos/service"
+	"github.com/magiconair/properties"
 )
 
 var count = 1
 
+//Dog type
 type Dog struct {
 	Name string
 	Kind string
 	Age  int
-	Url  string
+	URL  string
 }
 
+//Dogs type
 type Dogs struct {
 	Total int
 	Dogs  []Dog `json:"Pets"`
@@ -61,6 +65,7 @@ func (p *program) Start(s service.Service) error {
 	return nil
 }
 
+//GetLocation returns the full path of the config file based on the current executable location
 func GetLocation(file string) string {
 	ex, err := os.Executable()
 	if err != nil {
@@ -79,7 +84,14 @@ func (p *program) run() {
 	if err != nil {
 		fmt.Printf("config file not found, use default values\n")
 	} else {
-		port = properties.GetString("listen.port", port)
+		var readPort string
+		readPort = properties.GetString("listen.port", port)
+		if strings.HasPrefix(readPort, "{{") {
+			fmt.Printf("config file  fount but it contains unreplaced values\n")
+		} else {
+			port = readPort
+		}
+
 	}
 
 	http.HandleFunc("/", index)
