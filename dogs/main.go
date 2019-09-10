@@ -86,8 +86,9 @@ func (p *program) run() {
 	} else {
 		var readPort string
 		readPort = properties.GetString("listen.port", port)
-		if strings.HasPrefix(readPort, "{{") {
-			fmt.Printf("config file  fount but it contains unreplaced values\n")
+		//fmt.Printf(readPort)
+		if strings.HasPrefix(readPort, ":{{") {
+			fmt.Printf("config file fount but it contains unreplaced values %s\n", readPort)
 		} else {
 			port = readPort
 		}
