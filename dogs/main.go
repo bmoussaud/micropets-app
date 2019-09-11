@@ -65,10 +65,12 @@ func GetLocation(file string) string {
 }
 
 func main() {
+	var port = ":7003"
+
 	configLocation := GetLocation("config.properties")
 	fmt.Printf("******* %s\n", configLocation)
 	properties, err := properties.LoadFile(configLocation, properties.UTF8)
-	var port = ":7003"
+
 	if err != nil {
 		fmt.Printf("config file not found, use default values\n")
 	} else {
