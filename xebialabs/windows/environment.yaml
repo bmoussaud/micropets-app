@@ -33,7 +33,7 @@ kind: Environments
 spec:
 - directory: Environments/MicroPet/Dev
   children:
-  - name: micropet.dev
+  - name: micropet.win.dev
     type: udm.Environment
     members:
     - Infrastructure/MicroPet/Windows/win2012r2-dev/testrunner
@@ -60,7 +60,7 @@ kind: Environments
 spec:
 - directory: Environments/MicroPet/Ops
   children:
-  - name: micropet.prod
+  - name: micropet.win. prod
     type: udm.Environment
     members:
     - Infrastructure/MicroPet/Windows/win2012r2-prod.2/testrunner-2

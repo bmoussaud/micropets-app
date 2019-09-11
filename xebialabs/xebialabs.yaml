@@ -1,0 +1,7 @@
+apiVersion: xl/v1
+kind: Import
+metadata:
+  imports: 
+  - windows/xebialabs.yaml
+  - kubernetes/xebialabs.yaml
+ 

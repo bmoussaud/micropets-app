@@ -1,0 +1,120 @@
+apiVersion: xl-deploy/v1
+kind: Infrastructure
+spec:
+- name: Infrastructure/MicroPet
+  type: core.Directory
+---
+apiVersion: xl-deploy/v1
+kind: Infrastructure
+spec:
+- name: Infrastructure/MicroPet/Kubernetes
+  type: core.Directory
+---
+apiVersion: xl-deploy/v1
+kind: Infrastructure
+metadata:
+ Infrastructure-home: Infrastructure/MicroPet/Kubernetes
+spec:
+  - name: xl-pet-kube
+    type: k8s.Master
+    apiServerURL: https://192.168.130.134:8443
+    skipTLS: true
+    debug: true
+    kubeConfigContext: minikube
+    kubectlHost: ~Infrastructure/localhost
+    caCert: |-
+      -----BEGIN CERTIFICATE-----
+      MIIC5zCCAc+gAwIBAgIBATANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5p
+      a3ViZUNBMB4XDTE4MTAwNzA2MDQzMloXDTI4MTAwNTA2MDQzMlowFTETMBEGA1UE
+      AxMKbWluaWt1YmVDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMIZ
+      8KXgiwCcHq/JVpzHkH+urDp/cTedJb1ip2Nv2BPeEeVcO267DGYWuHD5z5rcumYA
+      Sb8NoD0y80/hEaNh3UaM7i0qQAznhofC6TWqWWCGpysH1fLPRq6MgDEAz0ASf8k3
+      F4zclh++NY+3He9Wyqz7dQ+l3vZCDsjCucp01vmNMrT9Jz0vTqM8slV9MwbD/4P9
+      2zonZ5QbiRvXwfNfN9qHiEMJKqwGP6WIChv3cIYNvWmFKT++aC6vwcqYXieVLYb6
+      T5pidrwQ/burVC1odnb7JCjSfryXsLAIFt3OVJvTn67lKeoLEQBzS5w0VqXP1d9M
+      x0kJT1Q4X/Me7xY/qd0CAwEAAaNCMEAwDgYDVR0PAQH/BAQDAgKkMB0GA1UdJQQW
+      MBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3
+      DQEBCwUAA4IBAQBhje+Fd6HIeoFHVShCMoDvL/Eambi49Nf6BuAXJmQ4cnucBWJs
+      lznz/nfBDbwmXbuckTb2LWXXoUzr5hWUQ3rQrnFp9cHCujcnckFw7Q9DGE9coZv7
+      ws8taHVOzFzGwjbd70MdH0cKn4hViz9zRisS7ZisxWXzXDxfK6CWCS9PhLzpaYys
+      +S6m7Z//RIONiX1CwvtM5XkfKGf5yX/NxTQOLLohTI1ZEEItKhLVWNrjJMTtCXRe
+      hGbc/kKUuXv797nmVpoXi2bteRw06c2dzaloq+zn9Lro0BHsxqykEUVBipR9uD77
+      GhC4NqQpLgpI+I0wuEOxkgli5OMXnw9EUOg2
+      -----END CERTIFICATE-----
+    tlsCert: |-
+      -----BEGIN CERTIFICATE-----
+      MIIDkjCCAnqgAwIBAgIBAjANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5p
+      a3ViZUNBMB4XDTE5MDMxODA4MjIwNloXDTIwMDMxODA4MjIwNlowLDEXMBUGA1UE
+      ChMOc3lzdGVtOm1hc3RlcnMxETAPBgNVBAMTCG1pbmlrdWJlMIIBIjANBgkqhkiG
+      9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8PZIJ7SUNeXMLD+w8NtDeVXSY/6BkHinKYay
+      azJa7qXFta1C2hPp4bleyy/4SlcAnxfK2FJ/0ndeCWIdB5518/sbnLAkZMBh400C
+      e/L/IjPtkqu3WPbBeAQmWK9PuHx7K7+Ac1daI8hV4bAsFFCgfJrsF1sCwLU2KDsx
+      s/9PUbadH92dHpK22CAzDldBNxrTvshLyJ8RSoFFT06Kpgdqsjt30RmlDfHOjE/n
+      lcueWBhabXCwFSO3uvfhBoCRqvTeYYFiy/ccFSlpMp9TTk6cS47pTx35/lniBwiK
+      Ebvck2bB2Yc5712/vPwZa9+o3Wu+jxpztJdmm9lmQWMUPqGjBQIDAQABo4HVMIHS
+      MA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIw
+      DAYDVR0TAQH/BAIwADCBkgYDVR0RBIGKMIGHggptaW5pa3ViZUNBgiRrdWJlcm5l
+      dGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWyCFmt1YmVybmV0ZXMuZGVmYXVs
+      dC5zdmOCEmt1YmVybmV0ZXMuZGVmYXVsdIIKa3ViZXJuZXRlc4IJbG9jYWxob3N0
+      hwTAqIKGhwQKYAABhwQKAAABMA0GCSqGSIb3DQEBCwUAA4IBAQChr17UyGW4Z6gC
+      jVUgOaAObVDSdIV6T9qCkSibYk6Qoga3vYdT193WD8pKtgQUeoABdOo9NNVsZcnE
+      eI6Dx7smmCrDVyCe46u7QGfk+7IIHUSJJu7I/Fjx+L5m/qEd9FhkmrIQoaSTE7KI
+      0z8qaRkPo4MwtCVy8qfJyetL5IlPJlBqv9bhD3M8Eniqv3iKksKBp6ndVFgg6Kz1
+      Aqd8HHbR3XOJKJUyrVAt0GbF98TcBO+kI9ckLE/qOvxHtdVGBpdFg9JGldac2UVs
+      mRG3FqdZh/uJt1ug4ZpWiBq0ACavVCZiWsKRIjsIDNdiVFTUxaWu1eC6fuJ9t2fk
+      /wsrOQ45
+      -----END CERTIFICATE-----
+    tlsPrivateKey: |-
+      -----BEGIN RSA PRIVATE KEY-----
+      MIIEowIBAAKCAQEA8PZIJ7SUNeXMLD+w8NtDeVXSY/6BkHinKYayazJa7qXFta1C
+      2hPp4bleyy/4SlcAnxfK2FJ/0ndeCWIdB5518/sbnLAkZMBh400Ce/L/IjPtkqu3
+      WPbBeAQmWK9PuHx7K7+Ac1daI8hV4bAsFFCgfJrsF1sCwLU2KDsxs/9PUbadH92d
+      HpK22CAzDldBNxrTvshLyJ8RSoFFT06Kpgdqsjt30RmlDfHOjE/nlcueWBhabXCw
+      FSO3uvfhBoCRqvTeYYFiy/ccFSlpMp9TTk6cS47pTx35/lniBwiKEbvck2bB2Yc5
+      712/vPwZa9+o3Wu+jxpztJdmm9lmQWMUPqGjBQIDAQABAoIBACUFYb6f8ul4/e6K
+      do/60BoTQnjUgGmG7//kTwNDQE9MLt0j2pKQ3q0sgtDq9NXPGixXRnYH7tWSO2Nr
+      rJQgF3U9zlc7hMvp9uAqU8hhZCuIGOcg9NF5T+41jQKxJKlujqoBCSYvdIzs2a0M
+      GSmh3ZZnYwCPnhOng8OYnKFQB4rBHH8NXs4baH0GJIFKvNZpEmdAwj6zuVT+VoZs
+      qfs4ODYhDfn89tEaVVc0ZImsVa7OsVy0Kq0jvrK8LhSEQ7IQ9Kj6cvBpL/MnFQbM
+      xG9u2qmAv7VUEQq6a0T1Qs/AhQMsyLdyi9TXMsLZe6vowjiWhH7kOm99gK1fo0BQ
+      2z3icR0CgYEA9wcKYfNDbl8CeQ/OXleeecC0y7HJ/7bQLGbo6DjnGM5i/Bd1Tq6w
+      otwgHCYbxEfM2Nlq7l1CJKEYqKCrWlQyQkZzmVoMcpzLbvBgM6aKWgdUQC9gLGCN
+      6HvFCypSwzoe0uETUx4x6uls6WmK6Kt2TNutsWeF0uPF76QEqYQRzgMCgYEA+bbX
+      m5ep7pYVhsCyLCSRDUc+dIjjQTROo+JxXszEtEY0354BxxPXayjiSB3ft5wYWP2S
+      ZVFOxvr79GuR7/a3DG7gOmjwRYsAo7DsyvyGWPysiCv58sRUJhqLBVlHXdmuJJxI
+      MJBc/Ldh+CqxwCKvbDlk1/hOAckAM3g4hSbG4FcCgYAPubcDfUTxpcK2ijcM8m74
+      OThJL0w4px6hdPumrNipT5oliijBlYVRGMpCgHqMCDYWJ+ESw4UOZ+L1+SRvX6TD
+      a1C4lm7sbObWbR7yqstr58OJQnrQ2GSwRBDLISqbmvuTWRit1eI/nhR812csYJ3r
+      TqDEBl8SicVz9/EECZBImQKBgQDRit6uD7xnGsYBh517cUvOyqPcAipAwvXii9f6
+      ZvYBGJCxvNNdDIdNwsbvITJjzraXpmC8aFgknOPkHIgfxvWfl0LNgNVuZdApjAOH
+      6hOKhKz6r3xUfO7n8ooJ+PrsBAgfbI0fQ2TkI7YwGxOBWRm/RQIcQJ6k3NgwWIeF
+      JB7qjQKBgAzIf4EYQHvDB6QmAzvLj6a7/4KSZMi81V6Xl5bZjvduEd+pvFbMrD+y
+      2LKv4vR5fwB0yjZgXDG84Zck85NCydVp6VAeMH+3mp5335XcQIGzT1TnCkF+mTno
+      PvS/RA2dAx7vy1s6TFWlqYjQb6zgVv1+YosyXwTdyiixMzJVeNqB
+      -----END RSA PRIVATE KEY-----
+    children:
+      - name: micropet-staging
+        type: k8s.Namespace
+      - name: micropet-production
+        type: k8s.Namespace
+  - name: localhost
+    type: overthere.LocalHost
+    os: UNIX
+    children:
+      - name: test-runner-staging
+        type: smoketest.Runner
+      - name: test-runner-production
+        type: smoketest.Runner
+
+---
+apiVersion: xl-deploy/v1
+kind: Configuration
+spec:
+- name: Configuration/defaultMailServer
+  type: mail.SmtpServer
+  host: localhost
+  port: 1025
+  fromAddress: xldeploy@demo.org
+  testAddress: xldeploy-test@demo.org
+
+

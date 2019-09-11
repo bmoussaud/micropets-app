@@ -1,13 +1,15 @@
+BINARY_NAME=cats
+REGISTRY=localhost:5000
+
 # Go parameters
 GOCMD=go
 GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
-BINARY_NAME=cats
 
 BINARY_WINDOWS=$(BINARY_NAME).exe
-DOCKER_IMAGE=xebialabs.demo/$(BINARY_NAME)
+DOCKER_IMAGE=$(REGISTRY)/$(BINARY_NAME):$(XL_VALUE_version)
 
 all: test build
 
@@ -36,3 +38,7 @@ build-windows:
 
 docker-build:
 	docker build -t $(DOCKER_IMAGE) .
+	docker push $(DOCKER_IMAGE)
+
+xebialabs:
+	xl --xl-deploy-url http://localhost:4525 apply -s --proceed-when-dirty -f xebialabs.yaml

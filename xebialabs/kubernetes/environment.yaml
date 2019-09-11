@@ -1,0 +1,53 @@
+apiVersion: xl-deploy/v1
+kind: Environments
+spec:
+- name: Environments/MicroPet
+  type: core.Directory
+---
+apiVersion: xl-deploy/v1
+kind: Infrastructure
+spec:
+- name: Environments/MicroPet/Dev
+  type: core.Directory
+---
+apiVersion: xl-deploy/v1
+kind: Environments
+spec:
+- name: Environments/MicroPet/Ops
+  type: core.Directory
+---
+apiVersion: xl-deploy/v1
+kind: Environments
+spec:
+- name: Environments/MicroPet/Dev/Dict
+  type: core.Directory
+---
+apiVersion: xl-deploy/v1
+kind: Infrastructure
+spec:
+- name: Environments/MicroPet/Ops/Dict
+  type: core.Directory
+---
+apiVersion: xl-deploy/v1
+kind: Environments
+spec:
+- directory: Environments/MicroPet/Ops
+  children:
+  - name: micropet.k8s.staging
+    type: udm.Environment
+    members:
+    - Infrastructure/MicroPet/Kubernetes/xl-pet-kube/micropet-staging
+    - Infrastructure/MicroPet/Kubernetes/localhost/test-runner-staging    
+    dictionaries:
+    - Environments/MicroPet/Ops/Dict/micropet.staging.config
+  - directory: Dict
+    children:
+    - name: micropet.staging.config
+      type: udm.Dictionary
+      entries:
+        pets.listen.port: 8101
+        cats.listen.port: 8102
+        dogs.listen.port: 8103
+        gui.listen.port: 8109    
+        env: staging
+
