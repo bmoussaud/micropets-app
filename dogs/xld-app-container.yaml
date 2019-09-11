@@ -1,0 +1,34 @@
+apiVersion: xl-deploy/v1
+kind: Applications
+spec:
+- name: Containers
+  type: core.Directory
+  children:
+  - name: micropets
+    type: core.Directory
+    children:
+    - name: dogs
+      type: udm.Application
+      children:
+      - name: !value version
+        type: udm.DeploymentPackage
+        orchestrator:
+        - sequential-by-deployed
+        deployables:
+        - name: dogs
+          type: uccm.ContainerSpec
+          image: !format localhost:5000/dogs:%version%
+          replicas: "1"
+          profile: production
+          ports:
+          - name: web
+            type: uccm.ContainerPortSpec
+            containerPort: "7003"
+            exposeAsService: True
+            servicePort: "80" 
+            exposeAsIngress: True
+        - name: test dogs service availability
+          type: smoketest.HttpRequestTest
+          url: http://micropet.k8s.{{env}}.dogs.xebialabs.demo
+          expectedResponseText: Total
+

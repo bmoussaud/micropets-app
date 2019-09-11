@@ -2,6 +2,7 @@ apiVersion: xl/v1
 kind: Import
 metadata:
   imports:
-  - xld-app.yaml
-  - ../xebialabs/xld-env.yaml
-  - ../xebialabs/xld-infra.yaml
+  - xld-app-windows.yaml
+  - xld-app-container.yaml
+  - ../xebialabs/xebialabs.yaml
+
