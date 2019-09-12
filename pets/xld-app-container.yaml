@@ -20,6 +20,8 @@ spec:
           image: !format localhost:5000/pets:%version%
           replicas: "1"
           profile: production
+          env:
+            SERVICE_CONFIG: /etc/service/pets_config.json            
           ports:
           - name: web
             type: uccm.ContainerPortSpec
@@ -27,6 +29,12 @@ spec:
             exposeAsService: True
             servicePort: "80" 
             exposeAsIngress: True
+          mountedFiles:
+          - name: configuration 
+            type: uccm.MountedFileSpec
+            path: /etc/service
+            isSensitive: False
+            file: !file "./delivery/pets_config.json"
         - name: test pets service availability
           type: smoketest.HttpRequestTest
           url: http://micropet.k8s.{{env}}.pets.xebialabs.demo

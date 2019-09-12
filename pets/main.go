@@ -85,8 +85,9 @@ func index(w http.ResponseWriter, r *http.Request) {
 	var all Pets
 
 	for i, backend := range config.Backends {
-		fmt.Printf("* Accessing %d\t %s\t %s\n", i, backend.Name, backend.Port)
-		pets := queryPets(backend.Port)
+		URL := fmt.Sprintf("http://%s:%s", backend.Host, backend.Port)
+		fmt.Printf("* Accessing %d\t %s\t %s\n", i, backend.Name, URL)
+		pets := queryPets(URL)
 		all.Total = all.Total + pets.Total
 		for _, pet := range pets.Pets {
 			pet.Type = backend.Name
