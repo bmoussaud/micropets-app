@@ -7,27 +7,20 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
-	"strings"
 
-	"github.com/kelseyhightower/envconfig"
+	"github.com/spf13/viper"
 )
 
 //Config Structure
 type Config struct {
-	ListenPort string `json:"port"`
-	Backends   []struct {
-		PetType string `json:"type"`
-		URL     string `json:"url"`
-	} `json:"backends"`
-}
-
-//EnvConfig Structure
-type EnvConfig struct {
-	//export PET_LISTENPORT=9999
-	ListenPort string
-	//export PETS_BACKENDS=cat_http://localhost:9000,dogs_http://localhost:9002
-	Backends []string
+	Service struct {
+		Port string
+	}
+	Backends []struct {
+		Name string `json:"name"`
+		Host string `json:"host"`
+		Port string `json:"port"`
+	}
 }
 
 //Pet Structure
@@ -87,16 +80,16 @@ func queryPets(backend string) Pets {
 func index(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
 	fmt.Printf("Handling %+v\n", r)
-	config := LoadConfiguration(configLocation)
+	config := LoadConfiguration()
 
 	var all Pets
 
 	for i, backend := range config.Backends {
-		fmt.Printf("* Accessing %d\t %s\t %s\n", i, backend.PetType, backend.URL)
-		pets := queryPets(backend.URL)
+		fmt.Printf("* Accessing %d\t %s\t %s\n", i, backend.Name, backend.Port)
+		pets := queryPets(backend.Port)
 		all.Total = all.Total + pets.Total
 		for _, pet := range pets.Pets {
-			pet.Type = backend.PetType
+			pet.Type = backend.Name
 			all.Pets = append(all.Pets, pet)
 		}
 	}
@@ -111,63 +104,28 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//GetLocation returns the fullpath
-func GetLocation(file string) string {
-	ex, err := os.Executable()
-	if err != nil {
-		panic(err)
-	}
-	exPath := filepath.Dir(ex)
-	return filepath.Join(exPath, file)
-}
-
 //LoadConfiguration method
-func LoadConfiguration(file string) Config {
-	fmt.Printf("LoadConfiguration from File %s\n", file)
-	ex, err := os.Executable()
-	if err != nil {
-		panic(err)
+func LoadConfiguration() Config {
+	viper.SetConfigType("json")
+	viper.SetConfigName("pets_config") // name of config file (without extension)
+	if envCfgFile := os.Getenv("SERVICE_CONFIG"); envCfgFile != "" {
+		fmt.Printf("Load configuration from %s\n", envCfgFile)
+		viper.SetConfigFile(envCfgFile)
+	} else {
+		viper.AddConfigPath("/etc/micropets/")  // path to look for the config file in
+		viper.AddConfigPath("$HOME/.micropets") // call multiple times to add many search paths
+		viper.AddConfigPath(".")                // optionally look for config in the working directory
 	}
-	exPath := filepath.Dir(ex)
-	fullPath := filepath.Join(exPath, file)
+	err := viper.ReadInConfig() // Find and read the config file
+	if err != nil {             // Handle errors reading the config file
+		panic(fmt.Errorf("Fatal error config file: %s ", err))
+	}
+	//fmt.Printf("%+v\n", viper.AllSettings())
 
 	var config Config
-	configFile, err := os.Open(fullPath)
-	defer configFile.Close()
+	err = viper.Unmarshal(&config)
 	if err != nil {
-		fmt.Println(err.Error())
-	}
-	jsonParser := json.NewDecoder(configFile)
-	jsonParser.Decode(&config)
-
-	//Overide using env variable
-	fmt.Printf("LoadConfiguration from Env prefix PETS\n")
-	var envConfig EnvConfig
-	err = envconfig.Process("pets", &envConfig)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	if len(envConfig.ListenPort) > 0 && envConfig.ListenPort != "" {
-		fmt.Printf("* override Listen Port with %s\n", envConfig.ListenPort)
-		config.ListenPort = envConfig.ListenPort
-	}
-
-	for _, b := range envConfig.Backends {
-		if len(b) > 0 && b != "" {
-			fmt.Println("* override Backends:")
-			result := strings.Split(b, "_")
-			pet := result[0]
-			url := result[1]
-			//fmt.Printf(" from env (%s) (%s)\n", pet, url)
-			for i, service := range config.Backends {
-				//fmt.Printf("  from config file (%s) (%s)\n", service.PetType, service.URL)
-				if strings.EqualFold(service.PetType, pet) {
-					fmt.Printf("* %s  %s <- %s \n", pet, service.URL, url)
-					config.Backends[i].URL = url
-					break
-				}
-			}
-		}
+		panic(fmt.Errorf("unable to decode into struct, %v", err))
 	}
 
 	fmt.Printf("Resolved Configuration\n")
@@ -177,12 +135,12 @@ func LoadConfiguration(file string) Config {
 
 func main() {
 
-	config := LoadConfiguration(configLocation)
-	port := config.ListenPort
+	config := LoadConfiguration()
+	port := config.Service.Port
 	http.HandleFunc("/", index)
 	fmt.Printf("******* Starting to the Pets service on port %s\n", port)
 	for i, backend := range config.Backends {
-		fmt.Printf("* Managing %d\t %s\t %s\n", i, backend.PetType, backend.URL)
+		fmt.Printf("* Managing %d\t %s\t %s:%s\n", i, backend.Name, backend.Host, backend.Port)
 	}
 	log.Fatal(http.ListenAndServe(port, nil))
 }
