@@ -1,4 +1,4 @@
-{
-  "petServiceUrl":"http://{{remote.ip}}:{{pets.listen.port}}",
-  "stage": "{{env}}"
+{  
+  "petServiceUrl":"http://micropet.k8s.staging.pets.xebialabs.demo/",
+  "stage": "staging"
 }
