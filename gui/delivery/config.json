@@ -1,0 +1,5 @@
+{  
+  "petServiceUrl":"http://micropet.k8s.{{env}}.pets.xebialabs.demo/",
+  "stage": "{{env}}",
+  "debug": "False"
+}

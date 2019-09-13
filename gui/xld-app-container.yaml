@@ -27,6 +27,12 @@ spec:
             exposeAsService: True
             servicePort: "80" 
             exposeAsIngress: True
+          mountedFiles:
+          - name: configuration 
+            type: uccm.MountedFileSpec
+            path: /usr/share/nginx/html/assets/config
+            isSensitive: False
+            file: !file "./delivery/config.json"
         - name: test gui service availability
           type: smoketest.HttpRequestTest
           url: http://micropet.k8s.{{env}}.gui.xebialabs.demo
