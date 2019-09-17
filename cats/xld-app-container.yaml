@@ -17,7 +17,7 @@ spec:
         deployables:
         - name: cats
           type: uccm.ContainerSpec
-          image: !format localhost:5000/cats:%appversion%
+          image: !format localhost:5000/cats:%version%
           replicas: "1"
           profile: production
           ports:
@@ -25,7 +25,7 @@ spec:
             type: uccm.ContainerPortSpec
             containerPort: "7002"
             exposeAsService: True
-            servicePort: "80" 
+            servicePort: "80"
             exposeAsIngress: True
         - name: test cats service availability
           type: smoketest.HttpRequestTest
