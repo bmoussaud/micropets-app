@@ -42,3 +42,6 @@ docker-build:
 
 xebialabs:
 	xl --xl-deploy-url http://localhost:4525 apply -s --proceed-when-dirty -f xebialabs.yaml
+
+deploy:
+	../xld.sh Applications/Containers/micropets/cats/$(XL_VALUE_version) Environments/MicroPet/Ops/micropet.k8s.staging
