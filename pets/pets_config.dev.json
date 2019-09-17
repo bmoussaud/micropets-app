@@ -1,0 +1,9 @@
+{
+  "service": {
+    "port":":7004"
+  },
+  "backends": [
+    {"name":"cats","host":"micropet.k8s.staging.cats.xebialabs.demo", "port":"80"},
+    {"name":"dogs","host":"micropet.k8s.staging.dogs.xebialabs.demo", "port":"80"}    
+  ]
+}

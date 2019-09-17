@@ -16,7 +16,7 @@ run:
 	./$(BINARY_NAME)
 
 docker-build:
-	eval $(minikube docker-env)	
+	eval $(minikube docker-env)
 	docker build -t $(DOCKER_IMAGE) .
 	docker push $(DOCKER_IMAGE)
 

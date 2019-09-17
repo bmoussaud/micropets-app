@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sort"
 
 	"github.com/spf13/viper"
 )
@@ -94,6 +95,10 @@ func index(w http.ResponseWriter, r *http.Request) {
 			all.Pets = append(all.Pets, pet)
 		}
 	}
+
+	sort.SliceStable(all.Pets, func(i, j int) bool {
+		return all.Pets[i].Name < all.Pets[j].Name
+	})
 
 	js, err := json.Marshal(all)
 	if err != nil {

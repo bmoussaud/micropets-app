@@ -23,7 +23,7 @@ clean:
 
 run:
 	$(GOBUILD) -o $(BINARY_NAME) -v main.go
-	./$(BINARY_NAME)
+	SERVICE_CONFIG=pets_config.dev.json ./pets
 
 deps:	
 	$(GOGET) $(GOGET_FLAGS) github.com/spf13/viper
@@ -34,8 +34,12 @@ build-windows:
 	CGO_ENABLED=0 GOOS=windows GOARCH=386 $(GOBUILD) -o $(BINARY_WINDOWS) -v
 
 docker-build:
+	eval $(minikube docker-env)
 	docker build -t $(DOCKER_IMAGE) .
 	docker push $(DOCKER_IMAGE)
 
 xebialabs:
 	xl --xl-deploy-url http://localhost:4525 apply -s --proceed-when-dirty -f xebialabs.yaml
+
+deploy:
+	../xld.sh Applications/Containers/micropets/pets/$(XL_VALUE_version) Environments/MicroPet/Ops/micropet.k8s.staging
