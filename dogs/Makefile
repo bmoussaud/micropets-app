@@ -27,8 +27,7 @@ run:
 	$(GOBUILD) -o $(BINARY_NAME) -v main.go
 	./$(BINARY_NAME)
 
-deps:
-	$(GOGET) github.com/kelseyhightower/envconfig
+deps:	
 	$(GOGET) github.com/magiconair/properties
 
 
@@ -42,3 +41,6 @@ docker-build:
 
 xebialabs:
 	xl --xl-deploy-url http://localhost:4525 apply -s --proceed-when-dirty -f xebialabs.yaml
+
+deploy:
+	../xld.sh Applications/Containers/micropets/dogs/$(XL_VALUE_version) Environments/MicroPet/Ops/micropet.k8s.staging

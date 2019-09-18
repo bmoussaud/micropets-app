@@ -26,17 +26,26 @@ type Config struct {
 
 //Pet Structure
 type Pet struct {
-	Name string
-	Type string
-	Kind string
-	Age  int
-	URL  string
+	Name     string
+	Type     string
+	Kind     string
+	Age      int
+	URL      string
+	Hostname string
+}
+
+//Path Structure
+type Path struct {
+	Service  string
+	Hostname string
 }
 
 //Pets Structure
 type Pets struct {
-	Total int
-	Pets  []Pet `json:"Pets"`
+	Total     int
+	Hostname  string
+	Hostnames []Path
+	Pets      []Pet `json:"Pets"`
 }
 
 func setupResponse(w *http.ResponseWriter, req *http.Request) {
@@ -84,12 +93,20 @@ func index(w http.ResponseWriter, r *http.Request) {
 	config := LoadConfiguration()
 
 	var all Pets
+	host, err := os.Hostname()
+	if err != nil {
+		host = "Unknown"
+	}
+	path := Path{"pets", host}
+	all.Hostnames = []Path{path}
 
 	for i, backend := range config.Backends {
 		URL := fmt.Sprintf("http://%s:%s", backend.Host, backend.Port)
 		fmt.Printf("* Accessing %d\t %s\t %s\n", i, backend.Name, URL)
 		pets := queryPets(URL)
 		all.Total = all.Total + pets.Total
+		all.Hostnames = append(all.Hostnames, Path{backend.Name, pets.Hostname})
+		fmt.Printf("* Hostnames %s\n", all.Hostname)
 		for _, pet := range pets.Pets {
 			pet.Type = backend.Name
 			all.Pets = append(all.Pets, pet)

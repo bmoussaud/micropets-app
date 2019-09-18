@@ -24,8 +24,9 @@ type Dog struct {
 
 //Dogs type
 type Dogs struct {
-	Total int
-	Dogs  []Dog `json:"Pets"`
+	Total    int
+	Hostname string
+	Dogs     []Dog `json:"Pets"`
 }
 
 func setupResponse(w *http.ResponseWriter, req *http.Request) {
@@ -41,7 +42,15 @@ func index(w http.ResponseWriter, r *http.Request) {
 	pet2 := Dog{"Bil", "Bull Terrier", 12, "https://www.petmd.com/sites/default/files/07New_Collie.jpeg"}
 	pet3 := Dog{"Rantaplan", "Labrador Retriever", 24, "https://www.petmd.com/sites/default/files/01New_GoldenRetriever.jpeg"}
 	pet4 := Dog{"Lassie", "Golden Retriever", 20, "https://www.petmd.com/sites/default/files/11New_MixedBreed.jpeg"}
-	pets := Dogs{4, []Dog{pet1, pet2, pet3, pet4}}
+	pets := Dogs{4, "UKN", []Dog{pet1, pet2, pet3, pet4}}
+
+	host, err := os.Hostname()
+
+	if err != nil {
+		pets.Hostname = "Unknown"
+	} else {
+		pets.Hostname = host
+	}
 
 	js, err := json.Marshal(pets)
 	if err != nil {
