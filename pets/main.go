@@ -68,6 +68,8 @@ func queryPets(backend string) Pets {
 		return emptyPets
 	}
 
+	defer resp.Body.Close()
+
 	if resp.StatusCode != http.StatusOK {
 		fmt.Sprintf("Backend seems unhealthy: %v", resp)
 		return emptyPets

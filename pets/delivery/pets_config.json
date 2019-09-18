@@ -3,7 +3,8 @@
     "port":":7004"
   },
   "backends": [
-    {"name":"cats","host":"cats-web-service", "port":"80"},
-    {"name":"dogs","host":"dogs-web-service", "port":"80"}    
+    {"name":"cats","host":"cats-web-service", "port":"80"},    
+    {"name":"dogs","host":"dogs-web-service", "port":"80"},   
+    {"name":"fishes","host":"fishes-web-service", "port":"80"}    
   ]
 }
