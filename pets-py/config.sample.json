@@ -1,0 +1,10 @@
+{
+  "service": {
+    "port":":{{pets.listen.port}}"
+  },
+  "backends": [
+    {"name":"cats","host":"localhost", "port":"1000"},
+    {"name":"dogs","host":"localhost", "port":"1001"},
+    {"name":"fishes","host":"localhost", "port":"1002"}
+  ]
+}

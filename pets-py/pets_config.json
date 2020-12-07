@@ -1,0 +1,9 @@
+{
+  "service": {
+    "port":":7004"
+  },
+  "backends": [
+    {"name":"cats","host":"localhost", "port":"7003"},
+    {"name":"dogs","host":"localhost", "port":"7002"}    
+  ]
+}

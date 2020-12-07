@@ -27,8 +27,7 @@ run:
 	$(GOBUILD) -o $(BINARY_NAME) -v main.go
 	./$(BINARY_NAME)
 
-deps:
-	$(GOGET) github.com/kelseyhightower/envconfig
+deps:	
 	$(GOGET) github.com/magiconair/properties
 
 

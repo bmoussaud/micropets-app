@@ -1,0 +1,11 @@
+{
+    "service": {
+      "port":":7004",
+      "listen" : "false"
+    },
+    "backends": [
+      {"name":"cats","host":"cats-web-service", "port":"80"},
+      {"name":"dogs","host":"dogs-web-service", "port":"80"},
+      {"name":"fishes","host":"fishes-web-service", "port":"80"}
+    ]
+  }

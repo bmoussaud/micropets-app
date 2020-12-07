@@ -1,0 +1,7 @@
+{
+  "port":":{{pets.listen.port}}",
+  "backends": [
+    {"type":"cats","url":"http://localhost:{{cats.listen.port}}"},
+    {"type":"dogs","url":"http://localhost:{{dogs.listen.port}}"}
+  ]
+}
