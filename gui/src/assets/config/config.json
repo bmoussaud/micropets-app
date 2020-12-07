@@ -1,4 +1,4 @@
-{  
-  "petServiceUrl":"http://micropet.k8s.staging.pets.xebialabs.demo/",
+{    
+  "petServiceUrl":"http://localhost:9000/",
   "stage": "staging"
 }

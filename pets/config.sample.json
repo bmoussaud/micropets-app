@@ -1,10 +1,11 @@
 {
   "service": {
-    "port":":{{pets.listen.port}}"
+    "port":":9000",
+    "listen" : "true"
   },
   "backends": [
-    {"name":"cats","host":"localhost", "port":"1000"},
-    {"name":"dogs","host":"localhost", "port":"1001"},
-    {"name":"fishes","host":"localhost", "port":"1002"}
+    {"name":"cats","host":"localhost", "port":"7002"},
+    {"name":"dogs","host":"localhost", "port":"7003"},
+    {"name":"fishes","host":"localhost", "port":"7007"}
   ]
 }
