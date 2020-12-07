@@ -1,0 +1,94 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cats-db-credentials
+type: Opaque
+data:
+  user: YWRtaW4K
+  password: cGxlYXNlY2hhbmdlbWU=
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cats-config
+data:
+  config.properties: |
+    listen.port: 7002
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:  
+  name: cats-app
+  labels:
+    app: cats-app
+    group: micro-pet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cats-app
+      group: micro-pet
+  template:
+    metadata:
+      labels:
+        app: cats-app
+        group: micro-pet
+    spec:
+      containers:
+        - name: cats
+          image: registry.local:5000/micropet/cats:dev
+          ports:
+            - name: cats
+              containerPort: 7002
+          env:
+            - name: DATABASE_URL
+              value: jdbc:postgresql://cats-db:5432/cats
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: cats-db-credentials
+                  key: user
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cats-db-credentials
+                  key: password
+
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cats-service
+  labels:
+    app: cats-app
+    group: micro-pet
+spec:
+  ports:
+    - protocol: TCP
+      name: cats
+      port: 7002
+  selector:
+    app: cats-app
+    group: micro-pet
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: cats-ingress  
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+  - match: Host(`cats.dev.pet-cluster.demo`)
+    kind: Rule
+    services:
+    - name: cats-service
+      port: 7002
+
+
+
