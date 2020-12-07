@@ -55,6 +55,7 @@ spec:
       containers:
         - name: pets
           image: registry.local:5000/micropet/pets:dev
+          imagePullPolicy: Always
           ports:
             - name: pets
               containerPort: 9000

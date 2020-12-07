@@ -38,6 +38,7 @@ spec:
       containers:
         - name: cats
           image: registry.local:5000/micropet/cats:dev
+          imagePullPolicy: Always
           ports:
             - name: cats
               containerPort: 7002

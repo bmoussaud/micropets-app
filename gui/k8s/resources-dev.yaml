@@ -49,6 +49,7 @@ spec:
       containers:
         - name: gui
           image: registry.local:5000/micropet/gui:dev
+          imagePullPolicy: Always
           ports:
             - name: gui
               containerPort: 80

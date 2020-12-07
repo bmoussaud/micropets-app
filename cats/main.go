@@ -39,7 +39,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	cat1 := Cat{"Orphee", "Persan", 12, "https://www.pets4homes.co.uk/images/breeds/21/db349a9afb9b6973fa3b40f684a37bb9.jpg"}
 	cat2 := Cat{"Pirouette", "Bengal", 1, "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/934px-Paintedcats_Red_Star_standing.jpg"}
 	cat3 := Cat{"Pamina", "Angora", 120, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Turkish_Angora_Odd-Eyed.jpg/440px-Turkish_Angora_Odd-Eyed.jpg"}
-	cat4 := Cat{"Clochette", "Siamois", 120, "https://www.woopets.fr/assets/races/000/380/mobile/siamois.jpg"}
+	cat4 := Cat{"Clochette", "Siamois", 120, "https://www.woopets.fr/assets/races/home/siamois-124x153.jpg"}
 	cats := Cats{4, "Unknown", []Cat{cat1, cat2, cat3, cat4}}
 
 	host, err := os.Hostname()

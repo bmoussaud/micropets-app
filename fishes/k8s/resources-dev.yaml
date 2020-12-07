@@ -38,6 +38,7 @@ spec:
       containers:
         - name: fishes
           image: registry.local:5000/micropet/fishes:dev
+          imagePullPolicy: Always
           ports:
             - name: fishes
               containerPort: 7007
