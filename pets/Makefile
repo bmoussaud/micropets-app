@@ -1,3 +1,6 @@
+REGISTRY=registry.local:5000
+BINARY_NAME=pets
+
 # Go parameters
 GOCMD=go
 GOBUILD=$(GOCMD) build
@@ -5,9 +8,13 @@ GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
 GOGET_FLAGS=-u -v
-BINARY_NAME=pets
-BINARY_WINDOWS=$(BINARY_NAME).exe
-DOCKER_IMAGE=localhost:5000/$(BINARY_NAME):$(XL_VALUE_version)
+
+INARY_WINDOWS=$(BINARY_NAME).exe
+$(eval SHA1=$(shell git rev-parse --short HEAD))
+VERSION=1.0.0-$(SHA1)
+DOCKER_IMAGE=$(REGISTRY)/micropet/$(BINARY_NAME):$(VERSION)
+DOCKER_IMAGE_DEV=$(REGISTRY)/micropet/$(BINARY_NAME):dev
+
 
 all: test build
 
@@ -34,13 +41,18 @@ deps:
 build-windows:
 	CGO_ENABLED=0 GOOS=windows GOARCH=386 $(GOBUILD) -o $(BINARY_WINDOWS) -v
 
-docker-build:
-	eval $(minikube docker-env)
+docker-build: build
+	echo $(DOCKER_IMAGE)
 	docker build -t $(DOCKER_IMAGE) .
 	docker push $(DOCKER_IMAGE)
+	docker tag $(DOCKER_IMAGE) $(DOCKER_IMAGE_DEV)
+	docker push $(DOCKER_IMAGE_DEV)
 
 xebialabs:
 	xl --xl-deploy-url http://localhost:4525 apply -s --proceed-when-dirty -f xebialabs.yaml
 
 deploy:
 	../xld.sh Applications/Containers/micropets/pets/$(XL_VALUE_version) Environments/MicroPet/Ops/micropet.k8s.staging
+
+k8s-deploy:
+	kubectl apply -f k8s/resources-dev.yaml
