@@ -1,0 +1,11 @@
+{
+    "service": {
+      "port":":9000",
+      "listen" : "true"
+    },
+    "backends": [
+      {"name":"cats","host":"cats-service", "port":"7002"},    
+      {"name":"dogs","host":"dogs-service", "port":"7003"},   
+      {"name":"fishes","host":"fishes-service", "port":"7007"}  
+    ]
+}

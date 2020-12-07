@@ -1,0 +1,9 @@
+# kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+- ../../base
+configMapGenerator:
+- name: pets-config
+  files:
+  - pets_config_1.json

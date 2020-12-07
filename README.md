@@ -55,91 +55,26 @@ and check with your browser you can connect to `https://localhost:80/whoami/` or
 curl -k https://localhost:80/whoami/
 ```
 
-## Install & Configure Digital.ai Deploy
 
-* Install a brand new Deploy Server if you don't have one
-* Check the smoke test plugin is installed else install it : [https://github.com/xebialabs-community/xld-smoke-test-plugin/releases/download/v1.0.7/xld-smoke-test-plugin-1.0.7.xldp]
-* Check the gitops plugin is installed else install it : [https://github.com/xebialabs-community/xld-gitops-plugin/releases/download/v0.1.0-rc.1/xld-gitops-plugin-0.1.0-rc.1.xldp]
+## pet
 
-* run Deploy 9.8 in a docker container
+### kubectl
 
-``` bash
-$cd xl
-$docker-compose up
-$docker network connect k3d-$CLUSTER_NAME xl-deploy
+```bash
+kubectl apply -f k8s/resources-dev.yaml
+kubectl delete -f k8s/resources-dev.yaml
 ```
 
-* Edit the K3S Cluster configuration:
-
-  * run `k3d kubeconfig get $CLUSTER_NAME` command
-  * edit `xebialabs/infrastructure.values` file by replacing
-
-    * `caCert` value with `clusters/cluster/certificate-authority-data` value from the output of `k3d kubeconfig`
-    * `apiServerURL` value with `clusters/cluster/server` value from the output of `k3d kubeconfig` (if you use the deploy docker setup, `https://k3d-book-cluster-serverlb:6443` will be the value)
-    * `tlsCert` value with `name/user/client-certificate-data` value from the output of `k3d kubeconfig`
-    * `tlsPrivateKey` value with `name/user/client-key-data` value from the output of `k3d kubeconfig`
-
-    * or in the xebialabs folder, run `python configure_k3d.py --output infrastructure.xlvals --cluster $CLUSTER_NAME`
-
-* Import all the ci definitions (application environment infrastructure) : run `make initialci`
-* Deploy the application using the UI or the command line
+### kustomize : switch configuration
 
 ```bash
-$./xlw preview --values version=1.0.0-0.0.1 -f xebialabs/deployment.yaml
-$./xlw apply --values version=1.0.0-0.0.1  -s -p -f xebialabs/deployment.yaml
-````
-
-## Modify the application
-
-### Edit the books.html
-
-Edit `src/main/webapp/books.html`  and modify the css -> footer -> background-color (line #24)
-
-### Build the web application
-
-```bash
-$make web
-````
-
-this command will
-
-* build the war artifact,
-* put it into a Docker container `docker build`,
-* tag the images `docker tag bmoussaud/bookstore-advanced registry.local:5000/bmoussaud/bookstore-advanced`
-* push it into the docker registry `docker push registry.local:5000/bmoussaud/bookstore-advanced`
-
-### Build the database
-
-```bash
-$make database
+kubectl apply -k ./kustomize/overlays/2
+kubectl apply -k ./kustomize/overlays/3
+kubectl apply -k ./kustomize/overlays/2
+kubectl delete -k ./kustomize/overlays/2
 ```
 
-or in detail:
+## Reference
 
-```bash
-cd database
-export SHA1="0.0.1"
-export DB_VERSION="1.0.0-$SHA1"
-docker build . --tag bmoussaud/bookstore-advanced-database:$DB_VERSION --build-arg version=$DB_VERSION
-docker tag bmoussaud/bookstore-advanced-database:$DB_VERSION registry.local:5000/bmoussaud/bookstore-advanced-database:$DB_VERSION
-docker push registry.local:5000/bmoussaud/bookstore-advanced-database:$DB_VERSION
-```
+* https://blog.stack-labs.com/code/kustomize-101/
 
-### Deploy
-
-
-git commit -am "change the color"
-
-```bash
-$make deploy
-```
-
-
-
-
-## References
-
-* https://codeburst.io/creating-a-local-development-kubernetes-cluster-with-k3s-and-traefik-proxy-7a5033cb1c2d
-* https://k33g.gitlab.io/articles/2020-02-27-K3S-05-REGISTRY.html
-* https://k3d.io/usage/guides/registries
-* https://blog.ruanbekker.com/blog/2020/02/21/persistent-volumes-with-k3d-kubernetes/
