@@ -19,7 +19,7 @@ data:
 kind: Deployment
 apiVersion: apps/v1
 metadata:  
-  name: cats-app
+  name: cats-app  
   labels:
     app: cats-app
     group: micro-pet

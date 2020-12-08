@@ -56,7 +56,7 @@ curl -k https://localhost:80/whoami/
 ```
 
 
-## pet
+## Deploy
 
 ### kubectl
 
@@ -65,14 +65,39 @@ kubectl apply -f k8s/resources-dev.yaml
 kubectl delete -f k8s/resources-dev.yaml
 ```
 
-### kustomize : switch configuration
+```bash
+K8S_NS='default'
+kubectl apply -f dogs/k8s/resources-dev.yaml -n ${K8S_NS}
+kubectl apply -f cats/k8s/resources-dev.yaml -n ${K8S_NS}
+kubectl apply -f fishes/k8s/resources-dev.yaml -n ${K8S_NS}
+kubectl apply -f pets/k8s/resources-dev.yaml -n ${K8S_NS}
+kubectl apply -f gui/k8s/resources-dev.yaml -n ${K8S_NS}
+```
 
 ```bash
+K8S_NS='default'
+kubectl delete -f dogs/k8s/resources-dev.yaml -n ${K8S_NS}
+kubectl delete -f cats/k8s/resources-dev.yaml -n ${K8S_NS}
+kubectl delete -f fishes/k8s/resources-dev.yaml -n ${K8S_NS}
+kubectl delete -f pets/k8s/resources-dev.yaml -n ${K8S_NS}
+kubectl delete -f gui/k8s/resources-dev.yaml -n ${K8S_NS}
+```
+
+
+### kustomize :  switch pets configuration
+
+Switch between 2 services (dogs & cats) and 2 services (dogs, cats & fishes).
+
+```bash
+kubectl delete -k ./kustomize/overlays/2
 kubectl apply -k ./kustomize/overlays/2
 kubectl apply -k ./kustomize/overlays/3
 kubectl apply -k ./kustomize/overlays/2
-kubectl delete -k ./kustomize/overlays/2
 ```
+
+### new environment test
+
+
 
 ## Reference
 
