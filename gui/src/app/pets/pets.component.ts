@@ -15,6 +15,8 @@ import { ConfigAssetLoaderService, Configuration} from '../config-asset-loader.s
 export class PetsComponent implements OnInit {
 
   public pets: any[] = []
+  public env: string;
+  public env_color: string;
   public dataSource: MatTableDataSource<any>;
 
   public config: Configuration
@@ -25,6 +27,7 @@ export class PetsComponent implements OnInit {
     this.configService.loadConfigurations().subscribe(data =>   this.config = {
       petServiceUrl: (data as any).petServiceUrl,
       stage:  (data as any).stage,
+      stage_color:  (data as any).stage_color,
     });
   }
 
@@ -42,6 +45,8 @@ export class PetsComponent implements OnInit {
       .pipe(map(result => result['Pets']))
       .subscribe(result => {
         this.pets = result;
+        this.env = this.config.stage;
+        this.env_color  = this.config.stage_color;
         this.dataSource = new MatTableDataSource(this.pets)
       });
   }

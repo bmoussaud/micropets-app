@@ -6,6 +6,7 @@ import {shareReplay} from 'rxjs/operators';
 export interface Configuration {
   petServiceUrl: string;
   stage: string;
+  stage_color: string;
 }
 
 @Injectable({providedIn: 'root'})
