@@ -16,9 +16,9 @@ data:
   config.json: |
     {  
       "petServiceUrl":"http://pets.dev.pet-cluster.demo/",
-      "stage": "dev",
+      "stage": "DEV",
       "debug": "False",
-      "stage_color": "blue"
+      "stage_color": "green"
     }
 ---
 kind: Deployment
