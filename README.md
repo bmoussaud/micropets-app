@@ -97,7 +97,7 @@ kubectl apply -k ./kustomize/overlays/2
 
 ### new environment test
 
-Target an existing namespace (test) and modify the url to use `test` in it.
+Target an existing namespace (test) and modify the Ingress resources to use `test` in it.
 
 ```bash
 kustomize build  kustomize/test | kubectl apply -f -
@@ -106,4 +106,6 @@ kustomize build  kustomize/test | kubectl apply -f -
 ## Reference
 
 * https://blog.stack-labs.com/code/kustomize-101/
+* https://kubectl.docs.kubernetes.io/references/kustomize/
+
 

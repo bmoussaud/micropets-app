@@ -1,4 +1,4 @@
 {    
-  "petServiceUrl":"http://localhost:9000/",
+  "petServiceUrl":"http://pets.dev.pet-cluster.demo/",
   "stage": "staging"
 }
