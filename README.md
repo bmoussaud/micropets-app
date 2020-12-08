@@ -97,7 +97,11 @@ kubectl apply -k ./kustomize/overlays/2
 
 ### new environment test
 
+Target an existing namespace (test) and modify the url to use `test` in it.
 
+```bash
+kustomize build  kustomize/test | kubectl apply -f -
+```
 
 ## Reference
 
