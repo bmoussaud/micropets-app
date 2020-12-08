@@ -18,6 +18,7 @@ data:
       "petServiceUrl":"http://pets.dev.pet-cluster.demo/",
       "stage": "dev",
       "debug": "False"
+      "stage_color": "blue"
     }
 ---
 kind: Deployment
