@@ -100,7 +100,8 @@ kubectl apply -k ./kustomize/overlays/2
 Target an existing namespace (test) and modify the Ingress resources to use `test` in it.
 
 ```bash
-kustomize build  kustomize/test | kubectl apply -f -
+kubectl create ns test
+kustomize build  kustomize/test | sed "s/DEV/TEST/g" | sed "s/pets.test.pet-cluster.demo/pets.dev.pet-cluster.demo/g" | kubectl apply -f -
 ```
 
 ## Reference
