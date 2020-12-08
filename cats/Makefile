@@ -53,4 +53,5 @@ deploy:
 	../xld.sh Applications/Containers/micropets/cats/$(XL_VALUE_version) Environments/MicroPet/Ops/micropet.k8s.staging
 
 k8s-deploy:
+	kubectl delete -f k8s/resources-dev.yaml
 	kubectl apply -f k8s/resources-dev.yaml
