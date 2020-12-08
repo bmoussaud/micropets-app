@@ -17,7 +17,7 @@ data:
     {  
       "petServiceUrl":"http://pets.dev.pet-cluster.demo/",
       "stage": "dev",
-      "debug": "False"
+      "debug": "False",
       "stage_color": "blue"
     }
 ---

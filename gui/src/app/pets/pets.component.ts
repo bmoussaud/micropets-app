@@ -39,8 +39,8 @@ export class PetsComponent implements OnInit {
   }
 
   private refresh() {
-    console.log("------------------- refresh")
-    console.log(this.config.petServiceUrl)
+    //console.log("------------------- refresh")
+    //console.log(this.config.petServiceUrl)
     this.http.get(this.config.petServiceUrl)
       .pipe(map(result => result['Pets']))
       .subscribe(result => {
