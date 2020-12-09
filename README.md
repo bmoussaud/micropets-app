@@ -101,8 +101,32 @@ Target an existing namespace (test) and modify the Ingress resources to use `tes
 
 ```bash
 kubectl create ns test
-kustomize build  kustomize/test | sed "s/DEV/TEST/g" | sed "s/pets.test.pet-cluster.demo/pets.dev.pet-cluster.demo/g" | kubectl apply -f -
+kustomize build  kustomize/test | sed "s/DEV/TEST/g" | sed "s/pets.dev.pet-cluster.demo/pets.test.pet-cluster.demo/g" | kubectl apply -f -
+kustomize build  kustomize/test | kubectl delete -f -
 ```
+
+### Progressive deployment on Prod
+
+Target an existing namespace (prod) and modify the Ingress resources to use `prod` in it.
+
+
+```bash
+kubectl create ns prod
+kustomize build  kustomize/prod | sed "s/DEV/PRODUCTION/g" | sed "s/pets.dev.pet-cluster.demo/pets.prod.pet-cluster.demo/g" | kubectl apply -f -
+# the pet application returns dogs & cats
+open http://gui.prod.pet-cluster.demo
+kubectl apply -f kustomize/prodfish/resources-dev-3.yaml -n prod
+# the pet application returns dogs & cats & FISHES ==alternatively==
+open http://gui.prod.pet-cluster.demo
+kubectl delete -f kustomize/prodfish/resources-dev-2.yaml -n prod
+
+# the pet application returns dogs & cats & FISHES
+open http://gui.prod.pet-cluster.demo
+
+kustomize build  kustomize/prod | kubectl delete -f -
+```
+
+Use a dedicated configuration to have the 2 versions of the pets implementation (one with fish, one without)
 
 ## Reference
 
