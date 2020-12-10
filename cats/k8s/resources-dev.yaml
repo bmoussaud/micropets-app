@@ -90,6 +90,8 @@ spec:
     services:
     - name: cats-service
       port: 7002
+  tls:
+    certResolver: default
 
 
 

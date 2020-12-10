@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pets-service
+  labels:
+    app: pets-app
+    group: micro-pet
+spec:
+  ports:
+    - protocol: TCP
+      name: pets
+      port: 9000
+  selector:
+    app: pets-app
+    group: micro-pet
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pets-ingress  
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+  - match: Host(`pets.dev.pet-cluster.demo`)
+    kind: Rule
+    services:
+    - name: pets-service
+      port: 9000

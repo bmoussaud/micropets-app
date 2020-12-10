@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pets-config-v2
+data:
+  pets_config.json: |
+    {
+      "service": {
+        "port":":9000",
+        "listen" : "true"
+      },
+      "backends": [
+        {"name":"cats","host":"cats-service", "port":"7002"},    
+        {"name":"dogs","host":"dogs-service", "port":"7003"}      
+      ]
+    }
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:  
+  name: pets-app-v2
+  labels:
+    app: pets-app
+    group: micro-pet    
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pets-app
+      group: micro-pet      
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: pets-app
+        group: micro-pet        
+        version: v2
+    spec:
+      volumes:
+        - name: config-volume
+          configMap:
+            name: pets-config-v2  
+            items:
+            - key: pets_config.json
+              path: pets_config.json
+      containers:
+        - name: pets
+          image: registry.local:5000/micropet/pets:dev
+          imagePullPolicy: Always
+          ports:
+            - name: pets
+              containerPort: 9000
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/service/
+          env:
+            - name: SERVICE_CONFIG
+              value: /etc/service/pets_config.json                      
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 5
+---

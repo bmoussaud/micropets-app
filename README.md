@@ -99,6 +99,18 @@ open the website
 open http://gui.dev.pet-cluster.demo/
 ````
 
+#### Modify the frontend
+
+* edit  `gui/src/app/pets/pets.component.css` and change one color
+* commit your code
+* run `cd gui && make docker-build k8s-deploy`
+
+the Makefile handles :
+
+* the build of the Angular application
+* the build of the Docker Image,
+* the deployment into the Kubernetes Cluster
+
 #### Undeploy
 
 ```bash
@@ -110,25 +122,34 @@ kubectl delete -f pets/k8s/resources-dev.yaml -n ${K8S_NS}
 kubectl delete -f gui/k8s/resources-dev.yaml -n ${K8S_NS}
 ```
 
+### Switch pets configuration
 
-### kustomize :  switch pets configuration
+Switch between 2 services (dogs & cats) and 3 services (dogs, cats & fishes).
 
-Switch between 2 services (dogs & cats) and 2 services (dogs, cats & fishes).
+It uses the [kustomize](https://kustomize.io/) to generate the config map and to link it to the deployment.
 
 ```bash
+cd pets
 kubectl delete -k ./kustomize/overlays/2
 kubectl apply -k ./kustomize/overlays/2
 kubectl apply -k ./kustomize/overlays/3
 kubectl apply -k ./kustomize/overlays/2
 ```
 
-### new environment test
+### New environment : test
 
 Target an existing namespace (test) and modify the Ingress resources to use `test` in it.
+
+It uses the [kustomize](https://kustomize.io/) 
+
+* to generate the config map,
+* to manage the namespace name,
+* to change the Ingress URL (from .*dev*.pet-cluster.demo to .*test*.pet-cluster.demo)
 
 ```bash
 kubectl create ns test
 kustomize build  kustomize/test | sed "s/DEV/TEST/g" | sed "s/pets.dev.pet-cluster.demo/pets.test.pet-cluster.demo/g" | kubectl apply -f -
+open http://gui.test.pet-cluster.demo/
 kustomize build  kustomize/test | kubectl delete -f -
 ```
 

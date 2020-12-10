@@ -1,0 +1,45 @@
+# kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+- ../../cats/k8s
+- ../../dogs/k8s
+- ../../fishes/k8s
+- ../../gui/k8s
+- pets.yaml
+- pets-v2.yaml
+- pets-v3.yaml
+namespace: canary
+commonLabels:  
+  environment: canary
+patches:
+- target:    
+    name: cats-ingress  
+  patch: |-
+    - op: replace
+      path: /spec/routes/0/match
+      value: Host(`cats.canary.pet-cluster.demo`)
+- target:    
+    name: dogs-ingress  
+  patch: |-
+    - op: replace
+      path: /spec/routes/0/match
+      value: Host(`dogs.canary.pet-cluster.demo`)
+- target:    
+    name: fishes-ingress  
+  patch: |-
+    - op: replace
+      path: /spec/routes/0/match
+      value: Host(`fishes.canary.pet-cluster.demo`)
+- target:    
+    name: gui-ingress  
+  patch: |-
+    - op: replace
+      path: /spec/routes/0/match
+      value: Host(`gui.canary.pet-cluster.demo`)
+- target:    
+    name: pets-ingress  
+  patch: |-
+    - op: replace
+      path: /spec/routes/0/match
+      value: Host(`pets.canary.pet-cluster.demo`)
