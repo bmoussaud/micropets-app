@@ -75,6 +75,8 @@ and check with your browser you can connect to `https://localhost:80/whoami/` or
 ```bash
 curl -k https://localhost:80/whoami/
 ```
+
+
 ![Components](img/components.png)
 
 ## Deployments
