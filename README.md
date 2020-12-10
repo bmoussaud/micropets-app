@@ -1,4 +1,21 @@
-# README
+# MicroPet
+
+## Overview
+
+MicroPet is a MicroService Application that includes 4 components:
+
+* `Dogs` is a service managing dogs (Go)
+* `Cats` is a service managing cats (Go)
+* `Fishes` is a service managing fishes (Go)
+* `Pets` is a front ends service managing cats,dogs & fishes (Go)
+* `Gui` is a frontend of the wonderfull application (Angular)
+
+All the services are built into a Docker Images
+All the service have deployed in a Kubernetes Cluster following the pattern:
+
+Ingress <--> Service <--> Deployement <--> {ConfigMap,Secrets}
+                                    
+![Architecture](img/micropets-msa-2.png)
 
 Note: All the procedure has tested only on Mac using
 
@@ -109,7 +126,6 @@ kustomize build  kustomize/test | kubectl delete -f -
 
 Target an existing namespace (prod) and modify the Ingress resources to use `prod` in it.
 
-
 ```bash
 kubectl create ns prod
 kustomize build  kustomize/prod | sed "s/DEV/PRODUCTION/g" | sed "s/pets.dev.pet-cluster.demo/pets.prod.pet-cluster.demo/g" | kubectl apply -f -
@@ -127,6 +143,41 @@ kustomize build  kustomize/prod | kubectl delete -f -
 ```
 
 Use a dedicated configuration to have the 2 versions of the pets implementation (one with fish, one without)
+
+## Canary Deployment with istio
+
+Install istio on your cluster
+
+```bash
+istioctl install
+kubectl -n istio-system get deploy
+```
+
+Create a new namespace (canary) and enable istio
+
+```bash
+kubectl create ns canary
+kubectl label namespace canary istio-injection=enabled
+kubectl get namespace -L istio-injection
+```
+
+Deploy the application
+
+```` bash
+kustomize build kustomize/canary | sed "s/DEV/CANARY/g" | sed "s/pets.dev.pet-cluster.demo/pets.canary.pet-cluster.demo/g" | kubectl apply -f -
+open http://gui.canary.pet-cluster.demo
+````
+
+#Maesh
+
+```bash
+$ helm repo add maesh https://containous.github.io/maesh/charts
+$ helm repo update
+$ helm install maesh maesh/maesh
+```
+
+curl pets-service.canary.svc.cluster.local:9000
+curl pets-service.canary.svc.cluster.local:9000
 
 ## Reference
 
