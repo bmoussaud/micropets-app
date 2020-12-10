@@ -14,7 +14,7 @@ All the services are built into a Docker Images
 All the service have deployed in a Kubernetes Cluster following the pattern:
 
 Ingress <--> Service <--> Deployement <--> {ConfigMap,Secrets}
-                                    
+
 ![Architecture](img/micropets-msa-2.png)
 
 Note: All the procedure has tested only on Mac using
@@ -48,6 +48,7 @@ docker push registry.local:5000/containous/whoami:latest
 ## New K3S Cluster
 
 Create new K3S cluster using the docker registry created previously.
+It deploys [Helm](https://helm.sh/) & [Traefik](https://doc.traefik.io/traefik/).  
 
 Edit `k3s/new-local-cluster.sh` and set the value for
 
@@ -72,15 +73,16 @@ and check with your browser you can connect to `https://localhost:80/whoami/` or
 curl -k https://localhost:80/whoami/
 ```
 
+## Deployments
 
-## Deploy
-
-### kubectl
+### Deploy the Dev environment
 
 ```bash
 kubectl apply -f k8s/resources-dev.yaml
 kubectl delete -f k8s/resources-dev.yaml
 ```
+
+#### Deploy
 
 ```bash
 K8S_NS='default'
@@ -90,6 +92,14 @@ kubectl apply -f fishes/k8s/resources-dev.yaml -n ${K8S_NS}
 kubectl apply -f pets/k8s/resources-dev.yaml -n ${K8S_NS}
 kubectl apply -f gui/k8s/resources-dev.yaml -n ${K8S_NS}
 ```
+
+open the website
+
+```bash
+open http://gui.dev.pet-cluster.demo/
+````
+
+#### Undeploy
 
 ```bash
 K8S_NS='default'
