@@ -20,15 +20,18 @@ Ingress <--> Service <--> Deployement <--> {ConfigMap,Secrets}
 Note: All the procedure has tested only on Mac using
 
 * Docker For Mac
-* K3D
+* [K3D](https://k3d.io/) / [K3S](https://k3s.io/)
 * Helm
+* Traefik
 
-## New Docker Registry
+## Setup the infrastructure
+
+### New Docker Registry
 
 Create a new Docker Registry locally  using docker using `registry.local` as DNS name.
 
 ```bash
-$k3s/new-docker-registry.sh
+$ ./k3s/new-docker-registry.sh
 ```
 
 Edit your local hostname config /etc/hosts
@@ -37,7 +40,7 @@ Edit your local hostname config /etc/hosts
 127.0.0.1 registry.local
 ```
 
-## Test the registry
+### Test the registry
 
 ```bash
 docker pull containous/whoami
@@ -45,7 +48,7 @@ docker tag  containous/whoami registry.local:5000/containous/whoami:latest
 docker push registry.local:5000/containous/whoami:latest
 ```
 
-## New K3S Cluster
+### New K3S Cluster
 
 Create new K3S cluster using the docker registry created previously.
 It deploys [Helm](https://helm.sh/) & [Traefik](https://doc.traefik.io/traefik/).  
@@ -56,10 +59,10 @@ Edit `k3s/new-local-cluster.sh` and set the value for
 * K3S_HOME
 
 ```bash
-$k3s/new-local-cluster.sh
+$ k3s/new-local-cluster.sh
 ```
 
-## Test k3s configuration
+### Test k3s configuration
 
 Apply the following configuration
 
@@ -72,6 +75,7 @@ and check with your browser you can connect to `https://localhost:80/whoami/` or
 ```bash
 curl -k https://localhost:80/whoami/
 ```
+![Components](img/components.png)
 
 ## Deployments
 
