@@ -181,44 +181,35 @@ kustomize build  kustomize/prod | kubectl delete -f -
 
 Use a dedicated configuration to have the 2 versions of the pets implementation (one with fish, one without)
 
-## Canary Deployment with istio
-
-Install istio on your cluster
+## Canary Deployment using Traefik
 
 ```bash
-istioctl install
-kubectl -n istio-system get deploy
-```
-
-Create a new namespace (canary) and enable istio
-
-```bash
-kubectl create ns canary
-kubectl label namespace canary istio-injection=enabled
-kubectl get namespace -L istio-injection
-```
-
-Deploy the application
-
-```` bash
 kustomize build kustomize/canary | sed "s/DEV/CANARY/g" | sed "s/pets.dev.pet-cluster.demo/pets.canary.pet-cluster.demo/g" | kubectl apply -f -
-open http://gui.canary.pet-cluster.demo
+```
+
+open http://pets.canary.pet-cluster.demo/
+
+Inject traffic using [slow_cooker](https://github.com/BuoyantIO/slow_cooker)
+
+```bash
+./slow_cooker_darwin -qps 100 http://pets.canary.pet-cluster.demo/
 ````
 
-#Maesh
+After few minutes apply `kustomize/canary/pets_activate_20_80.yaml` to have V2 service (20%) and V3 service (80%)
+After few minutes apply `kustomize/canary/pets_activate_00_100.yaml` to have V3 service (100%)
+
+if linkerd has been installed you can look at the Grafana Dashbord showing 1/5 of the requests to the _pets_ service  goes to v3 including the fishes.
 
 ```bash
-$ helm repo add maesh https://containous.github.io/maesh/charts
-$ helm repo update
-$ helm install maesh maesh/maesh
+linkerd dashboard &
+linkerd -n canary stat deploy
 ```
 
-curl pets-service.canary.svc.cluster.local:9000
-curl pets-service.canary.svc.cluster.local:9000
+![Result](img/canary.png)
+
 
 ## Reference
 
 * https://blog.stack-labs.com/code/kustomize-101/
 * https://kubectl.docs.kubernetes.io/references/kustomize/
-
-
+* https://tasdikrahman.me/2019/09/12/ways-to-do-canary-deployments-kubernetes-traefik-istio-linkerd/

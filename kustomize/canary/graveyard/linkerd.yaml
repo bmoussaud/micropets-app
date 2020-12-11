@@ -1,0 +1,28 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: l5d-header-middleware-pets
+  namespace: traefik
+spec:
+  headers:
+    customRequestHeaders:
+      l5d-dst-override: "pets-service.canary.svc.cluster.local:9000"
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pets-ingress  
+  namespace: canary
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+  - match: Host(`pets.canary.pet-cluster.demo`)
+    kind: Rule
+    middlewares:
+    - name: l5d-header-middleware-pets
+      namespace: traefik
+    services:
+    - name: pets-app-v3
+      port: 9000

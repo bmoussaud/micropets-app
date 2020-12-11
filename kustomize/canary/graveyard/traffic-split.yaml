@@ -1,0 +1,12 @@
+apiVersion: split.smi-spec.io/v1alpha1
+kind: TrafficSplit
+metadata:
+  name: pets-traffic-split-v3
+  namespace: canary
+spec:
+  service: pets-app-v2
+  backends:
+  - service: pets-app-v2
+    weight: 900m
+  - service: pets-app-v3
+    weight: 100m

@@ -12,6 +12,8 @@ bases:
 namespace: canary
 commonLabels:  
   environment: canary
+commonAnnotations:
+  linkerd.io/inject: enabled
 patches:
 - target:    
     name: cats-ingress  

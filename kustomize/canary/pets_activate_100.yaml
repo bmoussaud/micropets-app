@@ -14,9 +14,9 @@ spec:
     - name: pets-app-v2
       port: 9000
       strategy: RoundRobin
-      weight: 80
+      weight: 0
     - name: pets-app-v3
       port: 9000    
       strategy: RoundRobin
-      weight: 20
+      weight: 100
 
