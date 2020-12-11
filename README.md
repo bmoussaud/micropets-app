@@ -205,7 +205,8 @@ linkerd dashboard &
 linkerd -n canary stat deploy
 ```
 
-![Result](img/canary.png)
+![Result](img/canary2.png)
+
 
 
 ## Reference
