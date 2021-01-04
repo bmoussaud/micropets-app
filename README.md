@@ -1,4 +1,4 @@
-# MicroPet
+# MicroPets
 
 ## Overview
 
