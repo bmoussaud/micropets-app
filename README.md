@@ -212,6 +212,11 @@ linkerd -n canary stat deploy
 ![Result](img/canary2.png)
 
 
+## Gitops with Flux
+
+Ref [https://toolkit.fluxcd.io/](https://toolkit.fluxcd.io/)
+export GITHUB_TOKEN=<your-token>
+export GITHUB_USER=<your-username>
 
 ## Reference
 
