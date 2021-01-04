@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: cats-db-credentials
+  namepace: {{NAMESPACE}}
 type: Opaque
 data:
   user: YWRtaW4K
@@ -55,7 +56,6 @@ spec:
                 secretKeyRef:
                   name: cats-db-credentials
                   key: password
-
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 5

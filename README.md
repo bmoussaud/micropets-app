@@ -99,6 +99,10 @@ kubectl apply -f pets/k8s/resources-dev.yaml -n ${K8S_NS}
 kubectl apply -f gui/k8s/resources-dev.yaml -n ${K8S_NS}
 ```
 
+Check the output and the status of the resources to be sure everything is ok.
+It's implicit advice you have to follow after running any _kubectl_ command.
+_kubectl apply_ is an asynchronous command that returns 'OK' 90% of the time because it asks the Kubernetes Cluster to change the resources' state.
+
 open the website
 
 ```bash
@@ -214,3 +218,4 @@ linkerd -n canary stat deploy
 * https://blog.stack-labs.com/code/kustomize-101/
 * https://kubectl.docs.kubernetes.io/references/kustomize/
 * https://tasdikrahman.me/2019/09/12/ways-to-do-canary-deployments-kubernetes-traefik-istio-linkerd/
+* https://medium.com/@trlogic/linkerd-traffic-split-acf6fae3b7b8
