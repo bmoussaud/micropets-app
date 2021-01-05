@@ -269,6 +269,45 @@ flux create kustomization cats \
   --export > ./staging-cluster/cats.yaml
 ```
 
+Commit & push the 2 resources.
+
+```bash
+git add -A && git commit -m "add staging webapp" && git push
+```
+
+Check the cats services is now deployed on the `dev` namespace
+
+``` bash
+❯ flux get kustomizations
+NAME       	READY	MESSAGE                                                          	REVISION                                       	SUSPENDED
+cats       	True 	Applied revision: master/5f3500cc01bb04c743d80c24162221125566168f	master/5f3500cc01bb04c743d80c24162221125566168f	False
+flux-system	True 	Applied revision: main/f41fcc19c9a3c011b527e8d58feb78bf642badfd  	main/f41fcc19c9a3c011b527e8d58feb78bf642badfd  	False
+````
+
+Replicate the configuration for the following services: dogs,gui,pets
+
+```bash
+git add -A && git commit -m "add staging dogs,pets,gui" && git push
+watch flux get kustomizations
+````
+
+```bash
+Every 2,0s: flux get kustomizations                                                                          MacBook-Pro-de-Benoit.local: 
+
+NAME            READY   MESSAGE                                                                 REVISION                                        SUSPENDED
+cats            True    Applied revision: master/5f3500cc01bb04c743d80c24162221125566168f       master/5f3500cc01bb04c743d80c24162221125566168f False
+flux-system     True    Applied revision: main/5108bf3cf14826770c63ad28e13434841b40079e         main/5108bf3cf14826770c63ad28e13434841b40079e   False
+dogs            True    Applied revision: master/5f3500cc01bb04c743d80c24162221125566168f       master/5f3500cc01bb04c743d80c24162221125566168f False
+gui             True    Applied revision: master/5f3500cc01bb04c743d80c24162221125566168f       master/5f3500cc01bb04c743d80c24162221125566168f False
+pets            True    Applied revision: master/5f3500cc01bb04c743d80c24162221125566168f       master/5f3500cc01bb04c743d80c24162221125566168f False
+````
+
+to force Flux to reconcile with repos
+
+```bash
+flux reconcile kustomization flux-system --with-source
+```
+
 ## Reference
 
 * https://blog.stack-labs.com/code/kustomize-101/
