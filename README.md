@@ -217,9 +217,63 @@ Ref [https://toolkit.fluxcd.io/](https://toolkit.fluxcd.io/)
 export GITHUB_TOKEN=<your-token>
 export GITHUB_USER=<your-username>
 
+flux bootstrap github \
+  --owner=$GITHUB_USER \
+  --repository=fleet-infra \
+  --branch=main \
+  --path=staging-cluster \
+  --personal
+
+this command creates or updates the `fleet-infra` personal private repository with a new path `staging-cluster` generating the flux configuration for this cluster. Then it applies them to the current cluster.
+
+``` bash
+.
+├── README.md
+└── staging-cluster
+    └── flux-system
+        ├── gotk-components.yaml
+        ├── gotk-sync.yaml
+        └── kustomization.yaml
+
+2 directories, 4 files
+```
+
+```bash
+❯ kubectl get pods --namespace flux-system
+NAME                                       READY   STATUS    RESTARTS   AGE
+helm-controller-6765c95b47-nsmbz           1/1     Running   0          89s
+notification-controller-694856fd64-jctjg   1/1     Running   0          89s
+source-controller-5bdb7bdfc9-djxgs         1/1     Running   0          89s
+kustomize-controller-7f5455cd78-jz6wc      1/1     Running   0          89s
+```
+
+Add the `micropets-app` project to be managed.
+
+```bash
+flux create source git webapp \
+  --url=https://github.com/bmoussaud/micropets-app \
+  --branch=master \
+  --interval=30s \
+  --export > ./staging-cluster/micropets-source.yaml
+```
+
+Add the `cats` projects
+
+```bash
+flux create kustomization cats \
+  --source=webapp \
+  --path="./cats/k8s" \
+  --prune=true \
+  --validation=client \
+  --interval=1h \
+  --export > ./staging-cluster/cats.yaml
+```
+
 ## Reference
 
 * https://blog.stack-labs.com/code/kustomize-101/
 * https://kubectl.docs.kubernetes.io/references/kustomize/
 * https://tasdikrahman.me/2019/09/12/ways-to-do-canary-deployments-kubernetes-traefik-istio-linkerd/
 * https://medium.com/@trlogic/linkerd-traffic-split-acf6fae3b7b8
+* https://youtu.be/R6OeIgb7lUI
+
