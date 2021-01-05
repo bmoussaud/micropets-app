@@ -2,8 +2,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cats-db-credentials
-  namepace: {{NAMESPACE}}
+  name: cats-db-credentials  
 type: Opaque
 data:
   user: YWRtaW4K
@@ -90,8 +89,8 @@ spec:
     services:
     - name: cats-service
       port: 7002
-  tls:
-    certResolver: default
+#  tls:
+#    certResolver: default
 
 
 

@@ -31,7 +31,7 @@ Note: All the procedure has tested only on Mac using
 Create a new Docker Registry locally  using docker using `registry.local` as DNS name.
 
 ```bash
-$ ./k3s/new-docker-registry.sh
+$./k3s/new-docker-registry.sh
 ```
 
 Edit your local hostname config /etc/hosts
@@ -59,7 +59,7 @@ Edit `k3s/new-local-cluster.sh` and set the value for
 * K3S_HOME
 
 ```bash
-$ k3s/new-local-cluster.sh
+$k3s/new-local-cluster.sh
 ```
 
 ### Test k3s configuration
@@ -75,7 +75,6 @@ and check with your browser you can connect to `https://localhost:80/whoami/` or
 ```bash
 curl -k https://localhost:80/whoami/
 ```
-
 
 ![Components](img/components.png)
 
