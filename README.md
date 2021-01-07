@@ -308,6 +308,19 @@ to force Flux to reconcile with repos
 flux reconcile kustomization flux-system --with-source
 ```
 
+The `interval` values in the kustomization resource creation tells fluxcd will check this interval to keep the configuration synchronized.
+In the command line we set 1h, but it's possible to lower this value to 60s. 
+
+* Edit the cats.yaml file and set the new interval value
+
+```yaml
+interval: 60s
+````
+
+* commit and push the code
+* kill the `cats` deployment object.
+* wait for 60 secondes, it will come back.
+
 ## Reference
 
 * https://blog.stack-labs.com/code/kustomize-101/
