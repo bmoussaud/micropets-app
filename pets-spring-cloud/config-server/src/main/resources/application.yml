@@ -1,6 +1,14 @@
 server.port: 8888
 
-spring.cloud.config.server.native.searchLocations: file:${PWD}/config-repo
+#spring.cloud.config.server.native.searchLocations: file:${PWD}/config-repo
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/bmoussaud/sample_configuration
+
+
 
 # WARNING: Exposing all management endpoints over http should only be used during development, must be locked down in production!
 management.endpoint.health.show-details: "ALWAYS"
@@ -12,5 +20,4 @@ logging:
 
 ---
 spring.profiles: docker
-spring.cloud.config.server.native.searchLocations: file:/config-repo
 

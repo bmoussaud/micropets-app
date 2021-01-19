@@ -26,7 +26,7 @@ xebialabs:
 	xl --xl-deploy-url http://localhost:4525 apply -s --proceed-when-dirty -f xebialabs.yaml
 
 docker-run: 
-	docker run -v config-repo:/config-repo -p 8888:8888 -e SPRING_SECURITY_USER_NAME=scott -e SPRING_SECURITY_USER_PASSWORD=tiger -e SPRING_PROFILES_ACTIVE=docker,native $(BINARY_NAME):$(VERSION)
+	docker run -v config-repo:/config-repo -p 8888:8888 -e SPRING_SECURITY_USER_NAME=scott -e SPRING_SECURITY_USER_PASSWORD=tiger -e SPRING_PROFILES_ACTIVE=docker,git $(BINARY_NAME):$(VERSION)
 
 k8s-deploy:
 	kubectl delete -f k8s/resources-dev.yaml

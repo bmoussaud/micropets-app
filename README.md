@@ -322,11 +322,22 @@ interval: 60s
 * kill the `cats` deployment object.
 * wait for 60 secondes, it will come back.
 
-## Reference
+## Pets Spring
+
+[Pet-Spring](pet-spring) is another implementation of the `pets` service using the Spring Cloud Framework. 
+IPets has been implemented using the Go Language.
+It uses the custom `config-server` stored in `pets-spring-cloud/config-server` the configuration is stored in `https://github.com/bmoussaud/sample_configuration`
+
+## References
 
 * https://blog.stack-labs.com/code/kustomize-101/
 * https://kubectl.docs.kubernetes.io/references/kustomize/
 * https://tasdikrahman.me/2019/09/12/ways-to-do-canary-deployments-kubernetes-traefik-istio-linkerd/
 * https://medium.com/@trlogic/linkerd-traffic-split-acf6fae3b7b8
 * https://youtu.be/R6OeIgb7lUI
+* https://github.com/JoeDog/siege https://www.linode.com/docs/guides/load-testing-with-siege/
+* https://github.com/PacktPublishing/Hands-On-Microservices-with-Spring-Boot-and-Spring-Cloud/tree/master/Chapter12
+
+
+
 

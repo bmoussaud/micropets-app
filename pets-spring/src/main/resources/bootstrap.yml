@@ -2,13 +2,15 @@ spring:
   application:
     name: pets-spring
   cloud:
+    config:
+      uri: http://scott:tiger@pets-config-server-service:8888
     kubernetes:
       reload:
         period: 1000
         enabled: true
       # https://docs.spring.io/spring-cloud-kubernetes/docs/current/reference/html/index.html#kubernetes-propertysource-implementations
       config:
-        enabled: true
+        enabled: false
 
 logging:
   level:
