@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cats-db-credentials  
+  name: fishes-db-credentials
 type: Opaque
 data:
   user: YWRtaW4K
@@ -11,50 +11,51 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cats-config
+  name: fishes-config
 data:
   config.properties: |
-    listen.port: 7002
+    listen.port: 7007
 ---
 kind: Deployment
 apiVersion: apps/v1
 metadata:  
-  name: cats-app  
+  name: fishes-app
   labels:
-    app: cats-app
+    app: fishes-app
     group: micro-pet
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cats-app
+      app: fishes-app
       group: micro-pet
   template:
     metadata:
       labels:
-        app: cats-app
+        app: fishes-app
         group: micro-pet
     spec:
       containers:
-        - name: cats
-          image: registry.local:5000/micropet/cats:dev
+        - name: fishes
+          image: registry.local:5000/micropet/fishes:dev
           imagePullPolicy: Always
           ports:
-            - name: cats
-              containerPort: 7002
+            - name: fishes
+              containerPort: 7007
           env:
-            - name: DATABASE_URL2
-              value: jdbc:postgresql://cats-db:5432/cats
+            - name: DATABASE_URL
+              value: jdbc:postgresql://fishes-db:5432/fishes
             - name: DATABASE_USER
               valueFrom:
                 secretKeyRef:
-                  name: cats-db-credentials
+                  name: fishes-db-credentials
                   key: user
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: cats-db-credentials
+                  name: fishes-db-credentials
                   key: password
+
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 5
@@ -62,35 +63,33 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: cats-service
+  name: fishes-service
   labels:
-    app: cats-app
+    app: fishes-app
     group: micro-pet
 spec:
   ports:
     - protocol: TCP
-      name: cats
-      port: 7002
+      name: fishes
+      port: 7007
   selector:
-    app: cats-app
+    app: fishes-app
     group: micro-pet
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: cats-ingress  
+  name: fishes-ingress  
 spec:
   entryPoints:
     - web
     - websecure
   routes:
-  - match: Host(`cats.dev.pet-cluster.demo`)
+  - match: Host(`fishes.dev.pet-cluster.demo`)
     kind: Rule
     services:
-    - name: cats-service
-      port: 7002
-#  tls:
-#    certResolver: default
+    - name: fishes-service
+      port: 7007
 
 
 

@@ -107,7 +107,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: xxxxpetsspringxxxx
+  name: pets-spring
 data:
   application.properties: |-
     myconfig.backends[0].name=cats

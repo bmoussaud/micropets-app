@@ -97,6 +97,9 @@ kubectl apply -f cats/k8s/resources-dev.yaml -n ${K8S_NS}
 kubectl apply -f fishes/k8s/resources-dev.yaml -n ${K8S_NS}
 kubectl apply -f pets/k8s/resources-dev.yaml -n ${K8S_NS}
 kubectl apply -f gui/k8s/resources-dev.yaml -n ${K8S_NS}
+kubectl apply -f pets-spring/k8s/resources-dev.yaml -n ${K8S_NS}
+kubectl apply -f pets-spring/k8s/resources-dev.yaml -n ${K8S_NS}
+kubectl apply -f pets-spring-cloud/config-server/k8s/resources-dev.yaml -n ${K8S_NS}
 ```
 
 Check the output and the status of the resources to be sure everything is ok.
@@ -130,6 +133,8 @@ kubectl delete -f cats/k8s/resources-dev.yaml -n ${K8S_NS}
 kubectl delete -f fishes/k8s/resources-dev.yaml -n ${K8S_NS}
 kubectl delete -f pets/k8s/resources-dev.yaml -n ${K8S_NS}
 kubectl delete -f gui/k8s/resources-dev.yaml -n ${K8S_NS}
+kubectl delete -f pets-spring/k8s/resources-dev.yaml -n ${K8S_NS}
+kubectl delete -f pets-spring-cloud/config-server/k8s/resources-dev.yaml -n ${K8S_NS}
 ```
 
 ### Switch pets configuration
