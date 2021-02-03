@@ -1,0 +1,19 @@
+#@data/values
+---
+application: micro-pet
+version: 1.0.0
+containers:
+- name: cats 
+  image: registry.local:5000/micropet/cats:dev
+  replicas: 1
+  profile: demo  
+  env:
+    DATABASE_URL: jdbc:postgresql://cats-db:5432/cats
+  config:
+    DATABASE_USER: scott
+    CATS_SERVICE_DEBUG: True
+  secret:
+    DATABASE_PASSWORD: tiger
+  ports:
+  - name: web    
+    containerPort: 7002    

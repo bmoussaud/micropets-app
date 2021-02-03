@@ -1,0 +1,9 @@
+#@ load("@ytt:base64", "base64")
+
+#@ def encoded_entries(entries):
+#@ data = {}
+#@ for entry in entries:
+#@ data[entry]=base64.encode(entry)
+#@ end
+entries: #@ data
+#@ end

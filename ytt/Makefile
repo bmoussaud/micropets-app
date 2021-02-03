@@ -1,0 +1,3 @@
+katapult:
+	ytt -f .
+

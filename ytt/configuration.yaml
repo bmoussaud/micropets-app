@@ -1,0 +1,19 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:base64", "base64")
+#@ load("helpers.star","app","config","secret","env")
+#@ load("helpers.lib.yml", "encoded_entries")
+
+#@ for/end container in data.values.containers:
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: #@ secret(container)
+type: Opaque
+data: #@ encoded_entries(container.secret)['entries']
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ config(container)
+data: #@ container.config

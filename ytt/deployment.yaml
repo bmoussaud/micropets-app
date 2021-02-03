@@ -1,0 +1,42 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:base64", "base64")
+#@ load("helpers.star","app","config","secret","env")
+#@ load("helpers.lib.yml", "encoded_entries")
+
+#@ for/end container in data.values.containers:
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: #@ container.name
+  labels:
+    app: #@ app(container)
+    group: #@ data.values.application
+spec:
+  replicas: #@ container.replicas
+  selector:
+    matchLabels:
+      app: #@ app(container)
+      group: #@ data.values.application
+  template:
+    metadata:
+      labels:
+        app: #@ app(container)
+        group: #@ data.values.application
+    spec:
+      containers:
+        - name: #@ container.name
+          image: #@ container.image
+          imagePullPolicy: Always
+          ports:
+            #@ for/end port in container.ports:
+            - name: #@ port.name
+              containerPort: #@ port.containerPort
+              protocol: TCP
+          #@ if hasattr(container,"env"):
+          env: #@ env(container)
+          #@ end
+
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 5

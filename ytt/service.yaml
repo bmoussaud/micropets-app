@@ -1,0 +1,22 @@
+#@ load("@ytt:data", "data")
+#@ load("helpers.star","app","config","secret","env")
+
+#@ for/end container in data.values.containers:
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ container.name+"-service"
+  labels:
+    app: #@ app(container)
+    group: #@ data.values.application
+spec:
+  ports:
+  #@ for/end port in container.ports:
+    - name: #@ port.name
+      port: #@ port.containerPort
+      protocol: TCP    
+  selector:
+    app: #@ app(container)
+    group: #@ data.values.application
+
