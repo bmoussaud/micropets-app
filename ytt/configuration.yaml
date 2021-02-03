@@ -3,7 +3,8 @@
 #@ load("helpers.star","app","config","secret","env")
 #@ load("helpers.lib.yml", "encoded_entries")
 
-#@ for/end container in data.values.containers:
+#@ for container in data.values.containers:
+#@ if hasattr(container,"secret"):
 ---
 apiVersion: v1
 kind: Secret
@@ -11,9 +12,16 @@ metadata:
   name: #@ secret(container)
 type: Opaque
 data: #@ encoded_entries(container.secret)['entries']
+#@ end
+#@ end
+
+#@ for container in data.values.containers:
+#@ if hasattr(container,"config"):
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: #@ config(container)
 data: #@ container.config
+#@ end
+#@ end

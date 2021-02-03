@@ -1,3 +1,4 @@
+load("@ytt:struct", "struct")
 
 def app(container):
     return "app-"+container.name
@@ -19,13 +20,16 @@ end
 
 def config_entry(key,refsecret):
   return {'name':key,'valueFrom': {'configMapKeyRef':{'name':refsecret,'key':key}}}
-
 end 
 
 def env(container):
     dvars = []
     for v in container.env: dvars.append({"name": v, "value": container.env[v]})
-    for v in container.config: dvars.append(config_entry(v,config(container)))
-    for v in container.secret: dvars.append(secret_entry(v, secret(container)))
+    if hasattr(container,"config"):
+      for v in container.config: dvars.append(config_entry(v,config(container)))
+    end
+    if hasattr(container,"secret"):
+      for v in container.secret: dvars.append(secret_entry(v, secret(container)))
+    end
     return dvars
 end

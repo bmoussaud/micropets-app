@@ -11,9 +11,26 @@ containers:
     DATABASE_URL: jdbc:postgresql://cats-db:5432/cats
   config:
     DATABASE_USER: scott
-    CATS_SERVICE_DEBUG: True
+    CATS_SERVICE_LVEL: ERROR
   secret:
     DATABASE_PASSWORD: tiger
   ports:
   - name: web    
     containerPort: 7002    
+- name: dogs 
+  image: registry.local:5000/micropet/dogs:dev
+  replicas: 1
+  profile: demo    
+  ports:
+  - name: web    
+    containerPort: 7003    
+- name: fishes 
+  image: registry.local:5000/micropet/fishes:dev
+  replicas: 1
+  profile: demo 
+  env:
+    DATABASE_URL: jdbc:postgresql://fishes-db:5432/fishes   
+  ports:
+  - name: web    
+    containerPort: 7007
+  
