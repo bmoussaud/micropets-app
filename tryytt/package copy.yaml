@@ -1,0 +1,46 @@
+#@data/values
+---
+apiVersion: uccm/v1
+kind: Package
+spec:
+- name: xl-front-back-app-1.0    
+  items:
+  - name: front
+    type: uccm.ContainerSpec
+    image: bmoussaud/xl-demo-frontend:1.0.83
+    replicas: 1
+    profile: production
+    env:
+      BACKEND_ENDPOINT: http://back-web-service
+      FEATURE: UCCM <b>{{env}}</b>-xl-demo-frontend:1.0.83
+    ports:
+    - name: web
+      type: uccm.ContainerPortSpec
+      containerPort: "8000"
+      servicePort: "80"
+      exposeAsIngress: "true"
+    mountedFiles:
+    - name: config
+      type: uccm.MountedFileSpec
+      placeholders:
+      - alternate.color
+      path: /opt/config/data
+      isSensitive: "false"
+      file: !file "artifacts/Applications/xl-front-back-app/1.0.83/front/config/config.properties"
+    - name: sensitive-config
+      type: uccm.MountedFileSpec
+      placeholders:
+      - password
+      path: /opt/config/data_secured
+      isSensitive: "true"
+      file: !file "artifacts/Applications/xl-front-back-app/1.0.83/front/sensitive-config/secured-config.properties"
+  - name: back
+    type: uccm.ContainerSpec
+    image: bmoussaud/xl-demo-backend:1.0.83
+    replicas: "1"
+    profile: production
+    ports:
+    - name: web
+      type: uccm.ContainerPortSpec
+      containerPort: "8000"
+      servicePort: "80"

@@ -1,0 +1,24 @@
+---
+application: micro-pet
+containers:
+- name: front  
+  image: bmoussaud/xl-demo-frontend:1.0.83
+  replicas: 1
+  profile: demo  
+  env:
+    BACKEND_ENDPOINT: http://back-web-service
+    FEATURE: UCCM <b>{{env}}</b>-xl-demo-frontend:1.0.83
+  ports:
+  - name: web    
+    containerPort: 8000
+    servicePort: 80
+    exposeAsIngress: "true"
+- name: back  
+  image: bmoussaud/xl-demo-backend:1.0.83
+  replicas: 1
+  profile: production  
+  ports:
+  - name: web    
+    containerPort: 8000
+    servicePort: 80
+    exposeAsIngress: "false"

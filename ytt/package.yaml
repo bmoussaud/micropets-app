@@ -45,3 +45,15 @@ containers:
     ports:
       - name: web
         containerPort: 9000
+  - name: gui
+    image: registry.local:5000/micropet/gui:dev
+    replicas: 1
+    profile: demo
+    env:
+      DATABASE_URL: jdbc:postgresql://fishes-db:5432/fishes
+    configfile:
+      name: config.json
+      mountedAs: /usr/share/nginx/html/assets/config  
+    ports:
+      - name: web
+        containerPort: 80
