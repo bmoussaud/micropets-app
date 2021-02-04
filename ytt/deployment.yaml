@@ -1,7 +1,7 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:base64", "base64")
 #@ load("helpers.star","app","config","secret","env","configfile")
-#@ load("helpers.lib.yml", "encoded_entries")
+#@ load("helpers.lib.yml", "labels")
 
 #@ for/end container in data.values.containers:
 ---
@@ -9,20 +9,14 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: #@ container.name
-  labels:
-    app: #@ app(container)
-    group: #@ data.values.application
+  labels: #@ labels(container)    
 spec:
   replicas: #@ container.replicas
   selector:
-    matchLabels:
-      app: #@ app(container)
-      group: #@ data.values.application
+    matchLabels: #@ labels(container)        
   template:
     metadata:
-      labels:
-        app: #@ app(container)
-        group: #@ data.values.application
+      labels: #@ labels(container)          
     spec:
       volumes:
         #@ if hasattr(container,"configfile"):
@@ -50,7 +44,6 @@ spec:
           - name: config-volume
             mountPath: #@ container.configfile.mountedAs
           #@ end
-
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 5

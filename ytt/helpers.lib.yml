@@ -1,11 +1,11 @@
-#@ load("@ytt:base64", "base64")
 #@ load("@ytt:data", "data")
+#@ load("helpers.star","app")
 
-#@ def encoded_entries(entries):
-#@ xdata = {}
-#@ for entry in entries:
-#@ xdata[entry]=base64.encode(entry)
-#@ end
-entries: #@ xdata
+
+
+#@ def labels(container):
+container: #@ app(container)
+application: #@ data.values.application
+version: #@ data.values.version
 #@ end
 

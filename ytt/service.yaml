@@ -1,5 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ load("helpers.star","app","config","secret","env")
+#@ load("helpers.lib.yml", "labels")
 
 #@ for/end container in data.values.containers:
 ---
@@ -7,16 +8,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: #@ container.name+"-service"
-  labels:
-    app: #@ app(container)
-    group: #@ data.values.application
+  labels: #@ labels(container)
 spec:
   ports:
-  #@ for/end port in container.ports:
+    #@ for/end port in container.ports:
     - name: #@ port.name
       port: #@ port.containerPort
-      protocol: TCP    
-  selector:
-    app: #@ app(container)
-    group: #@ data.values.application
+      protocol: TCP
+  selector: #@ labels(container)
+    
 

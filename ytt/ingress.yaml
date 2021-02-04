@@ -1,5 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ load("helpers.star","app","config","secret","env")
+#@ load("helpers.lib.yml", "labels")
 
 #@ def host(container):
 #@   return "Host(`{}.dev.pet-cluster.demo`)".format(container.name)
@@ -11,9 +12,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: #@ container.name+"-ingress"
-  labels:
-    app: #@ app(container)
-    group: #@ data.values.application
+  labels: #@ labels(container)    
 spec:
   entryPoints:
     - web
