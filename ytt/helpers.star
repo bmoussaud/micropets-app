@@ -1,4 +1,5 @@
 load("@ytt:struct", "struct")
+load("@ytt:data", "data")
 
 def app(container):
     return "app-"+container.name
@@ -6,6 +7,10 @@ end
 
 def config(container):
     return "config-"+container.name
+end
+
+def configfile(container):
+    return "configfile-"+container.name
 end
 
 
@@ -32,4 +37,11 @@ def env(container):
       for v in container.secret: dvars.append(secret_entry(v, secret(container)))
     end
     return dvars
+end
+
+def load_configfile(container):
+    data_map= {}
+    content = data.read(container.configfile.name)
+    data_map[container.configfile.name]= content
+    return data_map
 end

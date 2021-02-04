@@ -1,6 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:base64", "base64")
-#@ load("helpers.star","app","config","secret","env")
+#@ load("helpers.star","app","config","secret","env","configfile")
 #@ load("helpers.lib.yml", "encoded_entries")
 
 #@ for/end container in data.values.containers:
@@ -24,6 +24,15 @@ spec:
         app: #@ app(container)
         group: #@ data.values.application
     spec:
+      volumes:
+        #@ if hasattr(container,"configfile"):
+        - name: config-volume
+          configMap:
+            name: #@ configfile(container)
+            items:
+            - key: #@ container.configfile.name
+              path: #@ container.configfile.name
+        #@ end
       containers:
         - name: #@ container.name
           image: #@ container.image
@@ -35,6 +44,11 @@ spec:
               protocol: TCP
           #@ if hasattr(container,"env"):
           env: #@ env(container)
+          #@ end
+          volumeMounts:
+          #@ if hasattr(container,"configfile"):
+          - name: config-volume
+            mountPath: #@ container.configfile.mountedAs
           #@ end
 
       restartPolicy: Always

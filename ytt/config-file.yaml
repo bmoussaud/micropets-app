@@ -1,0 +1,14 @@
+#@ load("@ytt:data", "data")
+#@ load("helpers.star","app","configfile","secret","env","load_configfile")
+
+#@ for container in data.values.containers:
+#@ if hasattr(container,"configfile"):
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ configfile(container)
+data: #@ load_configfile(container)
+#@ end
+#@ end
+
