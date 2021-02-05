@@ -1,0 +1,6 @@
+{
+  "petServiceUrl": "http://pets.demo.pet-cluster.demo/",
+  "stage": "DEMO",
+  "debug": "False",
+  "stage_color": "red"
+}

@@ -88,7 +88,7 @@ end
 
 def load_configfile(container):
     data_map = {}
-    content = data.read(container.configfile.file)
+    content = data.read(container.configfile.file)    
     data_map[container.configfile.name] = content
     return data_map
 
