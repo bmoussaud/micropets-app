@@ -31,6 +31,13 @@ def secret(container):
 end
 
 
+def ns(environment):
+    return environment.namespace
+
+
+end
+
+
 def secret_entry(key, refsecret):
     return {'name': key, 'valueFrom': {'secretKeyRef': {'name': refsecret, 'key': key}}}
 
@@ -74,12 +81,14 @@ def encoded_entries(entries):
         xdata[entry] = base64.encode(entry)
     end
     return xdata
+
+
 end
 
 
 def load_configfile(container):
     data_map = {}
-    content = data.read(container.configfile.name)
+    content = data.read(container.configfile.file)
     data_map[container.configfile.name] = content
     return data_map
 

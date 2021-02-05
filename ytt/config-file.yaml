@@ -1,5 +1,5 @@
 #@ load("@ytt:data", "data")
-#@ load("helpers.star","app","configfile","secret","env","load_configfile")
+#@ load("helpers.star","app","configfile","secret","env","load_configfile","ns")
 #@ load("helpers.lib.yml", "labels")
 #@ for container in data.values.containers:
 #@ if hasattr(container,"configfile"):
@@ -9,6 +9,7 @@ kind: ConfigMap
 metadata:
   name: #@ configfile(container)
   labels: #@ labels(container) 
+  namespace: #@ ns(data.values.environment)
 data: #@ load_configfile(container)
 #@ end
 #@ end

@@ -2,6 +2,9 @@
 ---
 application: micro-pet
 version: 1.0.0
+environment:
+  name: test
+  namespace: uat
 containers:
   - name: cats
     image: registry.local:5000/micropet/cats:dev
@@ -39,6 +42,7 @@ containers:
     profile: demo
     configfile: 
       name: pets_config.json
+      file: uat/pets_config.json
       mountedAs: /etc/service/
     env:
       SERVICE_CONFIG: /etc/service/pets_config.json 
@@ -51,6 +55,7 @@ containers:
     profile: demo
     configfile:
       name: config.json
+      file: uat/config.json
       mountedAs: /usr/share/nginx/html/assets/config  
     ports:
       - name: web

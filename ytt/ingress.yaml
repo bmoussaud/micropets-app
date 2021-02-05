@@ -1,9 +1,9 @@
 #@ load("@ytt:data", "data")
-#@ load("helpers.star","app","config","secret","env")
+#@ load("helpers.star","app","config","secret","env","ns")
 #@ load("helpers.lib.yml", "labels")
 
 #@ def host(container):
-#@   return "Host(`{}.dev.pet-cluster.demo`)".format(container.name)
+#@   return "Host(`{}.{}.pet-cluster.demo`)".format(container.name,data.values.environment.name)
 #@ end
 
 #@ for/end container in data.values.containers:
@@ -13,6 +13,7 @@ kind: IngressRoute
 metadata:
   name: #@ container.name+"-ingress"
   labels: #@ labels(container)    
+  namespace: #@ ns(data.values.environment)
 spec:
   entryPoints:
     - web

@@ -1,7 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:base64", "base64")
-#@ load("helpers.star","app","config","secret","env","encoded_entries")
-
+#@ load("helpers.star","app","config","secret","env","encoded_entries","ns")
 #@ load("helpers.lib.yml", "labels")
 
 #@ for container in data.values.containers:
@@ -11,7 +10,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: #@ secret(container)
-  labels: #@ labels(container)      
+  labels: #@ labels(container)
+  namespace: #@ ns(data.values.environment)
 type: Opaque
 data: #@ encoded_entries(container.secret)
 #@ end
@@ -24,7 +24,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: #@ config(container)
-  labels: #@ labels(container)    
+  labels: #@ labels(container)
+  namespace: #@ ns(data.values.environment)
 data: #@ container.config
 #@ end
 #@ end

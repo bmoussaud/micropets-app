@@ -1,6 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:base64", "base64")
-#@ load("helpers.star","app","config","secret","env","configfile")
+#@ load("helpers.star","app","config","secret","env","configfile","ns")
 #@ load("helpers.lib.yml", "labels")
 
 #@ for/end container in data.values.containers:
@@ -10,6 +10,7 @@ apiVersion: apps/v1
 metadata:
   name: #@ container.name
   labels: #@ labels(container)    
+  namespace: #@ ns(data.values.environment)
 spec:
   replicas: #@ container.replicas
   selector:
