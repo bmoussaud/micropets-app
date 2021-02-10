@@ -1,18 +1,23 @@
-ENV="demo"
+#should be fetched from package.yaml
+ENV=demo
+PROFILE=profiles/simple
+NAMESPACE=mydemo
+APPLICATION=micro-pet
+VERSION=1.0.0
 
 katapult:
-	ytt -f profiles  -f ${ENV}
+	ytt -f ${PROFILE}  -f ${ENV}
 
 apply:
-	ytt -f profiles  -f ${ENV} | kubectl apply -f-
-	kubectl get pods -l version=1.0.0,application=micro-pet -n ${ENV}
+	ytt -f ${PROFILE}  -f ${ENV} | kubectl apply -n ${NAMESPACE} -f-
+	kubectl get pods -l version=${VERSION},application=${APPLICATION} -n ${NAMESPACE}
 
 kapply:	
-	ytt -f profiles  -f ${ENV} | kapp -y deploy -a micro-pet -f -
-	kapp inspect  -a micro-pet --tree
+	ytt -f ${PROFILE}  -f ${ENV} | kapp -y deploy -a ${APPLICATION} -f -
+	kapp inspect  -a ${APPLICATION} --tree
 
 delete:
-	ytt -f profiles  -f ${ENV} | kubectl delete -f-	
+	ytt -f ${PROFILE}  -f ${ENV} | kubectl delete -f-	
 
 kdelete:
-	kapp delete -a micro-pet
+	kapp delete -a ${APPLICATION}
