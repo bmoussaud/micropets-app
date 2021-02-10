@@ -47,8 +47,7 @@ containers:
       - name: web
         containerPort: 9000
   - name: gui
-    image: registry.local:5000/micropet/gui:dev
-    replicas: 1
+    image: registry.local:5000/micropet/gui:dev    
     profile: demo
     configfile:
       name: config.json
