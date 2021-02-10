@@ -1,6 +1,7 @@
 load("@ytt:struct", "struct")
 load("@ytt:data", "data")
 load("@ytt:base64", "base64")
+load("@ytt:sha256", "sha256")
 
 
 def app(container):
@@ -18,7 +19,8 @@ end
 
 
 def configfile(container):
-    return "configfile-"+container.name
+    content = load_configfile(container).popitem()[1]
+    return "configfile-"+container.name+"-"+sha256.sum(content)
 
 
 end
@@ -88,7 +90,7 @@ end
 
 def load_configfile(container):
     data_map = {}
-    content = data.read(container.configfile.file)    
+    content = data.read(container.configfile.file)
     data_map[container.configfile.name] = content
     return data_map
 
