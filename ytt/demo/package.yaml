@@ -7,8 +7,7 @@ environment:
   namespace: demo
 containers:
   - name: cats
-    image: registry.local:5000/micropet/cats:dev
-    replicas: 1
+    image: registry.local:5000/micropet/cats:dev    
     profile: demo
     env:
       DATABASE_URL: jdbc:postgresql://cats-db:5432/cats
@@ -22,14 +21,13 @@ containers:
         containerPort: 7002
   - name: dogs
     image: registry.local:5000/micropet/dogs:dev
-    replicas: 1
+    replicas: 2
     profile: demo
     ports:
       - name: web
         containerPort: 7003
   - name: fishes
-    image: registry.local:5000/micropet/fishes:dev
-    replicas: 1
+    image: registry.local:5000/micropet/fishes:dev    
     profile: demo
     env:
       DATABASE_URL: jdbc:postgresql://fishes-db:5432/fishes
@@ -37,8 +35,7 @@ containers:
       - name: web
         containerPort: 7007
   - name: pets
-    image: registry.local:5000/micropet/pets:dev
-    replicas: 1
+    image: registry.local:5000/micropet/pets:dev    
     profile: demo
     configfile: 
       name: pets_config.json

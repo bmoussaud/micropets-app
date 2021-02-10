@@ -12,7 +12,7 @@ metadata:
   labels: #@ labels(container)    
   namespace: #@ ns(data.values.environment)
 spec:
-  replicas: #@ container.replicas
+  replicas: #@ getattr(container,"replicas",1)  
   selector:
     matchLabels: #@ labels(container)        
   template:
