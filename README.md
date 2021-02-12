@@ -4,15 +4,14 @@
 
 MicroPet is a MicroService Application that includes 4 components:
 
-* `Dogs` is a service managing dogs (Go)
-* `Cats` is a service managing cats (Go)
-* `Fishes` is a service managing fishes (Go)
-* `Pets` is a front ends service managing cats,dogs & fishes (Go)
-* `Gui` is a frontend of the wonderfull application (Angular)
+- `Dogs` is a service managing dogs (Go)
+- `Cats` is a service managing cats (Go)
+- `Fishes` is a service managing fishes (Go)
+- `Pets` is a front ends service managing cats,dogs & fishes (Go)
+- `Gui` is a frontend of the wonderfull application (Angular)
 
 All the services are built into a Docker Images
 All the service have deployed in a Kubernetes Cluster following the pattern:
-
 
 Ingress <--> Service <--> Deployement <--> {ConfigMap,Secrets}
 
@@ -20,16 +19,16 @@ Ingress <--> Service <--> Deployement <--> {ConfigMap,Secrets}
 
 Note: All the procedure has tested only on Mac using
 
-* Docker For Mac
-* [K3D](https://k3d.io/) / [K3S](https://k3s.io/)
-* Helm
-* Traefik
+- Docker For Mac
+- [K3D](https://k3d.io/) / [K3S](https://k3s.io/)
+- Helm
+- Traefik
 
 ## Setup the infrastructure
 
 ### New Docker Registry
 
-Create a new Docker Registry locally  using docker using `registry.local` as DNS name.
+Create a new Docker Registry locally using docker using `registry.local` as DNS name.
 
 ```bash
 $./k3s/new-docker-registry.sh
@@ -52,12 +51,12 @@ docker push registry.local:5000/containous/whoami:latest
 ### New K3S Cluster
 
 Create new K3S cluster using the docker registry created previously.
-It deploys [Helm](https://helm.sh/) & [Traefik](https://doc.traefik.io/traefik/).  
+It deploys [Helm](https://helm.sh/) & [Traefik](https://doc.traefik.io/traefik/).
 
 Edit `k3s/new-local-cluster.sh` and set the value for
 
-* CLUSTER_NAME
-* K3S_HOME
+- CLUSTER_NAME
+- K3S_HOME
 
 ```bash
 $k3s/new-local-cluster.sh
@@ -110,19 +109,19 @@ open the website
 
 ```bash
 open http://gui.dev.pet-cluster.demo/
-````
+```
 
 #### Modify the frontend
 
-* edit  `gui/src/app/pets/pets.component.css` and change one color
-* commit your code
-* run `cd gui && make docker-build k8s-deploy`
+- edit `gui/src/app/pets/pets.component.css` and change one color
+- commit your code
+- run `cd gui && make docker-build k8s-deploy`
 
 the Makefile handles :
 
-* the build of the Angular application
-* the build of the Docker Image,
-* the deployment into the Kubernetes Cluster
+- the build of the Angular application
+- the build of the Docker Image,
+- the deployment into the Kubernetes Cluster
 
 #### Undeploy
 
@@ -155,11 +154,11 @@ kubectl apply -k ./kustomize/overlays/2
 
 Target an existing namespace (test) and modify the Ingress resources to use `test` in it.
 
-It uses the [kustomize](https://kustomize.io/) 
+It uses the [kustomize](https://kustomize.io/)
 
-* to generate the config map,
-* to manage the namespace name,
-* to change the Ingress URL (from .*dev*.pet-cluster.demo to .*test*.pet-cluster.demo)
+- to generate the config map,
+- to manage the namespace name,
+- to change the Ingress URL (from ._dev_.pet-cluster.demo to ._test_.pet-cluster.demo)
 
 ```bash
 kubectl create ns test
@@ -202,12 +201,12 @@ Inject traffic using [slow_cooker](https://github.com/BuoyantIO/slow_cooker)
 
 ```bash
 ./slow_cooker_darwin -qps 100 http://pets.canary.pet-cluster.demo/
-````
+```
 
 After few minutes apply `kustomize/canary/pets_activate_20_80.yaml` to have V2 service (20%) and V3 service (80%)
 After few minutes apply `kustomize/canary/pets_activate_00_100.yaml` to have V3 service (100%)
 
-if linkerd has been installed you can look at the Grafana Dashbord showing 1/5 of the requests to the _pets_ service  goes to v3 including the fishes.
+if linkerd has been installed you can look at the Grafana Dashbord showing 1/5 of the requests to the _pets_ service goes to v3 including the fishes.
 
 ```bash
 linkerd dashboard &
@@ -216,7 +215,6 @@ linkerd -n canary stat deploy
 
 ![Result](img/canary2.png)
 
-
 ## Gitops with Flux
 
 Ref [https://toolkit.fluxcd.io/](https://toolkit.fluxcd.io/)
@@ -224,15 +222,15 @@ export GITHUB_TOKEN=<your-token>
 export GITHUB_USER=<your-username>
 
 flux bootstrap github \
-  --owner=$GITHUB_USER \
-  --repository=fleet-infra \
-  --branch=main \
-  --path=staging-cluster \
-  --personal
+ --owner=$GITHUB_USER \
+ --repository=fleet-infra \
+ --branch=main \
+ --path=staging-cluster \
+ --personal
 
 this command creates or updates the `fleet-infra` personal private repository with a new path `staging-cluster` generating the flux configuration for this cluster. Then it applies them to the current cluster.
 
-``` bash
+```bash
 .
 ├── README.md
 └── staging-cluster
@@ -283,22 +281,22 @@ git add -A && git commit -m "add staging webapp" && git push
 
 Check the cats services is now deployed on the `dev` namespace
 
-``` bash
+```bash
 ❯ flux get kustomizations
 NAME       	READY	MESSAGE                                                          	REVISION                                       	SUSPENDED
 cats       	True 	Applied revision: master/5f3500cc01bb04c743d80c24162221125566168f	master/5f3500cc01bb04c743d80c24162221125566168f	False
 flux-system	True 	Applied revision: main/f41fcc19c9a3c011b527e8d58feb78bf642badfd  	main/f41fcc19c9a3c011b527e8d58feb78bf642badfd  	False
-````
+```
 
 Replicate the configuration for the following services: dogs,gui,pets
 
 ```bash
 git add -A && git commit -m "add staging dogs,pets,gui" && git push
 watch flux get kustomizations
-````
+```
 
 ```bash
-Every 2,0s: flux get kustomizations                                                                          MacBook-Pro-de-Benoit.local: 
+Every 2,0s: flux get kustomizations                                                                          MacBook-Pro-de-Benoit.local:
 
 NAME            READY   MESSAGE                                                                 REVISION                                        SUSPENDED
 cats            True    Applied revision: master/5f3500cc01bb04c743d80c24162221125566168f       master/5f3500cc01bb04c743d80c24162221125566168f False
@@ -306,7 +304,7 @@ flux-system     True    Applied revision: main/5108bf3cf14826770c63ad28e13434841
 dogs            True    Applied revision: master/5f3500cc01bb04c743d80c24162221125566168f       master/5f3500cc01bb04c743d80c24162221125566168f False
 gui             True    Applied revision: master/5f3500cc01bb04c743d80c24162221125566168f       master/5f3500cc01bb04c743d80c24162221125566168f False
 pets            True    Applied revision: master/5f3500cc01bb04c743d80c24162221125566168f       master/5f3500cc01bb04c743d80c24162221125566168f False
-````
+```
 
 to force Flux to reconcile with repos
 
@@ -315,34 +313,40 @@ flux reconcile kustomization flux-system --with-source
 ```
 
 The `interval` values in the kustomization resource creation tells fluxcd will check this interval to keep the configuration synchronized.
-In the command line we set 1h, but it's possible to lower this value to 60s. 
+In the command line we set 1h, but it's possible to lower this value to 60s.
 
-* Edit the cats.yaml file and set the new interval value
+- Edit the cats.yaml file and set the new interval value
 
 ```yaml
 interval: 60s
-````
+```
 
-* commit and push the code
-* kill the `cats` deployment object.
-* wait for 60 secondes, it will come back.
+- commit and push the code
+- kill the `cats` deployment object.
+- wait for 60 secondes, it will come back.
 
 ## Pets Spring
 
-[Pet-Spring](pet-spring) is another implementation of the `pets` service using the Spring Cloud Framework. 
+[Pet-Spring](pet-spring) is another implementation of the `pets` service using the Spring Cloud Framework.
 IPets has been implemented using the Go Language.
 It uses the custom `config-server` stored in `pets-spring-cloud/config-server` the configuration is stored in `https://github.com/bmoussaud/sample_configuration`
 
+## YTT (Katapult)
+
+the [ytt](ytt) folder demoes the usage of [ytt](https://carvel.dev/ytt/) & [kapp](https://carvel.dev/kapp/) from the Carvel.dev project to generate the YAML definition of all the resources and apply them into a kubernetes namespace.
+
+From the ytt folder, run:
+
+- `make katapult` generates the YAML K8S resource
+- `make kapp` generates the YAML K8S resource and run kapp.
+- `make kdelete` deletes the application
+
 ## References
 
-* https://blog.stack-labs.com/code/kustomize-101/
-* https://kubectl.docs.kubernetes.io/references/kustomize/
-* https://tasdikrahman.me/2019/09/12/ways-to-do-canary-deployments-kubernetes-traefik-istio-linkerd/
-* https://medium.com/@trlogic/linkerd-traffic-split-acf6fae3b7b8
-* https://youtu.be/R6OeIgb7lUI
-* https://github.com/JoeDog/siege https://www.linode.com/docs/guides/load-testing-with-siege/
-* https://github.com/PacktPublishing/Hands-On-Microservices-with-Spring-Boot-and-Spring-Cloud/tree/master/Chapter12
-
-
-
-
+- https://blog.stack-labs.com/code/kustomize-101/
+- https://kubectl.docs.kubernetes.io/references/kustomize/
+- https://tasdikrahman.me/2019/09/12/ways-to-do-canary-deployments-kubernetes-traefik-istio-linkerd/
+- https://medium.com/@trlogic/linkerd-traffic-split-acf6fae3b7b8
+- https://youtu.be/R6OeIgb7lUI
+- https://github.com/JoeDog/siege https://www.linode.com/docs/guides/load-testing-with-siege/
+- https://github.com/PacktPublishing/Hands-On-Microservices-with-Spring-Boot-and-Spring-Cloud/tree/master/Chapter12
