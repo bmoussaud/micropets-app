@@ -11,14 +11,10 @@ build:
 	ng build
 
 test:
-	npm serve
-clean:	
-	rm -f $(BINARY_NAME)
-	rm -f $(BINARY_WINDOWS)
-
-run:
-	$(GOBUILD) -o $(BINARY_NAME) -v main.go
-	./$(BINARY_NAME)
+	ng serve
+	
+deps:
+	npm install --save-dev @angular-devkit/build-angular
 
 docker-build: build
 	echo $(DOCKER_IMAGE)
