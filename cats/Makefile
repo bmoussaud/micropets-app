@@ -13,11 +13,12 @@ $(eval SHA1=$(shell git rev-parse --short HEAD))
 VERSION=1.0.0-$(SHA1)
 DOCKER_IMAGE=$(REGISTRY)/micropet/$(BINARY_NAME):$(VERSION)
 DOCKER_IMAGE_DEV=$(REGISTRY)/micropet/$(BINARY_NAME):dev
+GO111MODULE=auto
 
 all: test build docker-build
 
 build:
-	$(GOBUILD) -o $(BINARY_NAME) -v main.go
+	GO111MODULE=auto $(GOBUILD) -o $(BINARY_NAME) -v main.go
 
 test:
 	$(GOTEST) -v ./...
@@ -31,13 +32,12 @@ run:
 	./$(BINARY_NAME)
 
 deps:
-	$(GOGET) github.com/kelseyhightower/envconfig
-	$(GOGET) github.com/magiconair/properties
-
+	GO111MODULE=auto $(GOGET) github.com/kelseyhightower/envconfig
+	GO111MODULE=auto $(GOGET) github.com/magiconair/properties
 
 # Cross compilation
 build-windows:
-	CGO_ENABLED=0 GOOS=windows GOARCH=386 $(GOBUILD) -o $(BINARY_WINDOWS) -v
+	GO111MODULE=auto CGO_ENABLED=0 GOOS=windows GOARCH=386 $(GOBUILD) -o $(BINARY_WINDOWS) -v
 
 docker-build: build
 	echo $(DOCKER_IMAGE)

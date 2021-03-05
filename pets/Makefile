@@ -18,8 +18,8 @@ DOCKER_IMAGE_DEV=$(REGISTRY)/micropet/$(BINARY_NAME):dev
 
 all: test build
 
-build:
-	$(GOBUILD) -o $(BINARY_NAME) -v main.go
+build: 
+	GO111MODULE=auto $(GOBUILD) -o $(BINARY_NAME) -v main.go
 
 test:
 	$(GOTEST) -v ./...
@@ -28,18 +28,17 @@ clean:
 	rm -f $(BINARY_NAME)
 	rm -f $(BINARY_WINDOWS)
 
-run:
-	$(GOBUILD) -o $(BINARY_NAME) -v main.go
-	GODEBUG=netdns=go+1 SERVICE_CONFIG=pets_config.dev.json ./pets
+run: build	
+	GO111MODULE=auto GODEBUG=netdns=go+1 SERVICE_CONFIG=pets_config.dev.json ./pets
 
 deps:	
-	$(GOGET) $(GOGET_FLAGS) github.com/spf13/viper
-	$(GOGET) $(GOGET_FLAGS) github.com/imroc/req
+	GO111MODULE=auto $(GOGET) $(GOGET_FLAGS) github.com/spf13/viper
+	GO111MODULE=auto $(GOGET) $(GOGET_FLAGS) github.com/imroc/req
 
 
 # Cross compilation
 build-windows:
-	CGO_ENABLED=0 GOOS=windows GOARCH=386 $(GOBUILD) -o $(BINARY_WINDOWS) -v
+	GO111MODULE=auto CGO_ENABLED=0 GOOS=windows GOARCH=386 $(GOBUILD) -o $(BINARY_WINDOWS) -v
 
 docker-build: build
 	echo $(DOCKER_IMAGE)

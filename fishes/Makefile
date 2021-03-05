@@ -17,21 +17,21 @@ DOCKER_IMAGE_DEV=$(REGISTRY)/micropet/$(BINARY_NAME):dev
 all: test build
 
 build:
-	$(GOBUILD) -o $(BINARY_NAME) -v main.go
+	GO111MODULE=auto $(GOBUILD) -o $(BINARY_NAME) -v main.go
 
 test:
-	$(GOTEST) -v ./...
+	GO111MODULE=auto $(GOTEST) -v ./...
 clean:
 	$(GOCLEAN)
 	rm -f $(BINARY_NAME)
 	rm -f $(BINARY_WINDOWS)
 
 run:
-	$(GOBUILD) -o $(BINARY_NAME) -v main.go
+	GO111MODULE=auto $(GOBUILD) -o $(BINARY_NAME) -v main.go
 	./$(BINARY_NAME)
 
 deps:	
-	$(GOGET) github.com/magiconair/properties
+	GO111MODULE=auto $(GOGET) github.com/magiconair/properties
 
 
 # Cross compilation
