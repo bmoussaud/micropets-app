@@ -63,7 +63,7 @@ spec:
     spec:
       containers:
         - name: pets
-          image: registry.local:5000/micropet/pets-spring:latest
+          image: localregistry:5000/micropet/pets-spring:latest
           imagePullPolicy: Always
           ports:
             - name: pets

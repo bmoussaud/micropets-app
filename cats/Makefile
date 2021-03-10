@@ -1,5 +1,5 @@
 BINARY_NAME=cats
-REGISTRY=registry.local:5000
+REGISTRY=localregistry:5000
 
 # Go parameters
 GOCMD=go
@@ -11,8 +11,8 @@ GOGET=$(GOCMD) get
 BINARY_WINDOWS=$(BINARY_NAME).exe
 $(eval SHA1=$(shell git rev-parse --short HEAD))
 VERSION=1.0.0-$(SHA1)
-DOCKER_IMAGE=micropet/$(BINARY_NAME):$(VERSION)
-DOCKER_IMAGE_DEV=micropet/$(BINARY_NAME):dev
+DOCKER_IMAGE=$(REGISTRY)/micropet/$(BINARY_NAME):$(VERSION)
+DOCKER_IMAGE_DEV=$(REGISTRY)/micropet/$(BINARY_NAME):dev
 GO111MODULE=auto
 
 all: test build docker-build

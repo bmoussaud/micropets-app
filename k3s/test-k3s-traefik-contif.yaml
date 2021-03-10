@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: whoami-test-registry
-        image: registry.local:5000/containous/whoami
+        image: localregistry:5000/containous/whoami
         ports:
         - containerPort: 80
 ---
