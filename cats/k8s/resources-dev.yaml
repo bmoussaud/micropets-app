@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
         - name: cats
-          image: registry.local:5000/micropet/cats:dev
+          image: micropet/cats:dev
           imagePullPolicy: Always
           ports:
             - name: cats
