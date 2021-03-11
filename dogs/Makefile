@@ -16,9 +16,9 @@ DOCKER_IMAGE_DEV=$(REGISTRY)/micropet/$(BINARY_NAME):dev
 
 GO111MODULE=auto
 
-all: test build
+all: build docker-build docker-push
 
-build:
+build: deps
 	GO111MODULE=auto $(GOBUILD) -o $(BINARY_NAME) -v main.go
 
 test:

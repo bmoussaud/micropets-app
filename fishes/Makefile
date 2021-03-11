@@ -14,9 +14,9 @@ VERSION=1.0.0-$(SHA1)
 DOCKER_IMAGE=$(REGISTRY)/micropet/$(BINARY_NAME):$(VERSION)
 DOCKER_IMAGE_DEV=$(REGISTRY)/micropet/$(BINARY_NAME):dev
 
-all: test build
+all: build docker-build docker-push
 
-build:
+build: deps
 	GO111MODULE=auto $(GOBUILD) -o $(BINARY_NAME) -v main.go
 
 test:
