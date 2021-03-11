@@ -33,10 +33,6 @@ public class PetsController {
     @Value("${spring.application.name}")
     private String appName;
 
-    @Value("${user.role}")
-    private String role;
-
-
     @Autowired
     private DiscoveryClient discoveryClient;
 
@@ -46,8 +42,7 @@ public class PetsController {
     public String returnConfig() {
         StringBuilder sb = new StringBuilder();
         sb
-            .append("appName : ").append(appName).append("----- \n")
-            .append("role : ").append(role).append(" ------\n")
+            .append("appName : ").append(appName).append("----- \n")    
             .append("config: ").append(config.toString());
         logger.error("config:>"+sb.toString());
         return sb.toString();

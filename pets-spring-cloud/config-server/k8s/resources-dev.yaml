@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: pets-config
-          image: registry.local:5000/pets/config-server:latest
+          image: localregistry:5000/pets/config-server:latest
           imagePullPolicy: Always
           env:
           - name: SPRING_SECURITY_USER_NAME

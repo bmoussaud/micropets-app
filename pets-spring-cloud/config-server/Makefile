@@ -1,4 +1,4 @@
-REGISTRY=registry.local:5000
+REGISTRY=localregistry:5000
 BINARY_NAME=config-server
 
 

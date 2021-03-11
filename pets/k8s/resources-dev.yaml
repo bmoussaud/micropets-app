@@ -53,7 +53,7 @@ spec:
               path: pets_config.json
       containers:
         - name: pets
-          image: registry.local:5000/micropet/pets:dev
+          image: localregistry:5000/micropet/pets:dev
           imagePullPolicy: Always
           ports:
             - name: pets

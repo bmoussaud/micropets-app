@@ -1,4 +1,4 @@
-REGISTRY=registry.local:5000
+REGISTRY=localregistry:5000
 BINARY_NAME=pets
 
 # Go parameters
@@ -7,19 +7,18 @@ GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
-GOGET_FLAGS=-u -v
+GOGET_FLAGS=
 
 INARY_WINDOWS=$(BINARY_NAME).exe
 $(eval SHA1=$(shell git rev-parse --short HEAD))
 VERSION=1.0.0-$(SHA1)
-DOCKER_IMAGE=micropet/$(BINARY_NAME):$(VERSION)
-DOCKER_IMAGE_DEV=micropet/$(BINARY_NAME):dev
-
+DOCKER_IMAGE=$(REGISTRY)/micropet/$(BINARY_NAME):$(VERSION)
+DOCKER_IMAGE_DEV=$(REGISTRY)/micropet/$(BINARY_NAME):dev
 
 all: test build
 
 build: 
-	GO111MODULE=auto $(GOBUILD) -o $(BINARY_NAME) -v main.go
+	$(GOBUILD) -o $(BINARY_NAME) -v main.go
 
 test:
 	$(GOTEST) -v ./...
@@ -32,15 +31,15 @@ run: build
 	GO111MODULE=auto GODEBUG=netdns=go+1 SERVICE_CONFIG=pets_config.dev.json ./pets
 
 deps:	
-	GO111MODULE=auto $(GOGET) $(GOGET_FLAGS) github.com/spf13/viper
-	GO111MODULE=auto $(GOGET) $(GOGET_FLAGS) github.com/imroc/req
+	 $(GOGET) github.com/spf13/viper	
+	 $(GOGET) github.com/imroc/req
 
 
 # Cross compilation
 build-windows:
 	GO111MODULE=auto CGO_ENABLED=0 GOOS=windows GOARCH=386 $(GOBUILD) -o $(BINARY_WINDOWS) -v
 
-docker-build: build
+docker-build: 
 	echo $(DOCKER_IMAGE)
 	docker build -t $(DOCKER_IMAGE) .
 	docker tag $(DOCKER_IMAGE) $(DOCKER_IMAGE_DEV)
