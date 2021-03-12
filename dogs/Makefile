@@ -13,7 +13,8 @@ $(eval SHA1=$(shell git rev-parse --short HEAD))
 VERSION=1.0.0-$(SHA1)
 DOCKER_IMAGE=$(REGISTRY)/micropet/$(BINARY_NAME):$(VERSION)
 DOCKER_IMAGE_DEV=$(REGISTRY)/micropet/$(BINARY_NAME):dev
-
+DOCKER_HUB_IMAGE=bmoussaud/micropet_$(BINARY_NAME):$(VERSION)
+DOCKER_HUB_IMAGE_DEV=bmoussaud/micropet_$(BINARY_NAME):dev
 GO111MODULE=auto
 
 all: build docker-build docker-push
@@ -48,6 +49,12 @@ docker-build: build
 docker-push: docker-build 
 	docker push $(DOCKER_IMAGE)
 	docker push $(DOCKER_IMAGE_DEV)
+
+docker-hub-push: docker-build 
+	docker tag $(DOCKER_IMAGE) $(DOCKER_HUB_IMAGE)
+	docker tag $(DOCKER_IMAGE) $(DOCKER_HUB_IMAGE_DEV)
+	docker push $(DOCKER_HUB_IMAGE)
+	docker push $(DOCKER_HUB_IMAGE_DEV)
 
 xebialabs:
 	xl --xl-deploy-url http://localhost:4525 apply -s --proceed-when-dirty -f xebialabs.yaml
