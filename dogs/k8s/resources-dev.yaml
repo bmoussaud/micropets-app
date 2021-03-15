@@ -79,17 +79,34 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: dogs-ingress  
+  name: dogs-ingress-native
 spec:
   entryPoints:
     - web
     - websecure
   routes:
-  - match: Host(`dogs.dev.pet-cluster.demo`)
+  - match: Host(`native-dogs.dev.pet-cluster.demo`)
     kind: Rule
     services:
     - name: dogs-service
       port: 7003
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: dogs-ingress    
+spec:
+  rules:
+    - host: dogs.dev.pet-cluster.demo
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: dogs-service
+              servicePort: 7003         
+
+
+
 
 
 

@@ -79,17 +79,30 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: fishes-ingress  
+  name: fishes-ingress-native  
 spec:
   entryPoints:
     - web
     - websecure
   routes:
-  - match: Host(`fishes.dev.pet-cluster.demo`)
+  - match: Host(`native-fishes.dev.pet-cluster.demo`)
     kind: Rule
     services:
     - name: fishes-service
       port: 7007
-
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: fishes-ingress    
+spec:
+  rules:
+    - host: fishes.dev.pet-cluster.demo
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: fishes-service
+              servicePort: 7007
 
 

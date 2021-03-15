@@ -22,7 +22,7 @@ data:
       "backends": [
         {"name":"cats","host":"cats-service", "port":"7002"},    
         {"name":"dogs","host":"dogs-service", "port":"7003"},
-        {"name":"fishes","host":"fishes-service", "port":"7007"}
+        {"name":"pets","host":"fishes-service", "port":"7007"}
       ]
     }
 ---
@@ -88,17 +88,30 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: pets-ingress  
+  name: pets-ingress-native 
 spec:
   entryPoints:
     - web
     - websecure
   routes:
-  - match: Host(`pets.dev.pet-cluster.demo`)
+  - match: Host(`native-pets.dev.pet-cluster.demo`)
     kind: Rule
     services:
     - name: pets-service
       port: 9000
-
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: pets-ingress    
+spec:
+  rules:
+    - host: pets.dev.pet-cluster.demo
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: pets-service
+              servicePort: 9000
 
 

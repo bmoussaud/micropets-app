@@ -78,19 +78,33 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: cats-ingress  
+  name: cats-ingress-native 
 spec:
   entryPoints:
     - web
     - websecure
   routes:
-  - match: Host(`cats.dev.pet-cluster.demo`)
+  - match: Host(`native-cats.dev.pet-cluster.demo`)
     kind: Rule
     services:
     - name: cats-service
       port: 7002
 #  tls:
 #    certResolver: default
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: cats-ingress    
+spec:
+  rules:
+    - host: cats.dev.pet-cluster.demo
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: cats-service
+              servicePort: 7002          
 
 
 

@@ -80,17 +80,31 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: gui-ingress  
+  name: gui-ingress-native 
 spec:
   entryPoints:
     - web
     - websecure
   routes:
-  - match: Host(`gui.dev.pet-cluster.demo`)
+  - match: Host(`native-gui.dev.pet-cluster.demo`)
     kind: Rule
     services:
     - name: gui-service
       port: 80
-
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: gui-ingress    
+spec:
+  rules:
+    - host: gui.dev.pet-cluster.demo
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: gui-service
+              servicePort: 80
+              
 
 
