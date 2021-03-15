@@ -122,6 +122,13 @@ the Makefile handles :
 - the build of the Docker Image,
 - the deployment into the Kubernetes Cluster
 
+#### Deploy with customize
+kubectl apply -k dogs/k8s
+kubectl apply -k cats/k8s
+kubectl apply -k fishes/k8s
+kubectl apply -k pets/k8s
+kubectl apply -k gui/k8s
+
 #### Undeploy
 
 ```bash
@@ -134,6 +141,13 @@ kubectl delete -f gui/k8s/resources-dev.yaml -n ${K8S_NS}
 kubectl delete -f pets-spring/k8s/resources-dev.yaml -n ${K8S_NS}
 kubectl delete -f pets-spring-cloud/config-server/k8s/resources-dev.yaml -n ${K8S_NS}
 ```
+
+#### UnDeploy with customize
+kubectl delete -k dogs/k8s
+kubectl delete -k cats/k8s
+kubectl delete -k fishes/k8s
+kubectl delete -k pets/k8s
+kubectl delete -k gui/k8s
 
 ### Switch pets configuration
 

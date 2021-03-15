@@ -2,6 +2,7 @@ CLUSTER_NAME=pet-cluster
 
 destroy-cluster:
 	k3d cluster delete $(CLUSTER_NAME)
+	docker network disconnect k3d-$(CLUSTER_NAME) localregistry
 
 create-cluster:
 	k3d cluster create $(CLUSTER_NAME) --api-port 127.0.0.1:6443 -p 80:80@loadbalancer -p 443:443@loadbalancer --k3s-server-arg "--no-deploy=traefik" --volume "$(CURDIR)/k3d-registries.yaml:/etc/rancher/k3s/registries.yaml"
