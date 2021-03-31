@@ -85,31 +85,16 @@ spec:
     app: pets-app
     group: micro-pet
 ---
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: pets-ingress-native 
-spec:
-  entryPoints:
-    - web
-    - websecure
-  routes:
-  - match: Host(`native-pets.dev.pet-cluster.demo`)
-    kind: Rule
-    services:
-    - name: pets-service
-      port: 9000
----
 kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
   name: pets-ingress    
 spec:
   rules:
-    - host: pets.dev.pet-cluster.demo
+    - host: k8s.mytanzu.xyz
       http:
         paths:
-          - path: /
+          - path: /pets
             backend:
               serviceName: pets-service
               servicePort: 9000

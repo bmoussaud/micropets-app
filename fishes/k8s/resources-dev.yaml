@@ -76,31 +76,16 @@ spec:
     app: fishes-app
     group: micro-pet
 ---
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: fishes-ingress-native  
-spec:
-  entryPoints:
-    - web
-    - websecure
-  routes:
-  - match: Host(`native-fishes.dev.pet-cluster.demo`)
-    kind: Rule
-    services:
-    - name: fishes-service
-      port: 7007
----
 kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
   name: fishes-ingress    
 spec:
   rules:
-    - host: fishes.dev.pet-cluster.demo
+    - host: k8s.mytanzu.xyz
       http:
         paths:
-          - path: /
+          - path: /fishes
             backend:
               serviceName: fishes-service
               servicePort: 7007

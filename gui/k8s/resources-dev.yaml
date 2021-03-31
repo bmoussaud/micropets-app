@@ -15,7 +15,7 @@ metadata:
 data:
   config.json: |
     {  
-      "petServiceUrl":"http://pets.dev.pet-cluster.demo/",
+      "petServiceUrl": "http://k8s.mytanzu.xyz/pets",
       "stage": "DEV",
       "debug": "False",
       "stage_color": "green"
@@ -56,7 +56,7 @@ spec:
               containerPort: 80
           volumeMounts:
             - name: config-volume
-              mountPath: /usr/share/nginx/html/assets/config                            
+              mountPath: /usr/share/nginx/html/gui/assets/config                            
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 5
@@ -77,34 +77,23 @@ spec:
     app: gui-app
     group: micro-pet
 ---
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: gui-ingress-native 
-spec:
-  entryPoints:
-    - web
-    - websecure
-  routes:
-  - match: Host(`native-gui.dev.pet-cluster.demo`)
-    kind: Rule
-    services:
-    - name: gui-service
-      port: 80
----
 kind: Ingress
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 metadata:
-  name: gui-ingress    
+  name: gui-ingress
 spec:
   rules:
-    - host: gui.dev.pet-cluster.demo
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: gui-service
-              servicePort: 80
+  - host: k8s.mytanzu.xyz
+    http:
+      paths:
+      - path: /gui
+        pathType: Prefix
+        backend:
+          service:
+            name: gui-service
+            port:
+              number: 80
+
               
 
 

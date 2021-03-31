@@ -12,7 +12,7 @@ DOCKER_HUB_IMAGE_DEV=bmoussaud/micropet_$(BINARY_NAME):dev
 all: docker-build docker-push
 
 build:
-	ng build
+	ng build --base-href /gui/
 
 test:
 	ng serve
