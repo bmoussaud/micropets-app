@@ -10,6 +10,9 @@ MicroPet is a MicroService Application that includes 4 components:
 - `Pets` is a front ends service managing cats,dogs & fishes (Go)
 - `Gui` is a frontend of the wonderfull application (Angular)
 
+
+![ui](img/ui.png)
+
 All the services are built into a Docker Images
 All the service have deployed in a Kubernetes Cluster following the pattern:
 
