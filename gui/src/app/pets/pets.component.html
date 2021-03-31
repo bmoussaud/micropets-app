@@ -30,7 +30,7 @@
   <mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
-    <mat-row [ngClass]="{'cat': row.Type == 'cats', 'dog': row.Type == 'dogs', 'fishes': row.Type == 'fishes'}" *matRowDef="let row; columns: displayedColumns"></mat-row>
+    <mat-row [ngClass]="{'cat': row.Type == 'cats', 'dog': row.Type == 'dogs', 'fish': row.Type == 'fishes', 'pet': row.Type == 'pets'}" *matRowDef="let row; columns: displayedColumns"></mat-row>
 
 
     <ng-container matColumnDef="name">
