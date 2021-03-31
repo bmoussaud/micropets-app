@@ -110,7 +110,7 @@ _kubectl apply_ is an asynchronous command that returns 'OK' 90% of the time bec
 open the website
 
 ```bash
-open http://gui.dev.pet-cluster.demo/
+open http://gui.dev.pet-cluster.demo/ or http://k8s.mytanzu.xyz/gui/
 ```
 
 #### Modify the frontend
