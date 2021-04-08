@@ -125,7 +125,7 @@ the Makefile handles :
 - the build of the Docker Image,
 - the deployment into the Kubernetes Cluster
 
-#### Deploy with customize
+#### Deploy with kustomize
 kubectl apply -k dogs/k8s
 kubectl apply -k cats/k8s
 kubectl apply -k fishes/k8s
