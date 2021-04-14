@@ -14,7 +14,8 @@ metadata:
   name: cats-config
 data:
   config.properties: |
-    listen.port: 7002
+    listen.port: :7002
+    mode: RANDOM_NUMBER
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -35,6 +36,13 @@ spec:
         app: cats-app
         group: micro-pet
     spec:
+      volumes:
+        - name: config-volume
+          configMap:
+            name: cats-config
+            items:
+            - key: config.properties
+              path: config.properties
       containers:
         - name: cats
           image: localregistry:5000/micropet/cats:dev
@@ -42,6 +50,9 @@ spec:
           ports:
             - name: cats
               containerPort: 7002
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config/
           env:
             - name: DATABASE_URL2
               value: jdbc:postgresql://cats-db:5432/cats
@@ -55,6 +66,8 @@ spec:
                 secretKeyRef:
                   name: cats-db-credentials
                   key: password
+            - name: SERVICE_CONFIG_DIR
+              value: /config
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 5

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -27,6 +28,10 @@ type Cats struct {
 	Cats     []Cat `json:"Pets"`
 }
 
+var mode = "ALL"
+
+var configLocation string = "config.properties"
+
 func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
@@ -36,11 +41,21 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 func index(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
 	fmt.Printf("Handling %+v\n", r)
+	fmt.Printf("MODE %s\n", mode)
 	cat1 := Cat{"Orphee", "Persan", 12, "https://www.pets4homes.co.uk/images/breeds/21/db349a9afb9b6973fa3b40f684a37bb9.jpg"}
 	cat2 := Cat{"Pirouette", "Bengal", 1, "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/934px-Paintedcats_Red_Star_standing.jpg"}
 	cat3 := Cat{"Pamina", "Angora", 120, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Turkish_Angora_Odd-Eyed.jpg/440px-Turkish_Angora_Odd-Eyed.jpg"}
 	cat4 := Cat{"Clochette", "Siamois", 120, "https://www.woopets.fr/assets/races/home/siamois-124x153.jpg"}
 	cats := Cats{4, "Unknown", []Cat{cat1, cat2, cat3, cat4}}
+
+	if mode == "RANDOM_NUMBER" {
+		total := rand.Intn(cats.Total) + 1
+		fmt.Printf("total %d\n", total)
+		for i := 1; i < total; i++ {
+			cats.Cats = cats.Cats[:len(cats.Cats)-1]
+			cats.Total = cats.Total - 1
+		}
+	}
 
 	host, err := os.Hostname()
 
@@ -61,14 +76,19 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//GetLocation returns the full path of the config file based on the current executable location
+//GetLocation returns the full path of the config file based on the current executable location or using SERVICE_CONFIG_DIR env
 func GetLocation(file string) string {
-	ex, err := os.Executable()
-	if err != nil {
-		panic(err)
+	if serviceConfigDirectory := os.Getenv("SERVICE_CONFIG_DIR"); serviceConfigDirectory != "" {
+		fmt.Printf("Load configuration from %s\n", serviceConfigDirectory)
+		return filepath.Join(serviceConfigDirectory, file)
+	} else {
+		ex, err := os.Executable()
+		if err != nil {
+			panic(err)
+		}
+		exPath := filepath.Dir(ex)
+		return filepath.Join(exPath, file)
 	}
-	exPath := filepath.Dir(ex)
-	return filepath.Join(exPath, file)
 }
 
 func main() {
@@ -90,9 +110,16 @@ func main() {
 			port = readPort
 		}
 
+		var readMode string
+		readMode = properties.GetString("mode", mode)
+		if strings.HasPrefix(readPort, ":{{") {
+			fmt.Printf("config file fount but it contains unreplaced values %s\n", readMode)
+		} else {
+			mode = readMode
+		}
 	}
 
 	http.HandleFunc("/", index)
-	fmt.Printf("******* Starting to the Cats service on port %s\n", port)
+	fmt.Printf("******* Starting to the Cats service on port %s, mode %s\n", port, mode)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
