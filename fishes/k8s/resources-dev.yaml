@@ -14,7 +14,8 @@ metadata:
   name: fishes-config
 data:
   config.properties: |
-    listen.port: 7007
+    listen.port: :7007
+    mode: RANDOM_NUMBER
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -35,6 +36,13 @@ spec:
         app: fishes-app
         group: micro-pet
     spec:
+      volumes:
+        - name: config-volume
+          configMap:
+            name: fishes-config
+            items:
+            - key: config.properties
+              path: config.properties
       containers:
         - name: fishes
           image: localregistry:5000/micropet/fishes:dev
@@ -42,7 +50,12 @@ spec:
           ports:
             - name: fishes
               containerPort: 7007
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config/
           env:
+            - name: SERVICE_CONFIG_DIR
+              value: /config
             - name: DATABASE_URL
               value: jdbc:postgresql://fishes-db:5432/fishes
             - name: DATABASE_USER
