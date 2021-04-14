@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -29,6 +30,8 @@ type Dogs struct {
 	Dogs     []Dog `json:"Pets"`
 }
 
+var mode = "ALL"
+
 func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
@@ -43,6 +46,15 @@ func index(w http.ResponseWriter, r *http.Request) {
 	pet3 := Dog{"Rantaplan", "Labrador Retriever", 24, "https://www.petmd.com/sites/default/files/01New_GoldenRetriever.jpeg"}
 	pet4 := Dog{"Lassie", "Golden Retriever", 20, "https://www.petmd.com/sites/default/files/11New_MixedBreed.jpeg"}
 	pets := Dogs{4, "UKN", []Dog{pet1, pet2, pet3, pet4}}
+
+	if mode == "RANDOM_NUMBER" {
+		total := rand.Intn(pets.Total) + 1
+		fmt.Printf("total %d\n", total)
+		for i := 1; i < total; i++ {
+			pets.Dogs = pets.Dogs[:len(pets.Dogs)-1]
+			pets.Total = pets.Total - 1
+		}
+	}
 
 	host, err := os.Hostname()
 
@@ -63,14 +75,19 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//GetLocation returns the full path of the config file based on the current executable location
+//GetLocation returns the full path of the config file based on the current executable location or using SERVICE_CONFIG_DIR env
 func GetLocation(file string) string {
-	ex, err := os.Executable()
-	if err != nil {
-		panic(err)
+	if serviceConfigDirectory := os.Getenv("SERVICE_CONFIG_DIR"); serviceConfigDirectory != "" {
+		fmt.Printf("Load configuration from %s\n", serviceConfigDirectory)
+		return filepath.Join(serviceConfigDirectory, file)
+	} else {
+		ex, err := os.Executable()
+		if err != nil {
+			panic(err)
+		}
+		exPath := filepath.Dir(ex)
+		return filepath.Join(exPath, file)
 	}
-	exPath := filepath.Dir(ex)
-	return filepath.Join(exPath, file)
 }
 
 func main() {
@@ -92,9 +109,16 @@ func main() {
 			port = readPort
 		}
 
+		var readMode string
+		readMode = properties.GetString("mode", mode)
+		if strings.HasPrefix(readPort, ":{{") {
+			fmt.Printf("config file fount but it contains unreplaced values %s\n", readMode)
+		} else {
+			mode = readMode
+		}
 	}
 
 	http.HandleFunc("/", index)
-	fmt.Printf("******* Starting to the Dog service on port %s\n", port)
+	fmt.Printf("******* Starting to the Dogs service on port %s, mode %s\n", port, mode)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
