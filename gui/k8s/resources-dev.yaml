@@ -18,7 +18,7 @@ data:
       "petServiceUrl": "http://k8s.mytanzu.xyz/pets",
       "stage": "DEV",
       "debug": "False",
-      "stage_color": "green"
+      "stage_color": "blue"
     }
 ---
 kind: Deployment
