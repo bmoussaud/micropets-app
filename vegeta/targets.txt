@@ -1,2 +1,2 @@
-GET http://k8s.mytanzu.xyz/pets
-GET http://k8s.mytanzu.xyz/gui/index.html
+GET http://front.mytanzu.xyz/pets
+GET http://front.mytanzu.xyz/gui/index.html

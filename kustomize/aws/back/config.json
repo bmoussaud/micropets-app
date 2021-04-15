@@ -1,0 +1,6 @@
+{  
+    "petServiceUrl": "http://back.mytanzu.xyz/pets",
+    "stage": "BACK",
+    "debug": "False",
+    "stage_color": "green"
+  }

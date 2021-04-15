@@ -27,3 +27,7 @@ k8s-deploy:
 deploy-front:
 	kustomize build kustomize/aws/front  | kapp -y deploy  -a micropets -f -
 	kapp inspect -a micropets
+
+deploy-back:
+	kustomize build kustomize/aws/back	  | kapp -y deploy  -a micropets -f -
+	kapp inspect -a micropets
