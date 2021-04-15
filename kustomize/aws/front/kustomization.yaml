@@ -1,0 +1,50 @@
+# kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+- ../../../cats/k8s
+- ../../../dogs/k8s
+- ../../../fishes/k8s
+- ../../../gui/k8s
+- ../../../pets/k8s
+namespace: micropet-test
+configMapGenerator:
+- name: gui-config
+  behavior: replace
+  files:
+  - config.json
+commonLabels:  
+  environment: front
+  provider: aws
+  runtime: tanzu
+patches:
+- target:    
+    name: cats-ingress  
+  patch: |-
+    - op: replace
+      path: /spec/rules/0/host
+      value: front.mytanzu.xyz
+- target:    
+    name: dogs-ingress  
+  patch: |-
+    - op: replace
+      path: /spec/rules/0/host
+      value: front.mytanzu.xyz
+- target:    
+    name: fishes-ingress  
+  patch: |-
+    - op: replace
+      path: /spec/rules/0/host
+      value: front.mytanzu.xyz
+- target:    
+    name: gui-ingress  
+  patch: |-
+    - op: replace
+      path: /spec/rules/0/host
+      value: front.mytanzu.xyz
+- target:    
+    name: pets-ingress  
+  patch: |-
+    - op: replace
+      path: /spec/rules/0/host
+      value: front.mytanzu.xyz

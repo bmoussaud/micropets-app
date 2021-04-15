@@ -23,3 +23,7 @@ k8s-deploy:
     	do                               \
           $(MAKE) --directory=$$d k8s-deploy; \
         done
+
+deploy-front:
+	kustomize build kustomize/aws/front  | kapp -y deploy  -a micropets -f -
+	kapp inspect -a micropets
