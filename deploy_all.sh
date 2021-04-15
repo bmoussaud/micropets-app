@@ -5,6 +5,8 @@ kustomize build fishes/k8s |  kapp -y deploy -n micropetdev -a fishes -f -
 kustomize build pets/k8s |  kapp -y deploy -n micropetdev -a pets -f -
 kustomize build gui/k8s |  kapp -y deploy -n micropetdev -a gui -f -
 
+kapp list  -n micropetdev
+
 #kubectl apply -k dogs/k8s
 #kubectl apply -k cats/k8s
 #kubectl apply -k fishes/k8s
