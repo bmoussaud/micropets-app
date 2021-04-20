@@ -82,7 +82,7 @@ metadata:
 spec:
   ports:
     - protocol: TCP
-      name: cats
+      name: http-cats
       port: 7002
   selector:
     app: cats-app
@@ -91,7 +91,7 @@ spec:
 kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
-  name: cats-ingress    
+  name: cats-ingress
 spec:
   rules:
     - host: k8s.mytanzu.xyz
@@ -100,7 +100,8 @@ spec:
           - path: /cats
             backend:
               serviceName: cats-service
-              servicePort: 7002          
+              servicePort: 7002
+
 
 
 

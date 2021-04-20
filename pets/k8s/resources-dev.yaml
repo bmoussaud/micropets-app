@@ -79,7 +79,7 @@ metadata:
 spec:
   ports:
     - protocol: TCP
-      name: pets
+      name: http-pets
       port: 9000
   selector:
     app: pets-app
@@ -88,7 +88,7 @@ spec:
 kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
-  name: pets-ingress    
+  name: pets-ingress
 spec:
   rules:
     - host: k8s.mytanzu.xyz

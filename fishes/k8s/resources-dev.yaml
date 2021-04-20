@@ -83,7 +83,7 @@ metadata:
 spec:
   ports:
     - protocol: TCP
-      name: fishes
+      name: http-fishes
       port: 7007
   selector:
     app: fishes-app
@@ -92,7 +92,7 @@ spec:
 kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
-  name: fishes-ingress    
+  name: fishes-ingress
 spec:
   rules:
     - host: k8s.mytanzu.xyz

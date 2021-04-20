@@ -83,7 +83,7 @@ metadata:
 spec:
   ports:
     - protocol: TCP
-      name: dogs
+      name: http-dogs
       port: 7003
   selector:
     app: dogs-app
@@ -92,7 +92,7 @@ spec:
 kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
-  name: dogs-ingress    
+  name: dogs-ingress
 spec:
   rules:
     - host: k8s.mytanzu.xyz
@@ -101,7 +101,7 @@ spec:
           - path: /dogs
             backend:
               serviceName: dogs-service
-              servicePort: 7003         
+              servicePort: 7003
 
 
 
