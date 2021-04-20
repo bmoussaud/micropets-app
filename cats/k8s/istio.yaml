@@ -25,7 +25,7 @@ spec:
   http:
   - match:
     - uri:
-        exact: /cats    
+        exact: /cats
     route:
     - destination:
         host: cats-service
