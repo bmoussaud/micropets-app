@@ -11,3 +11,4 @@ carvel-ytt-develop
 .DS_Store
 vegeta/*.bin
 vegeta/*.html
+*bin

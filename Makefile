@@ -31,3 +31,6 @@ deploy-front:
 deploy-back:
 	kustomize build kustomize/aws/back	  | kapp -y deploy  -a micropets -f -
 	kapp inspect -a micropets
+
+undeploy-app:	
+	kapp -y delete -a micropets
