@@ -1,13 +1,30 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vegeta-http-targets
+data:
+  targets.txt: |
+    GET http://front.mytanzu.xyz/pets
+    GET http://front.mytanzu.xyz/gui/index.html
+
+---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: vegeta-pod-runner
+  name: vegeta-http-runner
   labels:
     run: vegeta
 spec:
   volumes:
   - name: shared-data
-    emptyDir: {}
+    emptyDir: {}  
+  - name: vegeta-config-volume
+    configMap:
+      name: vegeta-http-targets
+      items:
+      - key: targets.txt
+        path: targets.txt
   containers:
   - name: httpd
     image: nginx
@@ -29,11 +46,13 @@ spec:
     volumeMounts:
     - name: shared-data
       mountPath: /vegeta-data 
+    - name: vegeta-config-volume
+      mountPath: /vegeta-config
     env:
     - name: MAX_LOOP
-      value: "50000"
+      value: "500"
     - name: VEGETA_DURATION
-      value: "60s"    
+      value: "30s"    
     - name: VEGETA_RATE
       value: "120"
 ---

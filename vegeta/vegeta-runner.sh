@@ -5,11 +5,14 @@ echo "MAX_LOOP ${MAX_LOOP}"
 echo "VEGETA_DURATION ${VEGETA_DURATION}"
 echo "VEGETA_RATE ${VEGETA_RATE}"
 vegeta -version
+echo "TARGETS"
+cat /vegeta-config/targets.txt
+echo "/TARGETS"
 
 while [ : ]
 do
     echo "Start Vegeta ${COUNTER}"
-    echo 'GET http://front.mytanzu.xyz/pets' | vegeta attack -rate=${VEGETA_RATE} -duration=${VEGETA_DURATION} | vegeta plot > /vegeta-data/plot_${COUNTER}.html
+    vegeta attack -targets=/vegeta-config/targets.txt -rate=${VEGETA_RATE} -duration=${VEGETA_DURATION} | vegeta plot > /vegeta-data/plot_${COUNTER}.html
     echo "Stop Vegeta"
     echo "Pause ${PAUSE_WAIT}"
     sleep ${PAUSE_WAIT}
