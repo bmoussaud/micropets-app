@@ -2,9 +2,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 bases:
-#- ../../../cats/k8s
-#- ../../../dogs/k8s
-#- ../../../fishes/k8s
+- ../../../cats/k8s
+- ../../../dogs/k8s
+- ../../../fishes/k8s
 - ../../../gui/k8s
 - ../../../pets/k8s
 namespace: micropet-test

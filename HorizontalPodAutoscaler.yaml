@@ -1,0 +1,24 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  annotations:
+    autoscaling.alpha.kubernetes.io/conditions: '[{"type":"AbleToScale","status":"True","lastTransitionTime":"2021-04-27T08:04:22Z","reason":"SucceededGetScale","message":"the
+      HPA controller was able to get the target''s current scale"},{"type":"ScalingActive","status":"False","lastTransitionTime":"2021-04-27T08:04:22Z","reason":"FailedGetResourceMetric","message":"the
+      HPA was unable to compute the replica count: failed to get cpu utilization:
+      missing request for cpu"}]'
+  creationTimestamp: "2021-04-27T08:04:07Z"
+  name: cats-app-78db48cf6b
+  namespace: micropet-test
+  resourceVersion: "2451059"
+  uid: 14022332-8767-4be4-bcf0-7bc38acaaa8a
+spec:
+  maxReplicas: 5
+  minReplicas: 2
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: ReplicaSet
+    name: cats-app-78db48cf6b
+  targetCPUUtilizationPercentage: 80
+status:
+  currentReplicas: 2
+  desiredReplicas: 0

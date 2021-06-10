@@ -357,6 +357,133 @@ From the ytt folder, run:
 - `make kapp` generates the YAML K8S resource and run kapp.
 - `make kdelete` deletes the application
 
+## Tanzu Service Mesh
+
+1. create 2 TKG clusters `aws-front` & `aws-back` with 3 worker nodes (m5.xlarge)
+2. Onboard the clusters into TSM (3 steps)[doc](https://docs.vmware.com/en/VMware-Tanzu-Service-Mesh/services/getting-started-guide/GUID-DE9746FD-8369-4B1E-922C-67CF4FB22D21.html)
+  * apply generic configuration
+  * define the secret
+  
+  ![Onboard1](img/TSM/1-TSMOnBoardCluster1.png)
+
+  * in the TSM UI, install the TSM components.
+  
+  ![Onboard2](img/TSM/1-TSMOnBoardCluster2.png)
+
+3. Assign dns name with the clusters (/etc/hosts or DNS)
+  * `front.mytanzy.xyz` to work LB in front of the `aws-front` cluster
+  * `back.mytanzy.xyz` to work LB in front of the `aws-back` cluster
+4. Edit `kustomize/aws/front/kustomization.yaml` and select (uncomment) the 5 services 
+````
+bases:
+- ../../../cats/k8s
+- ../../../dogs/k8s
+- ../../../fishes/k8s
+- ../../../gui/k8s
+- ../../../pets/k8s
+````
+5. Edit `kustomize/aws/front/pets_config.json` and for each service, set `"host": "servicename-service"` ex `"host": "cats-service"` for cats.
+6. from the root of the project, run `make deploy-front`
+7. Smoke Tests
+  * using curl `curl http://front.mytanzu.xyz/pets`
+  * using the internet browser `http://front.mytanzu.xyz/gui/`
+8. Using the TSM Console
+
+  * Create a new Global Namespace
+    * GNS Name : micropets
+    * Domain: micropet.tanzu (put any name, it doesn't match with a real DNS name)
+    
+    ![NewGlobalNamespace](img/TSM/1-NewGlobalNamespace.png)
+
+  * Select  the service mapping
+    * Select the `bmoussaud-front` cluster and the `micropet-test` namespace
+    * Check the list of the deployed services 
+  
+    ![ServiceMapping](img/TSM/2-ServiceMapping.png)
+
+ * Public Service
+    * No Public Service
+  * Health Checks
+    * No Public Service
+  * Finish
+
+![GNSOverview](img/TSM/3-GNS-Overview.png)
+
+Load few times the application using your browser `http://front.mytanzu.xyz/gui/` then click on the Cluster to get the following diagram.
+
+![TraficFront](img/TSM/4-Traficfront.png)
+
+9. Deploy the backend services (cats,dogs,fished) in the `aws-back` cluster : Edit `kustomize/aws/back/kustomization.yaml` and select (uncomment) the 3 services 
+```
+bases:
+- ../../../cats/k8s
+- ../../../dogs/k8s
+- ../../../fishes/k8s
+```
+6. from the root of the project, run `make deploy-back`
+7. Smoke Tests
+  * using curl `curl http://back.mytanzu.xyz/cats`, `curl http://back.mytanzu.xyz/dogs` and `curl http://back.mytanzu.xyz/fishes`
+8. Go into the TSM UI and check the status of the `aws-back` cluster
+
+![traficback](img/TSM/5-Trafic-back.png)
+
+9. Now we'll add the `aws-back` cluster into the global namespace: Edit and modify the service mapping
+
+![editgns](img/TSM/6-EditTSMGNS.png)
+![editmapping](img/TSM/7-AddBackClusterServiceMapping.png)
+
+10. After few access to both cluster the Global Namespace should look like this
+
+![2cLusters](img/TSM/8-Overview2Clusters.png)
+
+11. Edit the `kustomize/aws/front/pets_config.json` to use Global Namespace Service Name: For each service append `.micropet.tanzu`
+
+````
+{
+    "service": {
+        "port": ":9000",
+        "listen": "true"
+    },
+    "backends": [
+        {
+            "name": "cats",
+            "host": "cats-service.micropet.tanzu",
+            "port": "7002"
+        },
+        {
+            "name": "dogs",
+            "host": "dogs-service.micropet.tanzu",
+            "port": "7003"
+        },
+        {
+            "name": "pets",
+            "host": "fishes-service.micropet.tanzu",
+            "port": "7007"
+        }
+    ]
+}
+````
+
+Note: Force the redeployment of the pod associated with the pets-service by killing it `kubectl delete -n micropet-test pod pets-app-6f4ccf88c8-ks6r9`
+
+it's still working, the animal services are still available using this name
+
+````
+$kubectl exec -n micropet-test pets-app-6f4ccf88c8-9xq9d -c pets -- curl -s http://cats-service.micropet.tanzu:7002
+{"Total":2,"Hostname":"cats-app-7f4cfbb9d4-wlj7j","Pets":[{"Name":"Orphee","Kind":"Persan","Age":12,"URL":"https://www.pets4homes.co.uk/images/breeds/21/db349a9afb9b6973fa3b40f684a37bb9.jpg"},{"Name":"Pirouette","Kind":"Bengal","Age":1,"URL":"https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/934px-Paintedcats_Red_Star_standing.jpg"}]}%
+````
+
+As the services can resolved locally, the link between Pets and the 3 others services remains local.
+
+12. Shutdown the services on the `aws-front` cluster. Go to the root project and run `make kill-front-services`
+
+13. inject trafic in the UI 
+
+14. Redeploy the per-animal services (cats,)
+
+![trafic](img/TSM/9-GlobalTrafic.png)
+
+
 ## References
 
 - https://blog.stack-labs.com/code/kustomize-101/

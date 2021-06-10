@@ -25,12 +25,21 @@ k8s-deploy:
         done
 
 deploy-front:
+	kubectx  aws-front-admin@aws-front
 	kustomize build kustomize/aws/front  | kapp -y deploy  -a micropets -f -
 	kapp inspect -a micropets
 
 deploy-back:
+	kubectx aws-back-admin@aws-back
 	kustomize build kustomize/aws/back	  | kapp -y deploy  -a micropets -f -
 	kapp inspect -a micropets
+
+kill-front-services:
+	kubectx  aws-front-admin@aws-front
+	kubectl delete svc cats-service -n micropet-test
+	kubectl delete svc dogs-service -n micropet-test
+	kubectl delete svc fishes-service -n micropet-test
+
 
 undeploy-app:	
 	kapp -y delete -a micropets
