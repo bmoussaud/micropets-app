@@ -360,6 +360,9 @@ From the ytt folder, run:
 ## Tanzu Service Mesh
 
 1. create 2 TKG clusters `aws-front` & `aws-back` with 3 worker nodes (m5.xlarge)
+
+![clsuters](img/TSM/tsm-clusters.png)
+
 2. Onboard the clusters into TSM (3 steps)[doc](https://docs.vmware.com/en/VMware-Tanzu-Service-Mesh/services/getting-started-guide/GUID-DE9746FD-8369-4B1E-922C-67CF4FB22D21.html)
   * apply generic configuration
   * define the secret

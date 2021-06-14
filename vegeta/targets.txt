@@ -1,1 +1,3 @@
-GET http://lamp-apache-service.ndc-app2.avi.cpod-tkg.az-rbx.cloud-garage.net:8080/
+GET http://front.mytanzu.xyz/gui/
+GET http://front.mytanzu.xyz/pets
+
