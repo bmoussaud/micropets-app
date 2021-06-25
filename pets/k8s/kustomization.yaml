@@ -8,3 +8,7 @@ namespace: micropetdev
 images:
   - name: localregistry:5000/micropet/pets
     newName: bmoussaud/micropet_pets
+configMapGenerator:
+- name: pets-config  
+  files:
+  - pets_config.json

@@ -8,6 +8,8 @@ bases:
 - ../../../gui/k8s
 - ../../../pets/k8s
 namespace: micropet-test
+#namePrefix: front-
+#nameSuffix: -v1
 configMapGenerator:
 - name: gui-config
   behavior: replace
