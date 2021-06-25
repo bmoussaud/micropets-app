@@ -6,17 +6,17 @@
     "backends": [
         {
             "name": "cats",
-            "host": "cats-service.micropet.tanzu",
+            "host": "cats-service.micropet.demo",
             "port": "7002"
         },
         {
             "name": "dogs",
-            "host": "dogs-service.micropet.tanzu",
+            "host": "dogs-service.micropet.demo",
             "port": "7003"
         },
         {
             "name": "pets",
-            "host": "fishes-service.micropet.tanzu",
+            "host": "fishes-service.micropet.demo",
             "port": "7007"
         }
     ]
