@@ -10,6 +10,8 @@ bases:
 namespace: micropet-test
 #namePrefix: front-
 #nameSuffix: -v1
+transformers:
+- ./deploy-prefix-transformer.yaml
 configMapGenerator:
 - name: gui-config
   behavior: replace

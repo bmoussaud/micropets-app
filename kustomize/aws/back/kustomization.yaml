@@ -13,6 +13,8 @@ namespace: micropet-test
 #  behavior: replace
 #  files:
 #  - config.json
+transformers:
+- ./deploy-prefix-transformer.yaml
 commonLabels:    
   provider: aws
   runtime: tanzu

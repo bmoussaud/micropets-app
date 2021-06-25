@@ -1,0 +1,8 @@
+apiVersion: builtin
+kind: PrefixSuffixTransformer
+metadata:
+  name: customPrefixer
+prefix: "back-"
+fieldSpecs:
+- kind: Deployment
+  path: metadata/name
