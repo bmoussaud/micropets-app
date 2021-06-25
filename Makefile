@@ -25,7 +25,7 @@ k8s-deploy:
         done
 
 deploy-front:
-	kubectx  aws-front-admin@aws-front
+	kubectx  aws-front
 	kustomize build kustomize/aws/front  | kapp -y deploy  -a micropets -f -
 	kapp inspect -a micropets
 
