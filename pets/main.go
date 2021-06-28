@@ -123,6 +123,21 @@ func queryPets(backend string) Pets {
 	return pets
 }
 
+func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
+	setupResponse(&w, r)
+	fmt.Printf("Handling %+v\n", r)
+	var all Pets
+	path := Path{"pets", "readiness_and_liveness"}
+	all.Hostnames = []Path{path}
+	js, err := json.Marshal(all)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
+}
+
 func index(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
 	fmt.Printf("Handling %+v\n", r)
@@ -235,6 +250,8 @@ func main() {
 	if config.Service.Listen {
 		port := config.Service.Port
 		http.HandleFunc("/", index)
+		http.HandleFunc("/readiness", readiness_and_liveness)
+		http.HandleFunc("/liveness", readiness_and_liveness)
 		fmt.Printf("******* Starting to the Pets service on port %s\n", port)
 		for i, backend := range config.Backends {
 			fmt.Printf("* Managing %d\t %s\t %s:%s\n", i, backend.Name, backend.Host, backend.Port)

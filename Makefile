@@ -35,11 +35,14 @@ deploy-back:
 	kapp inspect -a micropets
 
 kill-front-services:
-	kubectx  aws-front-admin@aws-front
+	kubectx  aws-front
 	kubectl delete svc cats-service -n micropet-test
 	kubectl delete svc dogs-service -n micropet-test
 	kubectl delete svc fishes-service -n micropet-test
+	kubectl delete deployment front-cats-app -n micropet-test
+	kubectl delete deployment front-dogs-app -n micropet-test
+	kubectl delete deployment front-fishes-app -n micropet-test
 
-
+	
 undeploy-app:	
 	kapp -y delete -a micropets

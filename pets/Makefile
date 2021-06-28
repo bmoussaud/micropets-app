@@ -56,6 +56,9 @@ docker-hub-push: docker-build
 	docker push $(DOCKER_HUB_IMAGE)
 	docker push $(DOCKER_HUB_IMAGE_DEV)
 
+docker-run:
+	docker run $(DOCKER_IMAGE_DEV) 
+
 xebialabs:
 	xl --xl-deploy-url http://localhost:4525 apply -s --proceed-when-dirty -f xebialabs.yaml
 
