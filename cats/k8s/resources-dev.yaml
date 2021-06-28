@@ -50,6 +50,18 @@ spec:
           ports:
             - name: cats
               containerPort: 7002
+          livenessProbe:
+            httpGet:
+              port: 7002
+              path: /liveness
+            initialDelaySeconds: 10
+            periodSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 7002
+              path: /readiness
+            initialDelaySeconds: 10
+            periodSeconds: 2
           volumeMounts:
             - name: config-volume
               mountPath: /config/

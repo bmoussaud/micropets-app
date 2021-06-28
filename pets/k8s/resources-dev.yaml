@@ -56,6 +56,18 @@ spec:
         - name: pets
           image: localregistry:5000/micropet/pets:dev
           imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              port: 9000
+              path: /liveness
+            initialDelaySeconds: 10
+            periodSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 9000
+              path: /readiness
+            initialDelaySeconds: 10
+            periodSeconds: 2
           ports:
             - name: pets
               containerPort: 9000
