@@ -1,5 +1,5 @@
 {    
-  "petServiceUrl":"http://pets.dev.pet-cluster.demo/",
-  "stage": "staging",
+  "petServiceUrl":"http://front.mytanzu.xyz/pets",
+  "stage": "WIP",
   "stage_color": "green"
 }

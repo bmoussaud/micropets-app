@@ -26,12 +26,19 @@
 -->
 <div class="corner-ribbon top-right sticky {{env_color}}">{{env}}</div>
 
+
+
+
+
+
+
 <div>
   <mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
-    <mat-row [ngClass]="{'cat': row.Type == 'cats', 'dog': row.Type == 'dogs', 'fish': row.Type == 'fishes', 'pet': row.Type == 'pets'}" *matRowDef="let row; columns: displayedColumns"></mat-row>
-
+    <mat-row
+      [ngClass]="{'cat': row.Type == 'cats', 'dog': row.Type == 'dogs', 'fish': row.Type == 'fishes', 'pet': row.Type == 'pets'}"
+      *matRowDef="let row; columns: displayedColumns"></mat-row>
 
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
@@ -52,3 +59,11 @@
   </mat-table>
 
 </div>
+
+<mat-card>
+  <mat-card-content>
+    <p>
+      {{hostnamesstr}}
+    </p>
+  </mat-card-content>
+</mat-card>
