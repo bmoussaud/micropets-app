@@ -8,3 +8,7 @@ namespace: micropetdev
 images:
   - name: localregistry:5000/micropet/cats
     newName: bmoussaud/micropet_cats
+configMapGenerator:
+- name: cats-config
+  files:
+  - config.properties

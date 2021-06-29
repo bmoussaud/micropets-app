@@ -112,6 +112,11 @@ func GetLocation(file string) string {
 	}
 }
 
+func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(200)
+	w.Write([]byte("ok"))
+}
+
 func main() {
 	var port = ":7002"
 
@@ -143,7 +148,9 @@ func main() {
 		delayAmplitude = properties.GetFloat64("delay.amplitude", delayAmplitude)
 	}
 
-	http.HandleFunc("/", index)
+	http.HandleFunc("/cats/v1/data", index)
+	http.HandleFunc("/cats/liveness", readiness_and_liveness)
+	http.HandleFunc("/cats/readiness", readiness_and_liveness)
 	fmt.Printf("******* Starting to the Cats service on port %s, mode %s\n", port, mode)
 	fmt.Printf("******* Delay Period %f Amplitude %f\n", delayPeriod, delayAmplitude)
 	log.Fatal(http.ListenAndServe(port, nil))

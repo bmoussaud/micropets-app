@@ -11,7 +11,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cats-config
+  name: cats-config-old
   annotations:
     kustomize.config.k8s.io/needs-hash: "true"
 data:
@@ -57,14 +57,14 @@ spec:
           livenessProbe:
             httpGet:
               port: 7002
-              path: /liveness
-            initialDelaySeconds: 10
+              path: /cats/liveness
+            initialDelaySeconds: 5
             periodSeconds: 2
           readinessProbe:
             httpGet:
               port: 7002
-              path: /readiness
-            initialDelaySeconds: 10
+              path: /cats/readiness
+            initialDelaySeconds: 5
             periodSeconds: 2
           volumeMounts:
             - name: config-volume
@@ -113,7 +113,7 @@ spec:
     - host: k8s.mytanzu.xyz
       http:
         paths:
-          - path: /cats
+          - path: /cats            
             backend:
               serviceName: cats-service
               servicePort: 7002
