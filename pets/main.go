@@ -20,9 +20,10 @@ type Config struct {
 		Listen bool
 	}
 	Backends []struct {
-		Name string `json:"name"`
-		Host string `json:"host"`
-		Port string `json:"port"`
+		Name    string `json:"name"`
+		Host    string `json:"host"`
+		Port    string `json:"port"`
+		Context string `json:"context"`
 	}
 }
 
@@ -80,7 +81,7 @@ func queryPets(backend string) Pets {
 	}
 	var pets Pets
 	req.Debug = true
-	fmt.Printf("##########################@ 2 Connecting backend %s\n", backend)
+	fmt.Printf("##########################@ 2 Connecting backend [%s]\n", backend)
 	r, _ := req.Get(backend, header)
 	r.ToJSON(&pets)
 
@@ -116,7 +117,8 @@ func index(w http.ResponseWriter, r *http.Request) {
 	all.Hostnames = []Path{path}
 
 	for i, backend := range config.Backends {
-		URL := fmt.Sprintf("http://%s:%s", backend.Host, backend.Port)
+		URL := fmt.Sprintf("http://%s:%s%s", backend.Host, backend.Port, backend.Context)
+		lookupService(backend.Host)
 		fmt.Printf("* Accessing %d\t %s\t %s\n", i, backend.Name, URL)
 		pets := queryPets(URL)
 		all.Total = all.Total + pets.Total
@@ -139,44 +141,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
-
-}
-
-func index_stdout() {
-
-	config := LoadConfiguration()
-
-	var all Pets
-	host, err := os.Hostname()
-	if err != nil {
-		host = "Unknown"
-	}
-	path := Path{"pets", host}
-	all.Hostnames = []Path{path}
-
-	for i, backend := range config.Backends {
-		URL := fmt.Sprintf("http://%s:%s", backend.Host, backend.Port)
-		lookupService(backend.Host)
-		fmt.Printf("* Accessing %d\t %s\t %s\n", i, backend.Name, URL)
-		pets := queryPets(URL)
-		all.Total = all.Total + pets.Total
-		all.Hostnames = append(all.Hostnames, Path{backend.Name, pets.Hostname})
-		fmt.Printf("* Hostnames %s\n", all.Hostname)
-		for _, pet := range pets.Pets {
-			pet.Type = backend.Name
-			all.Pets = append(all.Pets, pet)
-		}
-	}
-
-	sort.SliceStable(all.Pets, func(i, j int) bool {
-		return all.Pets[i].Name < all.Pets[j].Name
-	})
-
-	js, err := json.Marshal(all)
-	if err != nil {
-		panic(fmt.Errorf("fatal marshall json: %s ", err))
-	}
-	fmt.Printf("%s", js)
 
 }
 
@@ -218,12 +182,10 @@ func main() {
 		http.HandleFunc("/", index)
 		fmt.Printf("******* Starting to the Pets service on port %s\n", port)
 		for i, backend := range config.Backends {
-			fmt.Printf("* Managing %d\t %s\t %s:%s\n", i, backend.Name, backend.Host, backend.Port)
+			fmt.Printf("* Managing %d\t %s\t %s:%s%s\n", i, backend.Name, backend.Host, backend.Port, backend.Context)
 		}
 		log.Fatal(http.ListenAndServe(port, nil))
 	} else {
-		fmt.Printf("******* Execute Pets service and exit \n")
-		index_stdout()
-
+		fmt.Printf("******* Don't Execute Pets service and exit \n")
 	}
 }

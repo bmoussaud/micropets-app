@@ -1,9 +1,20 @@
 {
   "service": {
-    "port":":7004"
+    "port": ":7004",
+    "listen": "true"
   },
   "backends": [
-    {"name":"cats","host":"localhost", "port":"7003"},
-    {"name":"dogs","host":"localhost", "port":"7002"}    
+    {
+      "name": "cats",
+      "host": "front.mytanzu.xyz",
+      "port": "80",
+      "context": "/cats/v1/data"
+    },
+    {
+      "name": "dogs",
+      "host": "front.mytanzu.xyz",
+      "port": "80",
+      "context": "/dogs"
+    }
   ]
 }
