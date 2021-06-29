@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -57,8 +56,6 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
-var configLocation string = "config.json"
-
 func lookupService(service string) string {
 
 	fmt.Fprintf(os.Stderr, "-- Service %v\n", service)
@@ -75,7 +72,7 @@ func lookupService(service string) string {
 	return service
 }
 
-func queryPets2(backend string) Pets {
+func queryPets(backend string) Pets {
 
 	header := req.Header{
 		"Accept":  "application/json",
@@ -87,39 +84,6 @@ func queryPets2(backend string) Pets {
 	r, _ := req.Get(backend, header)
 	r.ToJSON(&pets)
 
-	return pets
-}
-
-func queryPets(backend string) Pets {
-	var pets Pets
-	var emptyPets Pets
-
-	fmt.Printf("Connecting backend %s\n", backend)
-	resp, herr := http.Get(backend)
-
-	if herr != nil {
-		fmt.Printf("Error communicating with backend: %v", herr)
-		return emptyPets
-	}
-
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		fmt.Printf("Backend seems unhealthy: %v", resp)
-		return emptyPets
-	}
-
-	body, ierr := ioutil.ReadAll(resp.Body)
-
-	if ierr != nil {
-		fmt.Printf("Backend producing garbage: %v", ierr)
-		return emptyPets
-	}
-
-	err := json.Unmarshal([]byte(body), &pets)
-	if err != nil {
-		panic(err)
-	}
 	return pets
 }
 
@@ -154,7 +118,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	for i, backend := range config.Backends {
 		URL := fmt.Sprintf("http://%s:%s", backend.Host, backend.Port)
 		fmt.Printf("* Accessing %d\t %s\t %s\n", i, backend.Name, URL)
-		pets := queryPets2(URL)
+		pets := queryPets(URL)
 		all.Total = all.Total + pets.Total
 		all.Hostnames = append(all.Hostnames, Path{backend.Name, pets.Hostname})
 		fmt.Printf("* Hostnames %s\n", all.Hostname)
@@ -194,7 +158,7 @@ func index_stdout() {
 		URL := fmt.Sprintf("http://%s:%s", backend.Host, backend.Port)
 		lookupService(backend.Host)
 		fmt.Printf("* Accessing %d\t %s\t %s\n", i, backend.Name, URL)
-		pets := queryPets2(URL)
+		pets := queryPets(URL)
 		all.Total = all.Total + pets.Total
 		all.Hostnames = append(all.Hostnames, Path{backend.Name, pets.Hostname})
 		fmt.Printf("* Hostnames %s\n", all.Hostname)
@@ -210,7 +174,7 @@ func index_stdout() {
 
 	js, err := json.Marshal(all)
 	if err != nil {
-		panic(fmt.Errorf("Fatal marshall json: %s ", err))
+		panic(fmt.Errorf("fatal marshall json: %s ", err))
 	}
 	fmt.Printf("%s", js)
 
@@ -230,7 +194,7 @@ func LoadConfiguration() Config {
 	}
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file
-		panic(fmt.Errorf("Fatal error config file: %s ", err))
+		panic(fmt.Errorf("fatal error config file: %s ", err))
 	}
 
 	var config Config
@@ -249,9 +213,9 @@ func main() {
 	config := LoadConfiguration()
 	if config.Service.Listen {
 		port := config.Service.Port
-		http.HandleFunc("/", index)
 		http.HandleFunc("/readiness", readiness_and_liveness)
 		http.HandleFunc("/liveness", readiness_and_liveness)
+		http.HandleFunc("/", index)
 		fmt.Printf("******* Starting to the Pets service on port %s\n", port)
 		for i, backend := range config.Backends {
 			fmt.Printf("* Managing %d\t %s\t %s:%s\n", i, backend.Name, backend.Host, backend.Port)
