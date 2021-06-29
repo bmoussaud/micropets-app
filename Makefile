@@ -30,7 +30,7 @@ deploy-front:
 	kapp inspect -a micropets
 
 deploy-back:
-	kubectx aws-back-admin@aws-back
+	kubectx bmoussaud@vmware.com@aws-eks-back.eu-west-3.eksctl.io
 	kustomize build kustomize/aws/back	  | kapp -y deploy  -a micropets -f -
 	kapp inspect -a micropets
 

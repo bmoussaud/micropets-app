@@ -12,10 +12,14 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cats-config
+  annotations:
+    kustomize.config.k8s.io/needs-hash: "true"
 data:
   config.properties: |
     listen.port: :7002
     mode: RANDOM_NUMBER
+    delay.period: 10
+    delay.amplitude: 1
 ---
 kind: Deployment
 apiVersion: apps/v1

@@ -17,6 +17,9 @@ DOCKER_HUB_IMAGE=bmoussaud/micropet_$(BINARY_NAME):$(VERSION)
 DOCKER_HUB_IMAGE_DEV=bmoussaud/micropet_$(BINARY_NAME):dev
 GO111MODULE=auto
 
+ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
+
 all: build docker-build docker-push
 
 build: deps
@@ -55,6 +58,9 @@ docker-hub-push: docker-build
 	docker tag $(DOCKER_IMAGE) $(DOCKER_HUB_IMAGE_DEV)
 	docker push $(DOCKER_HUB_IMAGE)
 	docker push $(DOCKER_HUB_IMAGE_DEV)
+
+docker-run:
+	docker run --rm  --name $(BINARY_NAME)  -v $(ROOT_DIR):/config -e SERVICE_CONFIG_DIR=/config -p 7002:7002 $(DOCKER_IMAGE_DEV)
 
 xebialabs:
 	xl --xl-deploy-url http://localhost:4525 apply -s --proceed-when-dirty -f xebialabs.yaml

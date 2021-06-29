@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/magiconair/properties"
 )
@@ -32,6 +34,12 @@ var mode = "ALL"
 
 var configLocation string = "config.properties"
 
+var delayPeriod = 0.0
+
+var delayAmplitude = 0.0
+
+var calls = 0.0
+
 func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
@@ -40,17 +48,18 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 
 func index(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
-	fmt.Printf("Handling %+v\n", r)
-	fmt.Printf("MODE %s\n", mode)
+	//fmt.Printf("Handling %+v\n", r)
+	//fmt.Printf("MODE %s\n", mode)
 	cat1 := Cat{"Orphee", "Persan", 12, "https://www.pets4homes.co.uk/images/breeds/21/db349a9afb9b6973fa3b40f684a37bb9.jpg"}
 	cat2 := Cat{"Pirouette", "Bengal", 1, "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/934px-Paintedcats_Red_Star_standing.jpg"}
 	cat3 := Cat{"Pamina", "Angora", 120, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Turkish_Angora_Odd-Eyed.jpg/440px-Turkish_Angora_Odd-Eyed.jpg"}
 	cat4 := Cat{"Clochette", "Siamois", 120, "https://www.woopets.fr/assets/races/home/siamois-124x153.jpg"}
 	cats := Cats{4, "Unknown", []Cat{cat1, cat2, cat3, cat4}}
 
+	calls = calls + 1
 	if mode == "RANDOM_NUMBER" {
 		total := rand.Intn(cats.Total) + 1
-		fmt.Printf("total %d\n", total)
+		fmt.Printf("reduce results to total %d/%d\n", total, cats.Total)
 		for i := 1; i < total; i++ {
 			cats.Cats = cats.Cats[:len(cats.Cats)-1]
 			cats.Total = cats.Total - 1
@@ -69,6 +78,18 @@ func index(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+
+	if delayPeriod > 0 {
+		y := (math.Pi) / (2 * delayPeriod) * float64(calls)
+		sin_y := math.Sin(y)
+		abs_y := math.Abs(sin_y)
+		sleep := int(abs_y * delayAmplitude * 1000.0)
+		//fmt.Printf("waitTime %f - %f - %f - %f  -> sleep %d seconds  \n", calls, y, math.Sin(y), abs_y, sleep)
+		start := time.Now()
+		time.Sleep(time.Duration(sleep) * time.Millisecond)
+		elapsed := time.Since(start)
+		fmt.Printf("Current Unix Time: %s\n", elapsed)
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -105,7 +126,7 @@ func main() {
 		readPort = properties.GetString("listen.port", port)
 		//fmt.Printf(readPort)
 		if strings.HasPrefix(readPort, ":{{") {
-			fmt.Printf("config file fount but it contains unreplaced values %s\n", readPort)
+			fmt.Printf("config file found but it contains unreplaced values %s\n", readPort)
 		} else {
 			port = readPort
 		}
@@ -113,13 +134,17 @@ func main() {
 		var readMode string
 		readMode = properties.GetString("mode", mode)
 		if strings.HasPrefix(readPort, ":{{") {
-			fmt.Printf("config file fount but it contains unreplaced values %s\n", readMode)
+			fmt.Printf("config file found but it contains unreplaced values %s\n", readMode)
 		} else {
 			mode = readMode
 		}
+
+		delayPeriod = properties.GetFloat64("delay.period", delayPeriod)
+		delayAmplitude = properties.GetFloat64("delay.amplitude", delayAmplitude)
 	}
 
 	http.HandleFunc("/", index)
 	fmt.Printf("******* Starting to the Cats service on port %s, mode %s\n", port, mode)
+	fmt.Printf("******* Delay Period %f Amplitude %f\n", delayPeriod, delayAmplitude)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
