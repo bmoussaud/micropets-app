@@ -6,13 +6,13 @@ bases:
 - ../../../dogs/k8s
 - ../../../fishes/k8s
 #- ../../../gui/k8s
-#- ../../../pets/k8s
+- ../../../pets/k8s
 namespace: micropet-test
-#configMapGenerator:
-#- name: gui-config
-#  behavior: replace
-#  files:
-#  - config.json
+configMapGenerator:
+- name: pets-config
+  behavior: replace
+  files:
+  - pets_config.json
 transformers:
 - ./deploy-prefix-transformer.yaml
 commonLabels:    

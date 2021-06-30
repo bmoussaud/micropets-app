@@ -1,0 +1,26 @@
+{
+    "service": {
+        "port": ":9000",
+        "listen": "true"
+    },
+    "backends": [
+        {
+            "name": "cats",
+            "host": "cats-service.bmoussaud.demo",
+            "port": "7002",
+            "context": "/cats/v1/data"
+        },
+        {
+            "name": "dogs",
+            "host": "dogs-service.bmoussaud.demo",
+            "port": "7003",
+            "context": "/"
+        },
+        {
+            "name": "pets",
+            "host": "fishes-service.bmoussaud.demo",
+            "port": "7007",
+            "context": "/"
+        }
+    ]
+}
