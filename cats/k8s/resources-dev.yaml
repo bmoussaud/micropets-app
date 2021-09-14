@@ -113,7 +113,7 @@ spec:
     - host: k8s.mytanzu.xyz
       http:
         paths:
-          - path: /cats            
+          - path: /cats
             backend:
               serviceName: cats-service
               servicePort: 7002
