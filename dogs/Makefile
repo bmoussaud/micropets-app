@@ -36,6 +36,9 @@ run:
 deps:	
 	GO111MODULE=auto $(GOGET) github.com/magiconair/properties
 
+cnb-image:
+	pack build dog --buildpack gcr.io/paketo-buildpacks/go --builder paketobuildpacks/builder:base
+
 
 # Cross compilation
 build-windows:
