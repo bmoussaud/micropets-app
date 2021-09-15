@@ -12,3 +12,5 @@ carvel-ytt-develop
 vegeta/*.bin
 vegeta/*.html
 *bin
+cats/*.bin
+cats/*.html

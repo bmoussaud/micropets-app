@@ -71,3 +71,7 @@ deploy:
 k8s-deploy:
 	kubectl delete -k k8s
 	kubectl apply -k k8s
+
+load:
+	vegeta attack -targets=targets.txt -name=300qps -rate=300 -duration=15s > results.300qps.bin
+	cat results.300qps.bin | vegeta plot > plot.300qps.html
