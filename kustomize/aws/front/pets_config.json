@@ -17,7 +17,7 @@
             "context": "/"
         },
         {
-            "name": "pets",
+            "name": "fishes",
             "host": "fishes-service",
             "port": "7007",
             "context": "/"
