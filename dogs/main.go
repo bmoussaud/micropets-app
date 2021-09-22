@@ -13,8 +13,6 @@ import (
 	"github.com/magiconair/properties"
 )
 
-var count = 1
-
 //Dog type
 type Dog struct {
 	Name string
@@ -45,7 +43,8 @@ func index(w http.ResponseWriter, r *http.Request) {
 	pet2 := Dog{"Bil", "Bull Terrier", 12, "https://www.petmd.com/sites/default/files/07New_Collie.jpeg"}
 	pet3 := Dog{"Rantaplan", "Labrador Retriever", 24, "https://www.petmd.com/sites/default/files/01New_GoldenRetriever.jpeg"}
 	pet4 := Dog{"Lassie", "Golden Retriever", 20, "https://www.petmd.com/sites/default/files/11New_MixedBreed.jpeg"}
-	pets := Dogs{4, "UKN", []Dog{pet1, pet2, pet3, pet4}}
+	pet5 := Dog{"Beethoven", "Great St Bernard", 30, "https://petsnurturing.com/wp-content/uploads/2019/05/Best-Dog-Movies-1.jpg"}
+	pets := Dogs{5, "UKN", []Dog{pet1, pet2, pet3, pet4, pet5}}
 
 	if mode == "RANDOM_NUMBER" {
 		total := rand.Intn(pets.Total) + 1
@@ -100,8 +99,8 @@ func main() {
 	if err != nil {
 		fmt.Printf("config file not found, use default values\n")
 	} else {
-		var readPort string
-		readPort = properties.GetString("listen.port", port)
+		//var readPort string
+		readPort := properties.GetString("listen.port", port)
 		//fmt.Printf(readPort)
 		if strings.HasPrefix(readPort, ":{{") {
 			fmt.Printf("config file fount but it contains unreplaced values %s\n", readPort)
@@ -109,8 +108,7 @@ func main() {
 			port = readPort
 		}
 
-		var readMode string
-		readMode = properties.GetString("mode", mode)
+		readMode := properties.GetString("mode", mode)
 		if strings.HasPrefix(readPort, ":{{") {
 			fmt.Printf("config file fount but it contains unreplaced values %s\n", readMode)
 		} else {
