@@ -1,0 +1,7 @@
+{
+  "auths": {
+    "https://harbor.mytanzu.xyz": {
+      "auth": "YWRtaW46aFdnNnJvVHFZRlVBUlNrdw=="
+    }
+  }
+}

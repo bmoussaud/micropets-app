@@ -26,7 +26,7 @@ docker-hub-push: docker-build
 
 
 load:
-	vegeta attack -targets=targets.txt -header AppId:c7c734e9 -name=300qps -rate=300 -duration=15s > results.300qps.bin
+	vegeta attack -targets=targets.txt -header AppId:c7c734e9 -name=300qps -rate=300 -duration=10s > results.300qps.bin
 	cat results.300qps.bin | vegeta plot > plot.300qps.html
 
 burst: 	

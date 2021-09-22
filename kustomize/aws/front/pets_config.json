@@ -6,19 +6,19 @@
     "backends": [
         {
             "name": "cats",
-            "host": "cats-service",
+            "host": "cats-service.michelin.demo",
             "port": "7002",
             "context": "/cats/v1/data"
         },
         {
             "name": "dogs",
-            "host": "dogs-service",
+            "host": "dogs-service.michelin.demo",
             "port": "7003",
             "context": "/"
         },
         {
             "name": "fishes",
-            "host": "fishes-service",
+            "host": "fishes-service.michelin.demo",
             "port": "7007",
             "context": "/"
         }

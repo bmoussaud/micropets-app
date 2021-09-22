@@ -59,6 +59,10 @@ docker-hub-push: docker-build
 	docker push $(DOCKER_HUB_IMAGE)
 	docker push $(DOCKER_HUB_IMAGE_DEV)
 
+docker-run:
+	docker run --rm  --name $(BINARY_NAME)  -v $(ROOT_DIR):/config -e SERVICE_CONFIG_DIR=/config -p 7003:7003 $(DOCKER_IMAGE_DEV)
+
+
 xebialabs:
 	xl --xl-deploy-url http://localhost:4525 apply -s --proceed-when-dirty -f xebialabs.yaml
 
@@ -68,3 +72,10 @@ deploy:
 k8s-deploy:
 	kubectl delete -f k8s/resources-dev.yaml
 	kubectl apply -f k8s/resources-dev.yaml
+
+
+create-harbor-secret:
+	kubectl create secret generic harbor-registry-credentials \
+    --from-file=.dockerconfigjson=./harbor.json \
+    --type=kubernetes.io/dockerconfigjson \
+    -n micropet-build

@@ -1,0 +1,45 @@
+#@ load("@ytt:data", "data")
+---
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStore
+metadata:
+  name: micropet-store
+spec:
+  sources:
+    - image: gcr.io/paketo-buildpacks/go    
+    - image: gcr.io/paketo-buildpacks/nodejs
+    - image: harbor.mytanzu.xyz/library/watermark-labels-buildpack:0.0.4
+---
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStack
+metadata:
+  name: micropet-stack
+spec:
+  id: "io.buildpacks.stacks.bionic"
+  buildImage:
+    image: "paketobuildpacks/build:base-cnb"
+  runImage:
+    image: "paketobuildpacks/run:base-cnb"
+---
+apiVersion: kpack.io/v1alpha1
+kind: ClusterBuilder
+metadata:
+  name: micropet-builder
+spec:
+  serviceAccountRef:
+    name: micropet-service-account
+    namespace: #@ data.values.into_ns
+  tag: #@ data.values.image_prefix + "-builder"
+  stack:
+    name: micropet-stack
+    kind: ClusterStack
+  store:
+    name: micropet-store
+    kind: ClusterStore
+  order:    
+    - group:
+      - id: paketo-buildpacks/go
+      - id: bmoussaud/watermark
+    - group:
+      - id: paketo-buildpacks/nodejs
+      - id: bmoussaud/watermark

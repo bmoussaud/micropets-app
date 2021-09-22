@@ -469,7 +469,7 @@ bases:
 
 Note: Force the redeployment of the pod associated with the pets-service by killing it `kubectl delete -n micropet-test pod pets-app-6f4ccf88c8-ks6r9`
 
-it's still working, the animal services are still available using this name
+it's still working, the animal services are still available using this name !
 
 ````
 $kubectl exec -n micropet-test pets-app-6f4ccf88c8-9xq9d -c pets -- curl -s http://cats-service.micropet.tanzu:7002
@@ -486,6 +486,59 @@ As the services can resolved locally, the link between Pets and the 3 others ser
 
 ![trafic](img/TSM/9-GlobalTrafic.png)
 
+
+
+
+## Tanzu Build Service / kPack
+
+Set up the project to use [Cloud Native Buildpack](https://buildpacks.io/) instead of Dockerfile to create the image
+The project will use [kPack](https://github.com/pivotal/kpack). 
+If you're looking for a supported version of kPack, please look at [Tanzu Build Service by vmware](https://tanzu.vmware.com/build-service)
+
+Install kPack into the cluster
+```
+kapp deploy --yes -a kpack \
+	-f https://github.com/pivotal/kpack/releases/download/v0.3.1/release-0.3.1.yaml
+````
+
+Edit [cluster/values.yaml](cluster/values.yaml) 
+
+the cluster/kpack folder defines the cluster-scoped resources and the shared resources amongs the services
+
+```
+cd cluster
+export MICROPETS_registry_password="moussaud"
+export MICROPETS_into_ns="micropets-supplychain"
+kubectl create  ns ${MICROPETS_into_ns}
+ytt --ignore-unknown-comments --data-values-env  MICROPETS   -f . | kapp deploy --yes --into-ns ${MICROPETS_into_ns} -a micropet-kpack -f-
+```
+
+Check the builder is available (Ready=true)
+````
+$kubectl get ClusterBuilder micropet-builder
+NAME               LATESTIMAGE                                                                                                           READY
+micropet-builder   harbor.mytanzu.xyz/library/micropet-builder@sha256:dd1993c5a5550f7b91052330d11bb029bd2f108776dff5097e42e813988ae1b9   True
+```
+
+```
+export MICROPETS_into_ns="micropets-supplychain"
+ytt --ignore-unknown-comments -v image_prefix=harbor.mytanzu.xyz/library/micropet -f ../dogs/kpack.yml | kapp deploy --yes --into-ns ${MICROPETS_into_ns} -a micropet-dogs-kpack -f-
+```
+
+Check the image is Ready
+````
+$kubectl get images.kpack.io -n micropets-supplychain micropet-dogs-image
+NAME                  LATESTIMAGE                                                                                                        READY
+micropet-dogs-image   harbor.mytanzu.xyz/library/micropet-dogs@sha256:c103f2f4ade056a1c0a558a85236dd030b3550bc31e8d883db5fe26991be2486   True
+````
+
+Get the logs of the built images
+````
+logs -image micropet-dogs-image -namespace micropets-supplychain
+````
+
+kapp delete -a micropet-kpack
+kubectl delete  ns ${MICROPETS_into_ns}
 
 ## References
 

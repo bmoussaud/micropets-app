@@ -1,0 +1,8 @@
+#@data/values
+---
+image_prefix: harbor.mytanzu.xyz/library/micropet
+#into_ns: XXXX
+registry:
+  server: https://harbor.mytanzu.xyz
+  username: admin
+  #password injected using environment variable password: xxxxxxxx (see readme.md)
