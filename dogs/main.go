@@ -43,7 +43,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	pet2 := Dog{"Bil", "Bull Terrier", 12, "https://www.petmd.com/sites/default/files/07New_Collie.jpeg"}
 	pet3 := Dog{"Rantaplan", "Labrador Retriever", 24, "https://www.petmd.com/sites/default/files/01New_GoldenRetriever.jpeg"}
 	pet4 := Dog{"Lassie", "Golden Retriever", 20, "https://www.petmd.com/sites/default/files/11New_MixedBreed.jpeg"}
-	pet5 := Dog{"Beethoven", "Great St Bernard", 30, "https://petsnurturing.com/wp-content/uploads/2019/05/Best-Dog-Movies-1.jpg"}
+	pet5 := Dog{"Beethoven", "Great St Bernard", 30, "https://upload.wikimedia.org/wikipedia/commons/6/64/Hummel_Vedor_vd_Robandahoeve.jpg"}
 	pets := Dogs{5, "UKN", []Dog{pet1, pet2, pet3, pet4, pet5}}
 
 	if mode == "RANDOM_NUMBER" {
