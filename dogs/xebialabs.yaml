@@ -1,8 +1,0 @@
-apiVersion: xl/v1
-kind: Import
-metadata:
-  imports:
-  - xld-app-windows.yaml
-  - xld-app-container.yaml
-  - ../xebialabs/xebialabs.yaml
-
