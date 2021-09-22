@@ -7,4 +7,5 @@ resources:
 namespace: micropetdev
 images:
   - name: localregistry:5000/micropet/dogs
-    newName: bmoussaud/micropet_dogs
+    newName: harbor.mytanzu.xyz/library/micropet-dogs
+    newTag: latest
