@@ -14,3 +14,4 @@ vegeta/*.html
 *bin
 cats/*.bin
 cats/*.html
+istio-1.11.2
