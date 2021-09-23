@@ -40,6 +40,16 @@ deps:
 	GO111MODULE=auto $(GOGET) github.com/kelseyhightower/envconfig
 	GO111MODULE=auto $(GOGET) github.com/magiconair/properties
 
+cnb-image:
+	pack build $(BINARY_NAME) --buildpack gcr.io/paketo-buildpacks/go --builder paketobuildpacks/builder:base
+
+deploy_kapp:
+	ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropet-test -a micropet-cats-service -f-
+
+undeploy_kapp:
+	kapp delete -a micropet-dogs-service 
+
+
 # Cross compilation
 build-windows:
 	GO111MODULE=auto CGO_ENABLED=0 GOOS=windows GOARCH=386 $(GOBUILD) -o $(BINARY_WINDOWS) -v
