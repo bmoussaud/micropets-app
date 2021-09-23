@@ -1,4 +1,4 @@
-module moussaud.org/dogs
+module moussaud.org/cats
 
 go 1.16
 
