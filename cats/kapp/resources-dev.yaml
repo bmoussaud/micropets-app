@@ -106,7 +106,7 @@ metadata:
   name: cats-ingress
 spec:
   rules:
-    - host: k8s.mytanzu.xyz
+    - host: #@ data.values.service.virtual_host
       http:
         paths:
           - path: /cats

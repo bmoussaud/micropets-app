@@ -1,0 +1,10 @@
+#@data/values
+---
+service:  
+  port: 9000
+  replicas: 1
+  version: latest
+  virtual_host: front.mytanzu.xyz
+registry:
+  server: harbor.mytanzu.xyz/library
+  
