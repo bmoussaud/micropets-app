@@ -39,6 +39,12 @@ deps:
 cnb-image:
 	pack build dog --buildpack gcr.io/paketo-buildpacks/go --builder paketobuildpacks/builder:base
 
+deploy_kapp:
+	ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropet-test -a micropet-dogs-service -f-
+
+undeploy_kapp:
+	kapp delete -a micropet-dogs-service 
+
 
 # Cross compilation
 build-windows:
