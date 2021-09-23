@@ -1,5 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:overlay", "overlay")
+#@ load("helpers.star","configfile","load_configfile")
 ---
 apiVersion: v1
 kind: Secret
@@ -13,10 +14,8 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: dogs-config
-data:  
-  config.properties: #@ data.read("service_config.properties")
-    
+  name: #@ configfile("dogs-config", "service_config.properties")
+data: #@ load_configfile("service_config.properties")
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -40,9 +39,9 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: dogs-config
+            name: #@ configfile("dogs-config", "service_config.properties")
             items:
-            - key: config.properties
+            - key: service_config.properties
               path: config.properties
       containers:
         - name: dogs
