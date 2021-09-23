@@ -47,7 +47,7 @@ deploy_kapp:
 	ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropet-test -a micropet-cats-service -f-
 
 undeploy_kapp:
-	kapp delete -a micropet-dogs-service 
+	kapp delete -a micropet-cats-service 
 
 
 # Cross compilation

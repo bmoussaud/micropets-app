@@ -35,6 +35,16 @@ deps:
 	GO111MODULE=auto $(GOGET) github.com/magiconair/properties
 
 
+cnb-image:
+	pack build $(BINARY_NAME) --buildpack gcr.io/paketo-buildpacks/go --builder paketobuildpacks/builder:base
+
+deploy_kapp:
+	ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropet-test -a micropet-fishes-service -f-
+
+undeploy_kapp:
+	kapp delete -a micropet-fishes-service 
+
+
 # Cross compilation
 build-windows:
 	CGO_ENABLED=0 GOOS=windows GOARCH=386 $(GOBUILD) -o $(BINARY_WINDOWS) -v
