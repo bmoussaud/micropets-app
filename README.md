@@ -544,6 +544,8 @@ ytt --ignore-unknown-comments -v image_prefix=harbor.mytanzu.xyz/library/micrope
 export MICROPETS_into_ns="micropets-supplychain"
 ytt --ignore-unknown-comments -v image_prefix=harbor.mytanzu.xyz/library/micropet -f ../fishes/kpack.yml | kapp deploy --yes --into-ns ${MICROPETS_into_ns} -a micropet-fishes-kpack -f-
 
+export MICROPETS_into_ns="micropets-supplychain"
+ytt --ignore-unknown-comments -v image_prefix=harbor.mytanzu.xyz/library/micropet -f ../pets/kpack.yml | kapp deploy --yes --into-ns ${MICROPETS_into_ns} -a micropet-pets-kpack -f-
 
 _undeploy everything_
 

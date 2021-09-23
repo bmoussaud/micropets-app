@@ -36,6 +36,15 @@ deps:
 	 $(GOGET) github.com/spf13/viper	
 	 $(GOGET) github.com/imroc/req
 
+cnb-image:
+	pack build $(BINARY_NAME) --buildpack gcr.io/paketo-buildpacks/go --builder paketobuildpacks/builder:base
+
+deploy_kapp:
+	ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropet-test -a micropet-pets-service -f-
+
+undeploy_kapp:
+	kapp delete -a micropet-pets-service 
+
 
 # Cross compilation
 build-windows:
