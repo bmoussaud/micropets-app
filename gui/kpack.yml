@@ -1,0 +1,24 @@
+#@ load("@ytt:data", "data")
+---
+apiVersion: kpack.io/v1alpha1
+kind: Image
+metadata:
+  name: micropet-gui-image  
+spec:
+  #tag: harbor.mytanzu.xyz/library/micropet-gui-image
+  tag: #@ data.values.image_prefix + "-gui"
+  serviceAccount: micropet-service-account
+  builder:
+    name: micropet-builder   
+    kind: ClusterBuilder
+  source:
+    git:
+      url: https://github.com/bmoussaud/micropets-app
+      revision: master
+    subPath: gui
+  build: 
+    env:      
+      - name: BP_IMAGE_LABELS
+        value: watermark.project=micropet  watermark.author=benoit@moussaud
+      - name: BP_NODE_VERSION
+        value: "16"

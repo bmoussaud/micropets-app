@@ -9,6 +9,8 @@ DOCKER_IMAGE_DEV=$(REGISTRY)/micropet/$(BINARY_NAME):dev
 DOCKER_HUB_IMAGE=bmoussaud/micropet_$(BINARY_NAME):$(VERSION)
 DOCKER_HUB_IMAGE_DEV=bmoussaud/micropet_$(BINARY_NAME):dev
 
+MICROPETS_NS=micropets-supplychain
+
 all: docker-build docker-push
 
 build:
@@ -45,3 +47,10 @@ deploy:
 k8s-deploy:
 	kubectl delete -f k8s/resources-dev.yaml
 	kubectl apply -f k8s/resources-dev.yaml
+
+cnb-image:
+	pack build $(BINARY_NAME) --env BP_NODE_VERSION=14 --buildpack gcr.io/paketo-buildpacks/nodejs --builder paketobuildpacks/builder:base
+
+
+configure-kpack:
+	ytt --ignore-unknown-comments -v image_prefix=harbor.mytanzu.xyz/library/micropet -f kpack.yml | kapp deploy --yes --into-ns $(MICROPETS_NS) -a micropet-pets-kpack -f-
