@@ -1,5 +1,6 @@
 # https://buildpacks.io/docs/app-developer-guide/using-project-descriptor/
 # https://github.com/paketo-buildpacks/npm-install/issues/256#
+# https://github.com/paketo-buildpacks/npm-install/issues/256#issuecomment-884296756
 
 [project]
 id = "org.moussaud.micropet.gui"
