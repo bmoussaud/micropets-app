@@ -1,0 +1,15 @@
+# https://buildpacks.io/docs/app-developer-guide/using-project-descriptor/
+# https://github.com/paketo-buildpacks/npm-install/issues/256#
+
+[project]
+id = "org.moussaud.micropet.gui"
+name = "GUI"
+version = "1.0.0"
+
+[build]
+exclude = [
+    "node_modules"
+]
+
+[[build.buildpacks]]
+uri = "gcr.io/paketo-buildpacks/nodejs"
