@@ -22,3 +22,7 @@ spec:
         value: watermark.project=micropet  watermark.author=benoit@moussaud
       - name: NPM_CONFIG_LOGLEVEL
         value: "DEBUG"
+      - name: BP_NODE_RUN_SCRIPTS
+        value: "build"
+      - name: NODE_ENV
+        value: development 
