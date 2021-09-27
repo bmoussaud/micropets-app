@@ -13,7 +13,7 @@ export interface Configuration {
 export class ConfigAssetLoaderService {
 
   private readonly CONFIG_URL = 'assets/config/config.json';
-  private configuration$: Observable<Configuration>;
+  private configuration$!: Observable<Configuration>;
 
   constructor(private http: HttpClient) {
   }

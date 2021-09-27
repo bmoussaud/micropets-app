@@ -82,3 +82,5 @@
   .corner-ribbon.red{background: #e43;}
   .corner-ribbon.orange{background: #e82;}
   .corner-ribbon.yellow{background: #ec0;}  
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
