@@ -1,0 +1,6 @@
+{  
+  "petServiceUrl": "http://front.mytanzu.xyz/pets",
+  "stage": "DEV",
+  "debug": "False",
+  "stage_color": "blue"
+}

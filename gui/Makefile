@@ -51,6 +51,14 @@ k8s-deploy:
 cnb-image:
 	pack build $(BINARY_NAME) --env BP_NODE_VERSION=14 --buildpack gcr.io/paketo-buildpacks/nodejs --builder paketobuildpacks/builder:base
 
+deploy_kpack:	
+	ytt --ignore-unknown-comments -v into_ns=$(MICROPETS_NS) -v image_prefix=harbor.mytanzu.xyz/library/micropet -f kpack.yml | kapp deploy --yes --into-ns $(MICROPETS_NS) -a micropet-$(BINARY_NAME)-kpack -f-
 
-configure-kpack:
-	ytt --ignore-unknown-comments -v image_prefix=harbor.mytanzu.xyz/library/micropet -f kpack.yml | kapp deploy --yes --into-ns $(MICROPETS_NS) -a micropet-pets-kpack -f-
+undeploy_kpack:	
+	kapp delete -a micropet-$(BINARY_NAME)-kpack 
+
+deploy_kapp:
+	ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropet-test -a micropet-$(BINARY_NAME)-service -f-
+
+undeploy_kapp:
+	kapp delete -a micropet-dogs-service 

@@ -1,0 +1,95 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("helpers.star","configfile","load_configfile")
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gui-db-credentials
+type: Opaque
+data:
+  user: YWRtaW4K
+  password: cGxlYXNlY2hhbmdlbWU=
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ configfile("gui-config", "config.json")
+data: #@ load_configfile("config.json")
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:  
+  name: gui-app
+  labels:
+    app: gui-app
+    group: micro-pet
+spec:
+  replicas: #@ data.values.service.replicas
+  selector:
+    matchLabels:
+      app: gui-app
+      group: micro-pet
+  template:
+    metadata:
+      labels:
+        app: gui-app
+        group: micro-pet
+    spec:
+      volumes:
+        - name: config-volume
+          configMap:
+            name: #@ configfile("gui-config", "config.json")
+            items:
+            - key: config.json
+              path: config.json
+      containers:
+        - name: gui
+          image: #@ data.values.registry.server + "/micropet-gui:" +data.values.service.version
+          imagePullPolicy: Always
+          ports:
+            - name: gui
+              containerPort: #@ data.values.service.port
+          volumeMounts:
+            - name: config-volume
+              mountPath: /usr/share/nginx/html/gui/assets/config                            
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gui-service
+  labels:
+    app: gui-app
+    group: micro-pet
+spec:
+  ports:
+    - protocol: TCP
+      name: gui
+      port: #@ data.values.service.port
+  selector:
+    app: gui-app
+    group: micro-pet
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: gui-ingress
+spec:
+  rules:
+  - host: #@ data.values.service.virtual_host
+    http:
+      paths:
+      - path: /gui
+        pathType: Prefix
+        backend:
+          service:
+            name: gui-service
+            port:
+              number: #@ data.values.service.port
+
+              
+
+

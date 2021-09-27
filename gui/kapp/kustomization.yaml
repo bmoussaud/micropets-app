@@ -1,0 +1,10 @@
+# kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- resources-dev.yaml
+- istio.yaml
+namespace: micropetdev
+images:
+  - name: localregistry:5000/micropet/gui
+    newName: bmoussaud/micropet_gui

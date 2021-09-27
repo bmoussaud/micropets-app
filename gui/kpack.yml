@@ -9,7 +9,7 @@ spec:
   tag: #@ data.values.image_prefix + "-gui"
   serviceAccount: micropet-service-account
   builder:
-    name: micropet-builder   
+    name: gui-micropet-builder
     kind: ClusterBuilder
   source:
     git:
@@ -20,5 +20,36 @@ spec:
     env:      
       - name: BP_IMAGE_LABELS
         value: watermark.project=micropet  watermark.author=benoit@moussaud
-      - name: BP_NODE_VERSION
-        value: "16"
+      - name: NPM_CONFIG_LOGLEVEL
+        value: "DEBUG"
+---
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStack
+metadata:
+  name: gui-micropet-stack
+spec:
+  id: "io.buildpacks.stacks.bionic"
+  buildImage:
+    image: "paketobuildpacks/build:full-cnb"
+  runImage:
+    image: "paketobuildpacks/run:full-cnb"
+---
+apiVersion: kpack.io/v1alpha1
+kind: ClusterBuilder
+metadata:
+  name: gui-micropet-builder
+spec:
+  serviceAccountRef:
+    name: micropet-service-account
+    namespace: #@ data.values.into_ns
+  tag: #@ data.values.image_prefix + "-builder"
+  stack:
+    name: gui-micropet-stack
+    kind: ClusterStack
+  store:
+    name: micropet-store
+    kind: ClusterStore
+  order:        
+    - group:
+      - id: paketo-buildpacks/nodejs
+      - id: bmoussaud/watermark
