@@ -21,8 +21,8 @@ spec:
       - name: BP_IMAGE_LABELS
         value: watermark.project=micropet  watermark.author=benoit@moussaud
       - name: NPM_CONFIG_LOGLEVEL
-        value: "DEBUG"
+        value: DEBUG
       - name: BP_NODE_RUN_SCRIPTS
-        value: "build"
+        value: build
       - name: NODE_ENV
         value: development 
