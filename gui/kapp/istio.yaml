@@ -9,7 +9,7 @@ spec:
     istio: ingressgateway # use istio default controller
   servers:
   - port:
-      number: 80
+      number: #@ data.values.service.port
       name: http
       protocol: HTTP
     hosts:

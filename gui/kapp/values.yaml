@@ -1,7 +1,7 @@
 #@data/values
 ---
 service:  
-  port: 80
+  port: 8080
   replicas: 1
   version: latest
   virtual_host: front.mytanzu.xyz

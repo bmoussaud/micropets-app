@@ -1,5 +1,6 @@
 BINARY_NAME=dogs
 REGISTRY=localregistry:5000
+MICROPETS_NS=micropets-supplychain
 
 # Go parameters
 GOCMD=go
