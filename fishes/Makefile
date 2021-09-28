@@ -1,5 +1,8 @@
-BINARY_NAME=fishes
+BINARY_NAME=$(current_dir)
 REGISTRY=localregistry:5000
+MICROPETS_NS=micropets-supplychain
+IMAGE_PREFIX=harbor.mytanzu.xyz/library/micropet
+LOCAL_DOCKER_IMAGE=micropet-$(BINARY_NAME)-local-build
 
 # Go parameters
 GOCMD=go
@@ -7,6 +10,13 @@ GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
+GO111MODULE=auto
+
+#current directory
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
 
 BINARY_WINDOWS=$(BINARY_NAME).exe
 $(eval SHA1=$(shell git rev-parse --short HEAD))
@@ -15,39 +25,30 @@ DOCKER_IMAGE=$(REGISTRY)/micropet/$(BINARY_NAME):$(VERSION)
 DOCKER_IMAGE_DEV=$(REGISTRY)/micropet/$(BINARY_NAME):dev
 DOCKER_HUB_IMAGE=bmoussaud/micropet_$(BINARY_NAME):$(VERSION)
 DOCKER_HUB_IMAGE_DEV=bmoussaud/micropet_$(BINARY_NAME):dev
-all: build docker-build docker-push
 
+
+#local build
 build: deps
 	GO111MODULE=auto $(GOBUILD) -o $(BINARY_NAME) -v main.go
 
 test:
-	GO111MODULE=auto $(GOTEST) -v ./...
+	$(GOTEST) -v ./...
 clean:
 	$(GOCLEAN)
 	rm -f $(BINARY_NAME)
 	rm -f $(BINARY_WINDOWS)
 
 run:
-	GO111MODULE=auto $(GOBUILD) -o $(BINARY_NAME) -v main.go
+	$(GOBUILD) -o $(BINARY_NAME) -v main.go
 	./$(BINARY_NAME)
 
-deps:	
+deps:
+	GO111MODULE=auto $(GOGET) github.com/kelseyhightower/envconfig
 	GO111MODULE=auto $(GOGET) github.com/magiconair/properties
-
-
-cnb-image:
-	pack build $(BINARY_NAME) --buildpack gcr.io/paketo-buildpacks/go --builder paketobuildpacks/builder:base
-
-deploy_kapp:
-	ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropet-test -a micropet-fishes-service -f-
-
-undeploy_kapp:
-	kapp delete -a micropet-fishes-service 
-
 
 # Cross compilation
 build-windows:
-	CGO_ENABLED=0 GOOS=windows GOARCH=386 $(GOBUILD) -o $(BINARY_WINDOWS) -v
+	GO111MODULE=auto CGO_ENABLED=0 GOOS=windows GOARCH=386 $(GOBUILD) -o $(BINARY_WINDOWS) -v
 
 docker-build: build
 	echo $(DOCKER_IMAGE)
@@ -64,12 +65,28 @@ docker-hub-push: docker-build
 	docker push $(DOCKER_HUB_IMAGE)
 	docker push $(DOCKER_HUB_IMAGE_DEV)
 
-xebialabs:
-	xl --xl-deploy-url http://localhost:4525 apply -s --proceed-when-dirty -f xebialabs.yaml
+docker-run: cnb-image
+	docker run --rm  --name $(BINARY_NAME)  -v $(ROOT_DIR):/config -e SERVICE_CONFIG_DIR=/config -p 7007:7007 $(LOCAL_DOCKER_IMAGE)
 
-deploy:
-	../xld.sh Applications/Containers/micropets/fishes/$(XL_VALUE_version) Environments/MicroPet/Ops/micropet.k8s.staging
+cnb-image:
+	pack build $(LOCAL_DOCKER_IMAGE) --buildpack gcr.io/paketo-buildpacks/go --builder paketobuildpacks/builder:base
+
+deploy-cnb:	
+	ytt --ignore-unknown-comments -v image_prefix=$(IMAGE_PREFIX) -f kpack.yml | kapp deploy --yes --into-ns $(MICROPETS_NS) -a micropet-$(BINARY_NAME)-kpack -f-
+
+undeploy-cnb:	
+	kapp delete -a micropet-$(BINARY_NAME)-kpack 
+
+deploy-kapp:
+	ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropet-test -a micropet-$(BINARY_NAME)-service -f-
+
+undeploy-kapp:
+	kapp delete -a micropet-$(BINARY_NAME)-service
+
+load:
+	vegeta attack -targets=targets.txt -name=300qps -rate=300 -duration=15s > results.300qps.bin
+	cat results.300qps.bin | vegeta plot > plot.300qps.html
 
 k8s-deploy:
-	kubectl delete -f k8s/resources-dev.yaml
-	kubectl apply -f k8s/resources-dev.yaml
+	kubectl delete -k k8s
+	kubectl apply -k k8s

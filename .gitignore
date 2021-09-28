@@ -16,3 +16,4 @@ cats/*.bin
 cats/*.html
 istio-1.11.2
 gui_
+replicate_makefile.sh

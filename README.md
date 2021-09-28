@@ -520,35 +520,7 @@ NAME               LATESTIMAGE                                                  
 micropet-builder   harbor.mytanzu.xyz/library/micropet-builder@sha256:dd1993c5a5550f7b91052330d11bb029bd2f108776dff5097e42e813988ae1b9   True
 ```
 
-```
-export MICROPETS_into_ns="micropets-supplychain"
-ytt --ignore-unknown-comments -v image_prefix=harbor.mytanzu.xyz/library/micropet -f ../dogs/kpack.yml | kapp deploy --yes --into-ns ${MICROPETS_into_ns} -a micropet-dogs-kpack -f-
-```
-
-Check the image is Ready
-````
-$kubectl get images.kpack.io -n micropets-supplychain micropet-dogs-image
-NAME                  LATESTIMAGE                                                                                                        READY
-micropet-dogs-image   harbor.mytanzu.xyz/library/micropet-dogs@sha256:c103f2f4ade056a1c0a558a85236dd030b3550bc31e8d883db5fe26991be2486   True
-````
-
-Get the logs of the built images
-````
-logs -image micropet-dogs-image -namespace micropets-supplychain
-````
-
-export MICROPETS_into_ns="micropets-supplychain"
-ytt --ignore-unknown-comments -v image_prefix=harbor.mytanzu.xyz/library/micropet -f ../cats/kpack.yml | kapp deploy --yes --into-ns ${MICROPETS_into_ns} -a micropet-cats-kpack -f-
-
-
-export MICROPETS_into_ns="micropets-supplychain"
-ytt --ignore-unknown-comments -v image_prefix=harbor.mytanzu.xyz/library/micropet -f ../fishes/kpack.yml | kapp deploy --yes --into-ns ${MICROPETS_into_ns} -a micropet-fishes-kpack -f-
-
-export MICROPETS_into_ns="micropets-supplychain"
-ytt --ignore-unknown-comments -v image_prefix=harbor.mytanzu.xyz/library/micropet -f ../pets/kpack.yml | kapp deploy --yes --into-ns ${MICROPETS_into_ns} -a micropet-pets-kpack -f-
-
-export MICROPETS_into_ns="micropets-supplychain"
-ytt --ignore-unknown-comments -v image_prefix=harbor.mytanzu.xyz/library/micropet -f ../gui/kpack.yml | kapp deploy --yes --into-ns ${MICROPETS_into_ns} -a micropet-gui-kpack -f-
+in each service project, the `kpack.yaml` file specify what to build. Run `make deploy-cnb` to apply the definition using the current kubernetest context.
 
 _undeploy everything_
 

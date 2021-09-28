@@ -5,6 +5,18 @@ service_pets := pets
 service_gui := gui
 services := $(service_cats) $(service_dogs) $(service_fishes) $(service_pets) $(service_gui)
 
+cnb-image:
+	for d in $(services); \
+    	do                               \
+          $(MAKE) --directory=$$d cnb-image; \
+        done
+
+deploy-cnb:
+	for d in $(services); \
+    	do                               \
+          $(MAKE) --directory=$$d deploy-cnb; \
+        done
+
 docker-build:
 	for d in $(services); \
     	do                               \

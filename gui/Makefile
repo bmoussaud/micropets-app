@@ -1,5 +1,8 @@
-BINARY_NAME=gui
+BINARY_NAME=$(current_dir)
 REGISTRY=localregistry:5000
+MICROPETS_NS=micropets-supplychain
+IMAGE_PREFIX=harbor.mytanzu.xyz/library/micropet
+LOCAL_DOCKER_IMAGE=micropet-$(BINARY_NAME)-local-build
 
 BINARY_WINDOWS=$(BINARY_NAME).exe
 $(eval SHA1=$(shell git rev-parse --short HEAD))
@@ -9,7 +12,11 @@ DOCKER_IMAGE_DEV=$(REGISTRY)/micropet/$(BINARY_NAME):dev
 DOCKER_HUB_IMAGE=bmoussaud/micropet_$(BINARY_NAME):$(VERSION)
 DOCKER_HUB_IMAGE_DEV=bmoussaud/micropet_$(BINARY_NAME):dev
 
-MICROPETS_NS=micropets-supplychain
+
+#current directory
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 all: docker-build docker-push
 
@@ -38,24 +45,20 @@ docker-hub-push: docker-build
 	docker push $(DOCKER_HUB_IMAGE)
 	docker push $(DOCKER_HUB_IMAGE_DEV)
 
-xebialabs:
-	xl --xl-deploy-url http://localhost:4525 apply -s --proceed-when-dirty -f xebialabs.yaml
-
-deploy:
-	../xld.sh Applications/Containers/micropets/gui/$(XL_VALUE_version) Environments/MicroPet/Ops/micropet.k8s.staging
-
 k8s-deploy:
 	kubectl delete -f k8s/resources-dev.yaml
 	kubectl apply -f k8s/resources-dev.yaml
 
 cnb-image:
-	pack build $(BINARY_NAME) --env BP_NODE_VERSION=14 --buildpack gcr.io/paketo-buildpacks/nodejs --builder paketobuildpacks/builder:base
+	pack build $(LOCAL_DOCKER_IMAGE) --env BP_NODE_VERSION=14 --buildpack gcr.io/paketo-buildpacks/nodejs --builder paketobuildpacks/builder:base
 
-deploy_kpack:	
-	ytt --ignore-unknown-comments -v into_ns=$(MICROPETS_NS) -v image_prefix=harbor.mytanzu.xyz/library/micropet -f kpack.yml | kapp deploy --yes --into-ns $(MICROPETS_NS) -a micropet-$(BINARY_NAME)-kpack -f-
 
-undeploy_kpack:	
+deploy-cnb:	
+	ytt --ignore-unknown-comments  -v image_prefix=$(IMAGE_PREFIX) -f kpack.yml | kapp deploy --yes --into-ns $(MICROPETS_NS) -a micropet-$(BINARY_NAME)-kpack -f-
+
+undeploy-cnb:	
 	kapp delete -a micropet-$(BINARY_NAME)-kpack 
+
 
 deploy_kapp:
 	ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropet-test -a micropet-$(BINARY_NAME)-service -f-
