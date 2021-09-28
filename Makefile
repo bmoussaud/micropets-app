@@ -5,6 +5,17 @@ service_pets := pets
 service_gui := gui
 services := $(service_cats) $(service_dogs) $(service_fishes) $(service_pets) $(service_gui)
 
+deploy-kapp:
+	for d in $(services); \
+    	do                               \
+          $(MAKE) --directory=$$d deploy-kapp; \
+        done
+undeploy-kapp:
+	for d in $(services); \
+    	do                               \
+          $(MAKE) --directory=$$d undeploy-kapp; \
+        done
+
 cnb-image:
 	for d in $(services); \
     	do                               \

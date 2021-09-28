@@ -1,6 +1,7 @@
 BINARY_NAME=$(current_dir)
 REGISTRY=localregistry:5000
 MICROPETS_NS=micropets-supplychain
+MICROPETS_RUN_NS=micropets-run
 IMAGE_PREFIX=harbor.mytanzu.xyz/library/micropet
 LOCAL_DOCKER_IMAGE=micropet-$(BINARY_NAME)-local-build
 
@@ -59,9 +60,12 @@ deploy-cnb:
 undeploy-cnb:	
 	kapp delete -a micropet-$(BINARY_NAME)-kpack 
 
+namespace:
+	kubectl create namespace $(MICROPETS_RUN_NS) --dry-run=client -o yaml | kubectl apply -f -
+	kubectl get namespace $(MICROPETS_RUN_NS) 
 
-deploy_kapp:
-	ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropet-test -a micropet-$(BINARY_NAME)-service -f-
+deploy-kapp: namespace
+	ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns $(MICROPETS_RUN_NS) -a micropet-$(BINARY_NAME)-service -f-
 
-undeploy_kapp:
-	kapp delete -a micropet-$(BINARY_NAME)-service
+undeploy-kapp:
+	kapp delete -y -a micropet-$(BINARY_NAME)-service
