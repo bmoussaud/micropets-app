@@ -28,6 +28,12 @@ deploy-cnb:
           $(MAKE) --directory=$$d deploy-cnb; \
         done
 
+undeploy-cnb:
+	for d in $(services); \
+    	do                               \
+          $(MAKE) --directory=$$d undeploy-cnb; \
+        done
+
 docker-build:
 	for d in $(services); \
     	do                               \
