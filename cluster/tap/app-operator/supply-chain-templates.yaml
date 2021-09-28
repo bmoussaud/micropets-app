@@ -74,3 +74,37 @@ spec:
           url: $(sources.source.url)$
         subPath: $(workload.metadata.name)$
 
+---
+#
+#
+# `app-deploy` instantiates a `kapp-ctrl/App` making use of an image that comes
+# as input in the form of `$(images.image.image)$`.
+#
+# the use of `App` here is important because of how `knative` updates the
+# knative service under the hood to include some extra annotations that _can't_
+# be mutated once applied by knative's controller. As `kapp` is able to be
+# configured to not patch certain features (something `cartographer` can't
+# yet), we're able to bridge that gap with the use of `kapp-ctrl/App`.
+#
+#
+apiVersion: carto.run/v1alpha1
+kind: ClusterTemplate
+metadata:
+  name: app-deploy
+spec:
+  template:
+    apiVersion: kappctrl.k14s.io/v1alpha1
+    kind: App
+    metadata:
+      name: $(workload.metadata.name)$
+    spec:
+      serviceAccountName: default
+      fetch:
+        - git:
+            url: https://github.com/bmoussaud/micropets-app
+            ref: master
+            subPath: cluster/tap/app-operator/kapp
+      template:
+        - ytt: {}
+      deploy:
+        - kapp: {}

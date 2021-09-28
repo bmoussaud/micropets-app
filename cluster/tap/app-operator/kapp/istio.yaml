@@ -1,0 +1,35 @@
+#@ load("@ytt:data", "data")
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: dogs-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: dogs-virtual-service
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - dogs-gateway
+  http:
+  - match:
+    - uri:
+        exact: /dogs
+    route:
+    - destination:
+        host: dogs-service
+        port:
+          number: #@ data.values.service.port

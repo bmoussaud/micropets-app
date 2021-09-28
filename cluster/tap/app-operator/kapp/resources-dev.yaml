@@ -1,0 +1,122 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("helpers.star","configfile","load_configfile")
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dogs-db-credentials
+type: Opaque
+data:
+  user: YWRtaW4K
+  password: cGxlYXNlY2hhbmdlbWU=
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ configfile("dogs-config", "service_config.properties")
+data: #@ load_configfile("service_config.properties")
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:  
+  name: dogs-app
+  labels:
+    app: dogs-app
+    group: micro-pet
+spec:
+  replicas: #@ data.values.service.replicas
+  selector:
+    matchLabels:
+      app: dogs-app
+      group: micro-pet
+  template:
+    metadata:
+      labels:
+        app: dogs-app
+        group: micro-pet
+    spec:
+      volumes:
+        - name: config-volume
+          configMap:
+            name: #@ configfile("dogs-config", "service_config.properties")
+            items:
+            - key: service_config.properties
+              path: config.properties
+      containers:
+        - name: dogs
+          image: #@ data.values.registry.server + "/micropet-dogs:" +data.values.service.version
+          imagePullPolicy: Always
+          ports:
+            - name: dogs
+              containerPort: #@ data.values.service.port
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config/
+          livenessProbe:
+            httpGet:
+              port: #@ data.values.service.port
+              path: /liveness
+            initialDelaySeconds: 10
+            periodSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: #@ data.values.service.port
+              path: /readiness
+            initialDelaySeconds: 10
+            periodSeconds: 2
+          env:
+            - name: SERVICE_CONFIG_DIR
+              value: /config
+            - name: DATABASE_URL
+              value: jdbc:postgresql://dogs-db:5432/dogs
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: dogs-db-credentials
+                  key: user
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dogs-db-credentials
+                  key: password
+
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dogs-service
+  labels:
+    app: dogs-app
+    group: micro-pet
+spec:
+  ports:
+    - protocol: TCP
+      name: http-dogs
+      port: #@ data.values.service.port
+  selector:
+    app: dogs-app
+    group: micro-pet
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: dogs-ingress
+spec:
+  rules:
+    - host: #@ data.values.service.virtual_host
+      http:
+        paths:
+          - path: /dogs
+            backend:
+              serviceName: dogs-service
+              servicePort: #@ data.values.service.port
+
+
+
+
+
+
