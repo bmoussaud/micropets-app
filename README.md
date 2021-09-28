@@ -515,7 +515,7 @@ ytt --ignore-unknown-comments --data-values-env  MICROPETS   -f . | kapp deploy 
 ```
 
 Check the builder is available (Ready=true)
-````
+```
 $kubectl get ClusterBuilder micropet-builder
 NAME               LATESTIMAGE                                                                                                           READY
 micropet-builder   harbor.mytanzu.xyz/library/micropet-builder@sha256:dd1993c5a5550f7b91052330d11bb029bd2f108776dff5097e42e813988ae1b9   True
