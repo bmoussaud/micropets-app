@@ -491,7 +491,8 @@ As the services can resolved locally, the link between Pets and the 3 others ser
 
 ## Tanzu Build Service / kPack
 
-Set up the project to use [Cloud Native Buildpack](https://buildpacks.io/) instead of Dockerfile to create the image
+Set up the project to use [Cloud Native Buildpack](https://buildpacks.io/) instead of managing Dockerfile to create the image
+
 The project will use [kPack](https://github.com/pivotal/kpack). 
 If you're looking for a supported version of kPack, please look at [Tanzu Build Service by vmware](https://tanzu.vmware.com/build-service)
 
@@ -520,7 +521,8 @@ NAME               LATESTIMAGE                                                  
 micropet-builder   harbor.mytanzu.xyz/library/micropet-builder@sha256:dd1993c5a5550f7b91052330d11bb029bd2f108776dff5097e42e813988ae1b9   True
 ```
 
-in each service project, the `kpack.yaml` file specify what to build. Run `make deploy-cnb` to apply the definition using the current kubernetest context.
+in each service project, the `kpack.yaml` file specify what to build (Image). 
+Run `make deploy-cnb` to apply the definition using the current kubernetes context (at the root of the project or individually)
 
 _undeploy everything_
 
