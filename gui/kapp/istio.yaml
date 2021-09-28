@@ -27,9 +27,9 @@ spec:
   http:
   - match:
     - uri:
-        exact: /gui    
+        exact: /
     - uri:
-        prefix: /gui/
+        prefix: /
     route:
     - destination:
         host: gui-service
