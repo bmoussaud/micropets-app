@@ -1,6 +1,7 @@
 #@data/values
 ---
 service:  
+  name: dogs
   port: 7003
   replicas: 1
   version: latest

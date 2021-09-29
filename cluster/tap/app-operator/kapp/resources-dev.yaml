@@ -5,7 +5,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: dogs-db-credentials
+  name: #@ data.values.service.name + "-db-credentials"
 type: Opaque
 data:
   user: YWRtaW4K
@@ -14,41 +14,41 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: #@ configfile("dogs-config", "service_config.properties")
+  name: #@ configfile(data.values.service.name, "service_config.properties")
 data: #@ load_configfile("service_config.properties")
 ---
 kind: Deployment
 apiVersion: apps/v1
 metadata:  
-  name: dogs-app
+  name: #@ data.values.service.name +"-app"
   labels:
-    app: dogs-app
+    app: #@ data.values.service.name+ "-app"
     group: micro-pet
 spec:
   replicas: #@ data.values.service.replicas
   selector:
     matchLabels:
-      app: dogs-app
+      app: #@ data.values.service.name+ "-app"
       group: micro-pet
   template:
     metadata:
       labels:
-        app: dogs-app
+        app: #@ data.values.service.name+ "-app"
         group: micro-pet
     spec:
       volumes:
         - name: config-volume
           configMap:
-            name: #@ configfile("dogs-config", "service_config.properties")
+            name: #@ configfile(data.values.service.name, "service_config.properties")
             items:
             - key: service_config.properties
               path: config.properties
       containers:
-        - name: dogs
-          image: #@ data.values.registry.server + "/micropet-dogs:" +data.values.service.version
+        - name: #@ data.values.service.name
+          image: #@ data.values.registry.server + "/micropet-"+data.values.service.name+":" +data.values.service.version
           imagePullPolicy: Always
           ports:
-            - name: dogs
+            - name: #@ data.values.service.name+ "-http"
               containerPort: #@ data.values.service.port
           volumeMounts:
             - name: config-volume
@@ -69,16 +69,16 @@ spec:
             - name: SERVICE_CONFIG_DIR
               value: /config
             - name: DATABASE_URL
-              value: jdbc:postgresql://dogs-db:5432/dogs
+              value: #@ "jdbc:postgresql://"+data.values.service.name+"-db:5432/"+ data.values.service.name
             - name: DATABASE_USER
               valueFrom:
                 secretKeyRef:
-                  name: dogs-db-credentials
+                  name: #@ data.values.service.name+ "-db-credentials"
                   key: user
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: dogs-db-credentials
+                  name: #@ data.values.service.name+ "-db-credentials"
                   key: password
 
       restartPolicy: Always
@@ -88,31 +88,31 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: dogs-service
+  name: #@ data.values.service.name +"-service"
   labels:
-    app: dogs-app
+    app: #@ data.values.service.name+ "-app"
     group: micro-pet
 spec:
   ports:
     - protocol: TCP
-      name: http-dogs
+      name: #@ data.values.service.name+ "-http"
       port: #@ data.values.service.port
   selector:
-    app: dogs-app
+    app: #@ data.values.service.name+ "-app"
     group: micro-pet
 ---
 kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
-  name: dogs-ingress
+  name: #@ data.values.service.name + "-ingress"
 spec:
   rules:
     - host: #@ data.values.service.virtual_host
       http:
         paths:
-          - path: /dogs
+          - path: #@ "/"+ data.values.service.name
             backend:
-              serviceName: dogs-service
+              serviceName:  #@ data.values.service.name +"-service"
               servicePort: #@ data.values.service.port
 
 

@@ -529,6 +529,78 @@ _undeploy everything_
 kapp delete -a micropet-kpack
 kubectl delete  ns ${MICROPETS_into_ns}
 
+## Deploy with kAPP
+
+In each service directory, there is a `k8s` directory that holds the yaml file to deployed. The configuration is based on [Kustomize](https://kustomize.io/)
+There is another way to manage all these resources by grouping them into a bundle and to manage them using the same lifecycle. 
+This solution is `kapp` provided by the [https://carvel.dev/ project](https://carvel.dev/)
+One of the main advantage is : kapp is synchronous. It means not only kapp apply the resources but also check if the expected resources have been created or deleted.
+
+So in each directory, there is now a `kapp` directory and in the makefile 2 new targets: `deploy-kapp` & `undeploy-kapp`
+
+````
+ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropets-run -a micropet-cats-service -f-
+Target cluster 'https://gimckc2x2x1ar31iv6sd8124v6od-k8s-312336063.eu-west-3.elb.amazonaws.com:443' (nodes: ip-10-0-1-199.eu-west-3.compute.internal, 3+)
+
+Changes
+
+Namespace      Name                                                                          Kind            Conds.  Age  Op      Op st.  Wait to    Rs  Ri
+micropets-run  cats-app                                                                      Deployment      -       -    create  -       reconcile  -   -
+^              cats-config-2d3463f83f108599307ca86cb45545c5cb7e89c0c9219e30bdd091bd065099e2  ConfigMap       -       -    create  -       reconcile  -   -
+^              cats-db-credentials                                                           Secret          -       -    create  -       reconcile  -   -
+^              cats-gateway                                                                  Gateway         -       -    create  -       reconcile  -   -
+^              cats-ingress                                                                  Ingress         -       -    create  -       reconcile  -   -
+^              cats-service                                                                  Service         -       -    create  -       reconcile  -   -
+^              cats-virtual-service                                                          VirtualService  -       -    create  -       reconcile  -   -
+
+Op:      7 create, 0 delete, 0 update, 0 noop
+Wait to: 7 reconcile, 0 delete, 0 noop
+
+10:45:41AM: ---- applying 2 changes [0/7 done] ----
+10:45:41AM: create secret/cats-db-credentials (v1) namespace: micropets-run
+10:45:41AM: create configmap/cats-config-2d3463f83f108599307ca86cb45545c5cb7e89c0c9219e30bdd091bd065099e2 (v1) namespace: micropets-run
+10:45:41AM: ---- waiting on 2 changes [0/7 done] ----
+10:45:41AM: ok: reconcile configmap/cats-config-2d3463f83f108599307ca86cb45545c5cb7e89c0c9219e30bdd091bd065099e2 (v1) namespace: micropets-run
+10:45:41AM: ok: reconcile secret/cats-db-credentials (v1) namespace: micropets-run
+10:45:41AM: ---- applying 5 changes [2/7 done] ----
+10:45:41AM: create ingress/cats-ingress (extensions/v1beta1) namespace: micropets-run
+10:45:41AM: create virtualservice/cats-virtual-service (networking.istio.io/v1alpha3) namespace: micropets-run
+10:45:41AM: create gateway/cats-gateway (networking.istio.io/v1alpha3) namespace: micropets-run
+10:45:41AM: create deployment/cats-app (apps/v1) namespace: micropets-run
+10:45:41AM: create service/cats-service (v1) namespace: micropets-run
+10:45:41AM: ---- waiting on 5 changes [2/7 done] ----
+10:45:41AM: ok: reconcile virtualservice/cats-virtual-service (networking.istio.io/v1alpha3) namespace: micropets-run
+10:45:41AM: ok: reconcile ingress/cats-ingress (extensions/v1beta1) namespace: micropets-run
+10:45:41AM: ok: reconcile service/cats-service (v1) namespace: micropets-run
+10:45:41AM: ok: reconcile gateway/cats-gateway (networking.istio.io/v1alpha3) namespace: micropets-run
+10:45:41AM: ongoing: reconcile deployment/cats-app (apps/v1) namespace: micropets-run
+10:45:41AM:  ^ Waiting for generation 2 to be observed
+10:45:41AM:  L ok: waiting on replicaset/cats-app-5ffd8646bb (apps/v1) namespace: micropets-run
+10:45:41AM:  L ongoing: waiting on pod/cats-app-5ffd8646bb-6wtt7 (v1) namespace: micropets-run
+10:45:41AM:     ^ Pending
+10:45:41AM: ---- waiting on 1 changes [6/7 done] ----
+10:45:42AM: ongoing: reconcile deployment/cats-app (apps/v1) namespace: micropets-run
+10:45:42AM:  ^ Waiting for 1 unavailable replicas
+10:45:42AM:  L ok: waiting on replicaset/cats-app-5ffd8646bb (apps/v1) namespace: micropets-run
+10:45:42AM:  L ongoing: waiting on pod/cats-app-5ffd8646bb-6wtt7 (v1) namespace: micropets-run
+10:45:42AM:     ^ Pending: ContainerCreating
+10:45:44AM: ongoing: reconcile deployment/cats-app (apps/v1) namespace: micropets-run
+10:45:44AM:  ^ Waiting for 1 unavailable replicas
+10:45:44AM:  L ok: waiting on replicaset/cats-app-5ffd8646bb (apps/v1) namespace: micropets-run
+10:45:44AM:  L ongoing: waiting on pod/cats-app-5ffd8646bb-6wtt7 (v1) namespace: micropets-run
+10:45:44AM:     ^ Condition Ready is not True (False)
+10:45:49AM: ok: reconcile deployment/cats-app (apps/v1) namespace: micropets-run
+10:45:49AM: ---- applying complete [7/7 done] ----
+10:45:49AM: ---- waiting complete [7/7 done] ----
+
+Succeeded
+```
+
+It exists also a server side implementation called `kapp-controller` 
+
+https://carvel.dev/kapp-controller/docs/latest/app-spec/
+
+
 ## References
 
 - https://blog.stack-labs.com/code/kustomize-101/

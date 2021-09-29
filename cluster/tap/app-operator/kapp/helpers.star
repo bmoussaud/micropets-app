@@ -6,7 +6,7 @@ load("@ytt:sha256", "sha256")
 
 def configfile(name, file):
     content = load_configfile(file).popitem()[1]
-    return name+"-"+sha256.sum(content)
+    return name+"-config-"+sha256.sum(content)
 
 
 end

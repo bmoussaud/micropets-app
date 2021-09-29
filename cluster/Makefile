@@ -16,3 +16,11 @@ watch_workload:
 untap:
 	kapp delete --yes -a micropet-tap
 
+local-kapp:
+	ytt --ignore-unknown-comments -f tap/app-operator/kapp
+
+kapp-controler:
+	kubectl apply -f kapp-sample.yaml
+
+unkapp-controler:
+	kubectl delete -f kapp-sample.yaml
