@@ -1,3 +1,21 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sample-dogs-configuration     
+data:
+  values.yml: |
+    #@data/values
+    ---
+    service:  
+      name: dogs
+      port: 7003
+      replicas: 1
+      version: latest
+      virtual_host: front.mytanzu.xyz
+    registry:
+      server: harbor.mytanzu.xyz/library
+---
 apiVersion: kappctrl.k14s.io/v1alpha1
 kind: App
 metadata:
@@ -12,8 +30,8 @@ spec:
   template:
     - ytt:
         ignoreUnknownComments: true
-        #valuesFrom:
-        #  - configMapRef:
-        #      name: cfgmap-name        
+        valuesFrom:
+          - configMapRef:
+              name: sample-dogs-configuration      
   deploy:
     - kapp: {}
