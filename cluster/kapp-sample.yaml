@@ -4,9 +4,7 @@ kind: ConfigMap
 metadata:
   name: sample-dogs-configuration     
 data:
-  values.yml: |
-    #@data/values
-    ---
+  values.yml: |  
     service:  
       name: dogs
       port: 7003
