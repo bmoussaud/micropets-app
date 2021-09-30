@@ -529,6 +529,7 @@ _undeploy everything_
 kapp delete -a micropet-kpack
 kubectl delete  ns ${MICROPETS_into_ns}
 
+
 ## Deploy with kAPP
 
 In each service directory, there is a `k8s` directory that holds the yaml file to deployed. The configuration is based on [Kustomize](https://kustomize.io/)
@@ -594,7 +595,7 @@ Wait to: 7 reconcile, 0 delete, 0 noop
 10:45:49AM: ---- waiting complete [7/7 done] ----
 
 Succeeded
-```
+````
 
 It exists also a server side implementation called [`kapp-controller`](https://carvel.dev/kapp-controller/)
 
@@ -659,6 +660,43 @@ spec:
 $kubectl apply -f kapp-sample.yaml
 ````
 
+## Tanzu Application Platorm
+
+With a `ClusterSupplyChain`, app operators describe which "shape of applications" they deal with (via `spec.selector`), and what series of components are responsible for creating an artifact that delivers it (via `spec.components`).
+
+Those `Workload`s that match `spec.selector` then go through the components specified in `spec.components`.
+
+The `micropet-service-supply-chain` supplychain manages the backend services : dogs, cats, fishes and pets.
+
+![micropet-service-supply-chain](img/tap/micropet-service-supply-chain.jpg)
+
+it includes
+1. Watch a repository using `fluxcd/GitRepository`
+2. Build a new image using `kpack/Image`
+3. Configure the application using `kubernetes/ConfigMap`
+4. Trigger a deployment using `kapp-controler/kapp` 
+
+All theses 4 resources are described in [supply-chain-templates.yaml](cluster/tap/app-operator/supply-chain-templates.yaml) and put together in [supply-chain.yaml](cluster/tap/app-operator/supply-chain.yaml)
+
+Now each service must create a new workload based on this supply chain. 
+The association between a workload and the supplychain is based using labels: 
+`app.tanzu.vmware.com/workload-type`.
+
+Example
+````
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: dogs
+  labels:
+    app.tanzu.vmware.com/workload-type: micropet-service
+spec:
+  source:
+    git:
+      url: https://github.com/bmoussaud/micropets-app/
+      ref:
+        branch: master      
+````
 
 
 ## References

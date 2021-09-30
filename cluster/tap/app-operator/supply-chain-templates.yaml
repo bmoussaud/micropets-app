@@ -48,7 +48,6 @@ metadata:
   name: micropet-image
 spec:
   imagePath: .status.latestImage
-
   template:
     apiVersion: kpack.io/v1alpha1
     kind: Image
