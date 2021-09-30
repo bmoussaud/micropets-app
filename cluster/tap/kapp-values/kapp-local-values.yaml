@@ -7,6 +7,7 @@ service:
   replicas: 1
   version: latest
   virtual_host: front.mytanzu.xyz
+  image: harbor.mytanzu.xyz/library/micropet-dogs:latest 
 registry:
   server: harbor.mytanzu.xyz/library
   

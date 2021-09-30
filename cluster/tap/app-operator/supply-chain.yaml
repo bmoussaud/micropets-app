@@ -45,13 +45,13 @@ spec:
       sources:
         - component: source-provider
           name: source
+       images:
+        - component: image-builder
+          name: image
     - name: deploy
       templateRef:
         kind: ClusterTemplate
-        name: micropet-deploy
-      images:
-        - component: image-builder
-          name: image
+        name: micropet-deploy      
       configs:
         - component: configuration
           name: petconfig
