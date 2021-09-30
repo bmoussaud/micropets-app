@@ -75,6 +75,34 @@ spec:
         subPath: $(workload.metadata.name)$
 
 ---
+apiVersion: carto.run/v1alpha1
+kind: ClusterConfigTemplate
+metadata:
+  name: micropet-service-config
+spec:
+  params:
+    - name: port
+      default: 7003
+    - name: mode
+      default: "RANDOM_NUMBER"
+  configPath: .metadata.name
+  template:
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: service-$(workload.metadata.name)$-configuration     
+    data:
+      values.yml: |  
+        service:  
+          name: $(workload.metadata.name)$
+          port: $(params.port)$
+          mode: $(params.mode)$
+          replicas: 1
+          version: latest
+          virtual_host: front.mytanzu.xyz
+        registry:
+          server: harbor.mytanzu.xyz/library
+---
 #
 #
 # `app-deploy` instantiates a `kapp-ctrl/App` making use of an image that comes
@@ -90,21 +118,25 @@ spec:
 apiVersion: carto.run/v1alpha1
 kind: ClusterTemplate
 metadata:
-  name: app-deploy
+  name: micropet-deploy
 spec:
   template:
     apiVersion: kappctrl.k14s.io/v1alpha1
     kind: App
     metadata:
-      name: $(workload.metadata.name)$
-    spec:
-      serviceAccountName: default
-      fetch:
-        - git:
-            url: https://github.com/bmoussaud/micropets-app
-            ref: master
-            subPath: cluster/tap/app-operator/kapp
-      template:
-        - ytt: {}
-      deploy:
-        - kapp: {}
+      name: sample-app
+      spec:
+        serviceAccountName: default  
+        fetch:
+          - git:
+              url: https://github.com/bmoussaud/micropets-app
+              ref: master
+              subPath: cluster/tap/kapp
+        template:
+          - ytt:
+              ignoreUnknownComments: true
+              valuesFrom:
+                - configMapRef:
+                    name: $(configs.petconfig.config)  
+        deploy:
+          - kapp: {}

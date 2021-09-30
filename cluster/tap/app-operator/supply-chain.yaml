@@ -38,5 +38,23 @@ spec:
       sources:
         - component: source-provider
           name: source
+    - name: configuration
+      templateRef:
+        kind: ClusterConfigTemplate
+        name: micropet-service-config
+      sources:
+        - component: source-provider
+          name: source
+    - name: deploy
+      templateRef:
+        kind: ClusterTemplate
+        name: micropet-deploy
+      images:
+        - component: image-builder
+          name: image
+      configs:
+        - component: configuration
+          name: petconfig
+
 
     
