@@ -45,7 +45,7 @@ spec:
       sources:
         - component: source-provider
           name: source
-       images:
+      images:
         - component: image-builder
           name: image
     - name: deploy

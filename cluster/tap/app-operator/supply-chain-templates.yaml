@@ -41,16 +41,7 @@ spec:
       ref: $(workload.spec.source.git.ref)$
       gitImplementation: libgit2
       ignore: ""
-
-
 ---
-#
-#
-# `image` instantiates a `kpack/Image` object, responsible for ensuring that
-# there's a container image built and pushed to a container image registry
-# whenever there's either new source code, or its image builder gets na update.
-#
-#
 apiVersion: carto.run/v1alpha1
 kind: ClusterImageTemplate
 metadata:
@@ -100,7 +91,7 @@ spec:
           replicas: 1
           version: latest
           virtual_host: front.mytanzu.xyz
-          image: $(images.image.image)
+          image: $(images.image.image)$
         registry:
           server: harbor.mytanzu.xyz/library
 ---
