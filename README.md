@@ -608,7 +608,7 @@ kubectl create clusterrolebinding default-admin \
   --serviceaccount=default:default
 
 kapp deploy --yes -a kapp-controller \
-	-f https://github.com/vmware-tanzu/carvel-kapp-controller/releases/download/v0.22.0/release.yml
+	-f https://github.com/vmware-tanzu/carvel-kapp-controller/releases/download/v0.25.0/release.yml
 ````
 
 The description of the application follows this specification: https://carvel.dev/kapp-controller/docs/latest/app-spec/
@@ -618,11 +618,12 @@ The description of the application follows this specification: https://carvel.de
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: sample-dogs-configuration     
+  name: sample-dogs-configuration       
 data:
   values.yml: |  
     service:  
       name: dogs
+      mode: RANDOM_NUMBER
       port: 7003
       replicas: 1
       version: latest
@@ -633,9 +634,9 @@ data:
 apiVersion: kappctrl.k14s.io/v1alpha1
 kind: App
 metadata:
-  name: sample-dogs
+  name: sample-dogs 
 spec:
-  serviceAccountName: default
+  serviceAccountName: default  
   fetch:
     - git:
         url: https://github.com/bmoussaud/micropets-app
@@ -648,7 +649,8 @@ spec:
           - configMapRef:
               name: sample-dogs-configuration      
   deploy:
-    - kapp: {}
+    - kapp:
+        intoNs: another-ns1
 ````
 
 ````
