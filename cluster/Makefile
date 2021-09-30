@@ -17,7 +17,7 @@ untap:
 	kapp delete --yes -a micropet-tap
 
 local-kapp:
-	ytt --ignore-unknown-comments -f tap/app-operator/kapp
+	ytt --ignore-unknown-comments -f tap/app-operator/kapp -f values.yml
 
 kapp-controler:
 	kubectl apply -f kapp-sample.yaml

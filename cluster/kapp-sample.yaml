@@ -8,6 +8,7 @@ data:
     service:  
       name: dogs
       port: 7003
+      mode: RANDOM_NUMBER
       replicas: 1
       version: latest
       virtual_host: front.mytanzu.xyz

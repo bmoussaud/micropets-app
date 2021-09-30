@@ -1,6 +1,16 @@
 #@ load("@ytt:data", "data")
-#@ load("@ytt:overlay", "overlay")
-#@ load("helpers.star","configfile","load_configfile")
+#@yaml/text-templated-strings
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    kapp.k14s.io/versioned : ""
+  name: #@ data.values.service.name + "-config"
+data:
+  service_config.properties: |-
+    listen.port: :(@=  str(data.values.service.port) @)
+    mode: (@=  str(data.values.service.mode) @)
 ---
 apiVersion: v1
 kind: Secret
@@ -10,12 +20,6 @@ type: Opaque
 data:
   user: YWRtaW4K
   password: cGxlYXNlY2hhbmdlbWU=
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: #@ configfile(data.values.service.name, "service_config.properties")
-data: #@ load_configfile("service_config.properties")
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -39,7 +43,7 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: #@ configfile(data.values.service.name, "service_config.properties")
+            name:  #@ data.values.service.name + "-config"
             items:
             - key: service_config.properties
               path: config.properties

@@ -596,9 +596,65 @@ Wait to: 7 reconcile, 0 delete, 0 noop
 Succeeded
 ```
 
-It exists also a server side implementation called `kapp-controller` 
+It exists also a server side implementation called [`kapp-controller`](https://carvel.dev/kapp-controller/)
 
-https://carvel.dev/kapp-controller/docs/latest/app-spec/
+Install kapp-controler
+
+````
+# THIS CLUSTERROLEBINDING IS FOR DEMO PURPOSES ONLY - THIS WILL GRANT MORE PERMISSIONS THAN NECESSARY
+#
+kubectl create clusterrolebinding default-admin \
+  --clusterrole=cluster-admin \
+  --serviceaccount=default:default
+
+kapp deploy --yes -a kapp-controller \
+	-f https://github.com/vmware-tanzu/carvel-kapp-controller/releases/download/v0.22.0/release.yml
+````
+
+The description of the application follows this specification: https://carvel.dev/kapp-controller/docs/latest/app-spec/
+
+````
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sample-dogs-configuration     
+data:
+  values.yml: |  
+    service:  
+      name: dogs
+      port: 7003
+      replicas: 1
+      version: latest
+      virtual_host: front.mytanzu.xyz
+    registry:
+      server: harbor.mytanzu.xyz/library
+---
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: sample-dogs
+spec:
+  serviceAccountName: default
+  fetch:
+    - git:
+        url: https://github.com/bmoussaud/micropets-app
+        ref: master
+        subPath: cluster/tap/app-operator/kapp
+  template:
+    - ytt:
+        ignoreUnknownComments: true
+        valuesFrom:
+          - configMapRef:
+              name: sample-dogs-configuration      
+  deploy:
+    - kapp: {}
+````
+
+````
+$kubectl apply -f kapp-sample.yaml
+````
+
 
 
 ## References
