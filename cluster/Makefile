@@ -13,6 +13,9 @@ tap: namespace
 watch_workload:
 	watch kubectl tree Workload dogs -n  $(MICROPETS_SP_NS)
 
+desc_workload:
+	kubectl describe Workload dogs -n  $(MICROPETS_SP_NS)
+
 untap:
 	kapp delete --yes -a micropet-tap
 

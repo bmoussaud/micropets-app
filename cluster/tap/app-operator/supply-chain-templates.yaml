@@ -34,7 +34,7 @@ spec:
     apiVersion: source.toolkit.fluxcd.io/v1beta1
     kind: GitRepository
     metadata:
-      name: $(workload.metadata.name)$
+      name: micropet-$(workload.metadata.name)$
     spec:
       interval: 1m
       url: $(workload.spec.source.git.url)$
@@ -62,7 +62,7 @@ spec:
     apiVersion: kpack.io/v1alpha1
     kind: Image
     metadata:
-      name: $(workload.metadata.name)$
+      name: micropet-$(workload.metadata.name)$
     spec:
       tag: #@ data.values.image_prefix + "-tap-$(workload.metadata.name)$"
       serviceAccount: micropet-service-account
@@ -90,7 +90,7 @@ spec:
     apiVersion: v1
     kind: ConfigMap
     metadata:
-      name: service-$(workload.metadata.name)$-configuration     
+      name: micropet-service-$(workload.metadata.name)$-config     
     data:
       values.yml: |  
         service:  
@@ -124,19 +124,19 @@ spec:
     apiVersion: kappctrl.k14s.io/v1alpha1
     kind: App
     metadata:
-      name: sample-app
-      spec:
-        serviceAccountName: default  
-        fetch:
-          - git:
-              url: https://github.com/bmoussaud/micropets-app
-              ref: master
-              subPath: cluster/tap/kapp
-        template:
-          - ytt:
-              ignoreUnknownComments: true
-              valuesFrom:
-                - configMapRef:
-                    name: $(configs.petconfig.config)  
-        deploy:
-          - kapp: {}
+      name: $(workload.metadata.name)$-application
+    spec:
+      serviceAccountName: default  
+      fetch:
+        - git:
+            url: https://github.com/bmoussaud/micropets-app
+            ref: master
+            subPath: cluster/tap/kapp
+      template:
+        - ytt:
+            ignoreUnknownComments: true
+            valuesFrom:
+              - configMapRef:
+                  name: micropet-service-$(workload.metadata.name)$-config   
+      deploy:
+        - kapp: {}

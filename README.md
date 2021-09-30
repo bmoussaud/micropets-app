@@ -607,6 +607,8 @@ kubectl create clusterrolebinding default-admin \
   --clusterrole=cluster-admin \
   --serviceaccount=default:default
 
+kubectl create clusterrolebinding micropets-supplychain-default-admin --clusterrole=cluster-admin --serviceaccount=micropets-supplychain:default
+
 kapp deploy --yes -a kapp-controller \
 	-f https://github.com/vmware-tanzu/carvel-kapp-controller/releases/download/v0.25.0/release.yml
 ````
