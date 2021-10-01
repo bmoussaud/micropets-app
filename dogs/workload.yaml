@@ -24,3 +24,7 @@ spec:
       url: https://github.com/bmoussaud/micropets-app/
       ref:
         branch: master      
+  params:
+    - name: mode
+      value: "BENOIT_RANDOM_NUMBER"
+      
