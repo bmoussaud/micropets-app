@@ -672,9 +672,9 @@ The `micropet-service-supply-chain` supplychain manages the backend services : d
 
 it includes
 1. Watch a repository using `fluxcd/GitRepository`
-2. Build a new image using `kpack/Image`
-3. Configure the application using `kubernetes/ConfigMap`
-4. Trigger a deployment using `kapp-controler/kapp` 
+1. Build a new image using `kpack/Image`
+1. Configure the application using `kubernetes/ConfigMap`
+1. Trigger a deployment using `kapp-controler/kapp` 
 
 All theses 4 resources are described in [supply-chain-templates.yaml](cluster/tap/app-operator/supply-chain-templates.yaml) and put together in [supply-chain.yaml](cluster/tap/app-operator/supply-chain.yaml)
 
@@ -706,5 +706,6 @@ spec:
 - https://tasdikrahman.me/2019/09/12/ways-to-do-canary-deployments-kubernetes-traefik-istio-linkerd/
 - https://medium.com/@trlogic/linkerd-traffic-split-acf6fae3b7b8
 - https://youtu.be/R6OeIgb7lUI
-- https://github.com/JoeDog/siege https://www.linode.com/docs/guides/load-testing-with-siege/
+- https://github.com/JoeDog/siege 
+- https://www.linode.com/docs/guides/load-testing-with-siege/
 - https://github.com/PacktPublishing/Hands-On-Microservices-with-Spring-Boot-and-Spring-Cloud/tree/master/Chapter12

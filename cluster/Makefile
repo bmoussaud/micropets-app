@@ -8,13 +8,7 @@ kpack: namespace
 	ytt --ignore-unknown-comments --data-values-env  MICROPETS   -f . | kapp deploy --yes --into-ns $(MICROPETS_SP_NS) -a micropet-kpack -f-
 
 tap: namespace
-	ytt --ignore-unknown-comments -f tap/app-operator -f tap/developer -f values.yaml | kapp deploy --yes --into-ns $(MICROPETS_SP_NS) -a micropet-tap -f-
-
-watch_workload:
-	watch kubectl tree Workload dogs -n  $(MICROPETS_SP_NS)
-
-desc_workload:
-	kubectl describe Workload dogs -n  $(MICROPETS_SP_NS)
+	ytt --ignore-unknown-comments -f tap/app-operator -f values.yaml | kapp deploy --yes --into-ns $(MICROPETS_SP_NS) -a micropet-tap -f-
 
 untap:
 	kapp delete --yes -a micropet-tap
