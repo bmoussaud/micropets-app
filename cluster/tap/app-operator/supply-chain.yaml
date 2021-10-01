@@ -48,6 +48,9 @@ spec:
       images:
         - component: image-builder
           name: image
+      params:        
+        - name: mode
+          value: $(workload.spec.params[?(@.name=="mode")].value)$
     - name: deploy
       templateRef:
         kind: ClusterTemplate
@@ -55,6 +58,8 @@ spec:
       configs:
         - component: configuration
           name: petconfig
+
+    
 
 
     

@@ -26,5 +26,4 @@ spec:
         branch: master      
   params:
     - name: mode
-      value: "BENOIT_RANDOM_NUMBER"
-      
+      value: "RANDOM_NUMBER"
