@@ -8,9 +8,38 @@ metadata:
     kapp.k14s.io/versioned : ""
   name: #@ data.values.service.name + "-config"
 data:
+#@if data.values.service.name == "pets" :
+    {
+        "service": {
+            "port": ":(@=  str(data.values.service.port) @)",
+            "listen": "true"
+        },
+        "backends": [
+            {
+                "name": "cats",
+                "host": "cats-service",
+                "port": "7003",
+                "context": "/cats/v1/data"
+            },
+            {
+                "name": "dogs",
+                "host": "dogs-service",
+                "port": "7003",
+                "context": "/"
+            },
+            {
+                "name": "fishes",
+                "host": "fishes-service",
+                "port": "7003",
+                "context": "/"
+            }
+        ]
+    }
+#@ else:
   service_config.properties: |-
     listen.port: :(@=  str(data.values.service.port) @)
     mode: (@=  str(data.values.service.mode) @)
+#@ end
 ---
 apiVersion: v1
 kind: Secret
