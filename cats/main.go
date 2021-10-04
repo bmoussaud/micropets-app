@@ -44,6 +44,13 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
+func fallback(w http.ResponseWriter, r *http.Request) {
+	setupResponse(&w, r)
+	fmt.Printf("fallback : Handling %+v\n", r)
+	w.WriteHeader(200)
+	w.Write([]byte("ok"))
+}
+
 func index(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
 	//fmt.Printf("Handling %+v\n", r)
@@ -124,7 +131,7 @@ func main() {
 
 	if err != nil {
 		fmt.Printf("config file not found, use default values\n")
-	} else {		
+	} else {
 		readPort := properties.GetString("listen.port", port)
 		//fmt.Printf(readPort)
 		if strings.HasPrefix(readPort, ":{{") {
@@ -133,7 +140,6 @@ func main() {
 			port = readPort
 		}
 
-		
 		readMode := properties.GetString("mode", mode)
 		if strings.HasPrefix(readPort, ":{{") {
 			fmt.Printf("config file found but it contains unreplaced values %s\n", readMode)
@@ -151,6 +157,9 @@ func main() {
 	http.HandleFunc("/cats/liveness", readiness_and_liveness)
 	http.HandleFunc("/readiness", readiness_and_liveness)
 	http.HandleFunc("/cats/readiness", readiness_and_liveness)
+
+	http.HandleFunc("/", fallback)
+
 	fmt.Printf("******* Starting to the cats service on port %s, mode %s\n", port, mode)
 	fmt.Printf("******* Delay Period %f Amplitude %f\n", delayPeriod, delayAmplitude)
 	log.Fatal(http.ListenAndServe(port, nil))
