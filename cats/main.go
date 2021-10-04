@@ -145,7 +145,7 @@ func main() {
 		delayAmplitude = properties.GetFloat64("delay.amplitude", delayAmplitude)
 	}
 
-	http.HandleFunc("/cats/v1/data", index)
+	http.HandleFunc("/v1/data", index)
 	http.HandleFunc("/liveness", readiness_and_liveness)
 	http.HandleFunc("/readiness", readiness_and_liveness)
 	fmt.Printf("******* Starting to the cats service on port %s, mode %s\n", port, mode)
