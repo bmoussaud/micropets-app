@@ -9,6 +9,7 @@ metadata:
   name: #@ data.values.service.name + "-config"
 data:
 #@ if data.values.service.name == "pets" :
+  service_config.properties: |-
     {
         "service": {
             "port": ":(@=  str(data.values.service.port) @)",

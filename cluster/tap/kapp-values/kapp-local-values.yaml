@@ -1,7 +1,7 @@
 #@data/values
 ---
 service:  
-  name: dogs
+  name: pets
   port: 7003
   mode: RANDOM_NUMBER
   replicas: 1
