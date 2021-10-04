@@ -44,12 +44,13 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
+/*
 func fallback(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
 	fmt.Printf("fallback : Handling %+v\n", r)
 	w.WriteHeader(200)
 	w.Write([]byte("fallback"))
-}
+}*/
 
 func index(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
@@ -151,13 +152,13 @@ func main() {
 		delayAmplitude = properties.GetFloat64("delay.amplitude", delayAmplitude)
 	}
 
-	http.HandleFunc("/v1/data", index)
+	http.HandleFunc("/cats/v1/data", index)
 
-	http.HandleFunc("/liveness", readiness_and_liveness)
+	http.HandleFunc("/cats/liveness", readiness_and_liveness)
 
-	http.HandleFunc("/readiness", readiness_and_liveness)
+	http.HandleFunc("/cats/readiness", readiness_and_liveness)
 
-	http.HandleFunc("/", fallback)
+	//http.HandleFunc("/", fallback)
 
 	fmt.Printf("******* Starting to the cats service on port %s, mode %s\n", port, mode)
 	fmt.Printf("******* Delay Period %f Amplitude %f\n", delayPeriod, delayAmplitude)
