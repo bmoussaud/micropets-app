@@ -678,11 +678,15 @@ it includes
 
 All theses 4 resources are described in [supply-chain-templates.yaml](cluster/tap/app-operator/supply-chain-templates.yaml) and put together in [supply-chain.yaml](cluster/tap/app-operator/supply-chain.yaml)
 
-Now each service must create a new workload based on this supply chain. 
-The association between a workload and the supplychain is based using labels: 
+Then each service must provide a new workload based on this supply chain. 
+
+The association between a workload and the requested supplychain is based using labels: 
 `app.tanzu.vmware.com/workload-type`.
 
-Example
+
+
+Example: request A new workload called `micropet-service` with the following git repository using the `RANDOM_NUMBER` mode and listening on the `7003` port.
+
 ````
 apiVersion: carto.run/v1alpha1
 kind: Workload
@@ -696,7 +700,35 @@ spec:
       url: https://github.com/bmoussaud/micropets-app/
       ref:
         branch: master      
+  params:
+    - name: mode
+      value: "RANDOM_NUMBER"
+    - name: port
+      value: 7003   
 ````
+
+apply this yaml definition and wacth
+
+````
+kubectl tree Workload dogs -n micropets-supplychain
+Every 2,0s: kubectl tree Workload dogs -n micropets-supplychain                                                                           bmoussaud-a02.vmware.com: Fri Oct  1 16:02:08 2021
+
+NAMESPACE              NAME                                             READY    REASON        AGE
+micropets-supplychain  Workload/dogs                                    True     Ready         75s
+micropets-supplychain  ├─App/dogs-application                           -                      25s
+micropets-supplychain  ├─ConfigMap/micropet-service-dogs-config         -                      25s
+micropets-supplychain  ├─GitRepository/micropet-dogs                    Unknown  Progressing   75s
+micropets-supplychain  └─Image/micropet-dogs                            True                   70s
+micropets-supplychain    ├─Build/micropet-dogs-build-1-tw6vt            -                      70s
+micropets-supplychain    │ └─Pod/micropet-dogs-build-1-tw6vt-build-pod  False    PodCompleted  69s
+micropets-supplychain    ├─PersistentVolumeClaim/micropet-dogs-cache    -                      70s
+micropets-supplychain    └─SourceResolver/micropet-dogs-source          True                   70s
+
+````
+
+Several resources (kpack image, kapp-controler app, kubernetes config map, fluxcd git repository) are created and connected all together by the workload.
+
+
 
 
 ## References

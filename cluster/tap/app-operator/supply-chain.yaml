@@ -51,6 +51,8 @@ spec:
       params:        
         - name: mode
           value: $(workload.spec.params[?(@.name=="mode")].value)$
+        - name: port
+          value: $(workload.spec.params[?(@.name=="port")].value)$
     - name: deploy
       templateRef:
         kind: ClusterTemplate
