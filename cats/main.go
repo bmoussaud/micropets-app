@@ -146,8 +146,11 @@ func main() {
 	}
 
 	http.HandleFunc("/v1/data", index)
+	http.HandleFunc("/cats/v1/data", index)
 	http.HandleFunc("/liveness", readiness_and_liveness)
+	http.HandleFunc("/cats/liveness", readiness_and_liveness)
 	http.HandleFunc("/readiness", readiness_and_liveness)
+	http.HandleFunc("/cats/readiness", readiness_and_liveness)
 	fmt.Printf("******* Starting to the cats service on port %s, mode %s\n", port, mode)
 	fmt.Printf("******* Delay Period %f Amplitude %f\n", delayPeriod, delayAmplitude)
 	log.Fatal(http.ListenAndServe(port, nil))
