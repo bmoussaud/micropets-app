@@ -32,8 +32,6 @@ type Cats struct {
 
 var mode = "ALL"
 
-var configLocation string = "config.properties"
-
 var delayPeriod = 0.0
 
 var delayAmplitude = 0.0
@@ -126,9 +124,8 @@ func main() {
 
 	if err != nil {
 		fmt.Printf("config file not found, use default values\n")
-	} else {
-		var readPort string
-		readPort = properties.GetString("listen.port", port)
+	} else {		
+		readPort := properties.GetString("listen.port", port)
 		//fmt.Printf(readPort)
 		if strings.HasPrefix(readPort, ":{{") {
 			fmt.Printf("config file found but it contains unreplaced values %s\n", readPort)
@@ -136,8 +133,8 @@ func main() {
 			port = readPort
 		}
 
-		var readMode string
-		readMode = properties.GetString("mode", mode)
+		
+		readMode := properties.GetString("mode", mode)
 		if strings.HasPrefix(readPort, ":{{") {
 			fmt.Printf("config file found but it contains unreplaced values %s\n", readMode)
 		} else {
@@ -151,7 +148,7 @@ func main() {
 	http.HandleFunc("/cats/v1/data", index)
 	http.HandleFunc("/liveness", readiness_and_liveness)
 	http.HandleFunc("/readiness", readiness_and_liveness)
-	fmt.Printf("******* Starting to the Cats service on port %s, mode %s\n", port, mode)
+	fmt.Printf("******* Starting to the cats service on port %s, mode %s\n", port, mode)
 	fmt.Printf("******* Delay Period %f Amplitude %f\n", delayPeriod, delayAmplitude)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
