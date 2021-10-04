@@ -8,7 +8,7 @@ metadata:
     kapp.k14s.io/versioned : ""
   name: #@ data.values.service.name + "-config"
 data:
-#@if data.values.service.name == "pets" :
+#@ if data.values.service.name == "pets" :
     {
         "service": {
             "port": ":(@=  str(data.values.service.port) @)",
