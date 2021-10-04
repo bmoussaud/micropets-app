@@ -148,7 +148,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 func LoadConfiguration() Config {
 	viper.SetConfigType("json")
 	viper.SetConfigName("pets_config") // name of config file (without extension)
-	if envCfgFile := os.Getenv("SERVICE_CONFIG"); envCfgFile != "" {
+	if envCfgFile := os.Getenv("SERVICE_CONFIG_DIR"); envCfgFile != "" {
 		fmt.Printf("Load configuration from %s\n", envCfgFile)
 		viper.SetConfigFile(envCfgFile)
 	} else {
