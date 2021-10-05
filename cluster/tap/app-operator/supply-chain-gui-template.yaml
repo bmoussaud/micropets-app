@@ -54,6 +54,7 @@ spec:
           color: green
           port: 8080
           stage: supply_chain
+          config_path: /workspace/src/assets/config
         registry:
           server: harbor.mytanzu.xyz/library
 ---
