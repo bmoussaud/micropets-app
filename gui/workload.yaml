@@ -10,9 +10,4 @@ spec:
       url: https://github.com/bmoussaud/micropets-app/
       ref:
         branch: master
-  params:
-    - name: mode
-      value: "RANDOM_NUMBER"
-    - name: port
-      value: 80
-    
+  

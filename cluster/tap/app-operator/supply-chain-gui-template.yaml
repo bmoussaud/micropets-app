@@ -18,6 +18,7 @@ spec:
           virtual_host: front.mytanzu.xyz
           image: $(images.image.image)$
           color: green
+          port: 80
           stage: supply_chain
         registry:
           server: harbor.mytanzu.xyz/library
