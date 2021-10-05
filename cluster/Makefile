@@ -16,6 +16,9 @@ untap:
 local-kapp:
 	ytt --ignore-unknown-comments -f tap/kapp -f tap/kapp-values/kapp-local-values.yaml
 
+local-gui-kapp:
+	ytt --ignore-unknown-comments -f tap/kapp-gui -f tap/kapp-values/kapp-local-values.yaml
+
 kapp-controler:
 	kubectl apply -f kapp-sample.yaml
 

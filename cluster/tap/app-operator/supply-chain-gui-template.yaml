@@ -1,0 +1,49 @@
+---
+apiVersion: carto.run/v1alpha1
+kind: ClusterConfigTemplate
+metadata:
+  name: micropet-gui-service-config
+spec:  
+  configPath: .metadata.name
+  template:
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: micropet-gui-service-$(workload.metadata.name)$-config     
+    data:
+      values.yml: |  
+        service:  
+          name: $(workload.metadata.name)$          
+          replicas: 1          
+          virtual_host: front.mytanzu.xyz
+          image: $(images.image.image)$
+          color: green
+          stage: supply_chain
+        registry:
+          server: harbor.mytanzu.xyz/library
+---
+apiVersion: carto.run/v1alpha1
+kind: ClusterTemplate
+metadata:
+  name: micropet-gui-deploy
+spec:
+  template:
+    apiVersion: kappctrl.k14s.io/v1alpha1
+    kind: App
+    metadata:
+      name: $(workload.metadata.name)$-gui-application
+    spec:
+      serviceAccountName: default  
+      fetch:
+        - git:
+            url: https://github.com/bmoussaud/micropets-app
+            ref: master
+            subPath: cluster/tap/kapp-gui
+      template:
+        - ytt:
+            ignoreUnknownComments: true
+            valuesFrom:
+              - configMapRef:
+                  name: micropet-gui-service-$(workload.metadata.name)$-config   
+      deploy:
+        - kapp: {}

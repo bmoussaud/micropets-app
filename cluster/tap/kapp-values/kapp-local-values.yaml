@@ -1,13 +1,15 @@
 #@data/values
 ---
 service:  
-  name: pets
-  port: 7003
+  name: gui
+  port: 9999
   mode: RANDOM_NUMBER
   replicas: 1
   version: latest
   virtual_host: front.mytanzu.xyz
   image: harbor.mytanzu.xyz/library/micropet-dogs:latest 
+  stage: LOCAL_DEV
+  color: green
 registry:
   server: harbor.mytanzu.xyz/library
   

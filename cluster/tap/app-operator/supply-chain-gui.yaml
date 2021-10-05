@@ -4,7 +4,7 @@ metadata:
   name: micropet-service-supply-chain
 spec:
   selector:
-    app.tanzu.vmware.com/workload-type: micropet-service
+    app.tanzu.vmware.com/workload-type: micropet-gui-service
   #
   #
   #   source-provider <--[src]-- image-builder  <--[img]--- config <--[config]--- deployer
@@ -26,22 +26,17 @@ spec:
     - name: configuration
       templateRef:
         kind: ClusterConfigTemplate
-        name: micropet-service-config
+        name: micropet-gui-service-config
       sources:
         - component: source-provider
           name: source
       images:
         - component: image-builder
-          name: image
-      params:        
-        - name: mode
-          value: $(workload.spec.params[?(@.name=="mode")].value)$
-        - name: port
-          value: $(workload.spec.params[?(@.name=="port")].value)$
+          name: image      
     - name: deploy
       templateRef:
         kind: ClusterTemplate
-        name: micropet-deploy      
+        name: micropet-gui-deploy      
       configs:
         - component: configuration
           name: petconfig

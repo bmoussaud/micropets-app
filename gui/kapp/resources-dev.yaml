@@ -5,7 +5,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: gui-db-credentials
+  name: #@ data.values.service.name + "-db-credentials"
 type: Opaque
 data:
   user: YWRtaW4K
