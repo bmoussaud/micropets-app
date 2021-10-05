@@ -9,7 +9,7 @@ spec:
     apiVersion: v1
     kind: ConfigMap
     metadata:
-      name: micropet-gui-service-$(workload.metadata.name)$-config     
+      name: micropet-service-$(workload.metadata.name)$-config     
     data:
       values.yml: |  
         service:  
@@ -32,7 +32,7 @@ spec:
     apiVersion: kappctrl.k14s.io/v1alpha1
     kind: App
     metadata:
-      name: $(workload.metadata.name)$-gui-application
+      name: $(workload.metadata.name)$-application
     spec:
       serviceAccountName: default  
       fetch:
