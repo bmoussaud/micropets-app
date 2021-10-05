@@ -45,6 +45,6 @@ spec:
             ignoreUnknownComments: true
             valuesFrom:
               - configMapRef:
-                  name: micropet-gui-service-$(workload.metadata.name)$-config   
+                  name: micropet-service-$(workload.metadata.name)$-config   
       deploy:
         - kapp: {}
