@@ -9,7 +9,7 @@ metadata:
   name: #@ data.values.service.name + "-config"
 data:
 #@ if data.values.service.name == "pets" :
-  service_config.properties: |-
+  pets_config.json: |-
     {
         "service": {
             "port": ":(@=  str(data.values.service.port) @)",
@@ -37,7 +37,7 @@ data:
         ]
     }
 #@ else:
-  service_config.properties: |-
+  config.properties: |-
     listen.port: :(@=  str(data.values.service.port) @)
     mode: (@=  str(data.values.service.mode) @)
 #@ end
@@ -75,8 +75,14 @@ spec:
           configMap:
             name:  #@ data.values.service.name + "-config"
             items:
-            - key: service_config.properties
+            #@ if data.values.service.name == "pets" :
+            - key: pets_config.json
+              path: pets_config.json
+            #@ else:
+            - key: config.properties
               path: config.properties
+            #@ end
+            
       containers:
         - name: #@ data.values.service.name
           image: #@ data.values.service.image
