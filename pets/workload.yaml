@@ -1,0 +1,18 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: pets
+  labels:
+    app.tanzu.vmware.com/workload-type: micropet-service
+spec:
+  source:
+    git:
+      url: https://github.com/bmoussaud/micropets-app/
+      ref:
+        branch: master
+  params:
+    - name: mode
+      value: "RANDOM_NUMBER"
+    - name: port
+      value: 9000
+    

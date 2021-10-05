@@ -105,7 +105,7 @@ func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
 
 func index(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
-	fmt.Printf("Handling %+v\n", r)
+	//fmt.Printf("Handling %+v\n", r)
 	config := LoadConfiguration()
 
 	var all Pets
