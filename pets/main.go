@@ -82,7 +82,11 @@ func queryPets(backend string) Pets {
 	var pets Pets
 	req.Debug = true
 	fmt.Printf("##########################@ 2 Connecting backend [%s]\n", backend)
-	r, _ := req.Get(backend, header)
+	r, err := req.Get(backend, header)
+	if err != nil {
+		fmt.Printf("##########################@ ERROR Connecting backend [%s]\n", backend)
+		return pets
+	} 
 	r.ToJSON(&pets)
 
 	return pets
