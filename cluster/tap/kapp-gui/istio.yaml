@@ -27,9 +27,9 @@ spec:
   http:
   - match:
     - uri:
-        extact: /
+        extact: #@ "/"+ data.values.service.name 
     - uri:
-        prefix: /
+        prefix: #@ "/"+ data.values.service.name +"/"
     route:
     - destination:
         host: #@ data.values.service.name +"-service"
