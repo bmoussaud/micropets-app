@@ -1,3 +1,37 @@
+
+#@ load("@ytt:data", "data")
+---
+apiVersion: carto.run/v1alpha1
+kind: ClusterImageTemplate
+metadata:
+  name: micropet-gui-image
+spec:
+  imagePath: .status.latestImage
+  template:
+    apiVersion: kpack.io/v1alpha1
+    kind: Image
+    metadata:
+      name: micropet-$(workload.metadata.name)$
+    spec:
+      tag: #@ data.values.image_prefix + "-tap-$(workload.metadata.name)$"
+      serviceAccount: micropet-service-account
+      builder:
+        kind: ClusterBuilder
+        name: micropet-builder
+      source:
+        blob:
+          url: $(sources.source.url)$
+        subPath: $(workload.metadata.name)$
+      build:
+        env:
+          - name: BP_IMAGE_LABELS
+            value: watermark.project=micropet  watermark.author=benoit@moussaud
+          - name: NPM_CONFIG_LOGLEVEL
+            value: DEBUG
+          - name: BP_NODE_RUN_SCRIPTS
+            value: build
+          - name: NODE_ENV
+            value: development  
 ---
 apiVersion: carto.run/v1alpha1
 kind: ClusterConfigTemplate

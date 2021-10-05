@@ -19,7 +19,7 @@ spec:
     - name: image-builder
       templateRef:
         kind: ClusterImageTemplate
-        name: micropet-image
+        name: micropet-gui-image
       sources:
         - component: source-provider
           name: source
