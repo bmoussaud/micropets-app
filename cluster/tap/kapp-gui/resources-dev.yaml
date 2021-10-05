@@ -8,7 +8,7 @@ metadata:
     kapp.k14s.io/versioned : ""
   name: #@ data.values.service.name + "-config"
 data:
-  pets_config.json: |-
+  config.json: |-
     {  
       "petServiceUrl": "http://(@=  data.values.service.virtual_host @)/pets",
       "stage": "(@=  data.values.service.stage @)",
@@ -39,15 +39,9 @@ spec:
         - name: config-volume
           configMap:
             name:  #@ data.values.service.name + "-config"
-            items:
-            #@ if data.values.service.name == "pets" :
-            - key: pets_config.json
-              path: pets_config.json
-            #@ else:
-            - key: config.properties
-              path: config.properties
-            #@ end
-            
+            items:            
+            - key: config.json
+              path: config.json                        
       containers:
         - name: #@ data.values.service.name
           image: #@ data.values.service.image
