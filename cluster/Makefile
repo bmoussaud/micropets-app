@@ -8,7 +8,7 @@ kpack: namespace
 	ytt --ignore-unknown-comments --data-values-env  MICROPETS   -f . | kapp deploy --yes --into-ns $(MICROPETS_SP_NS) -a micropet-kpack -f-
 
 tap: namespace
-	ytt --ignore-unknown-comments -f tap/app-operator -f values.yaml | kapp deploy --yes --into-ns $(MICROPETS_SP_NS) -a micropet-tap -f-
+	ytt --ignore-unknown-comments -f tap/app-operator -f values.yaml | kapp deploy --yes --dangerous-override-ownership-of-existing-resources --into-ns $(MICROPETS_SP_NS) -a micropet-tap -f-
 
 untap:
 	kapp delete --yes -a micropet-tap

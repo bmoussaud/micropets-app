@@ -1,7 +1,7 @@
 apiVersion: carto.run/v1alpha1
 kind: ClusterSupplyChain
 metadata:
-  name: micropet-service-supply-chain
+  name: micropet-gui-service-supply-chain
 spec:
   selector:
     app.tanzu.vmware.com/workload-type: micropet-gui-service

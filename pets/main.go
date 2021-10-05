@@ -90,7 +90,7 @@ func queryPets(backend string) Pets {
 
 func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
-	fmt.Printf("Handling %+v\n", r)
+	//fmt.Printf("Handling %+v\n", r)
 	var all Pets
 	path := Path{"pets", "readiness_and_liveness"}
 	all.Hostnames = []Path{path}
@@ -105,7 +105,7 @@ func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
 
 func index(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
-	//fmt.Printf("Handling %+v\n", r)
+	fmt.Printf("index Handling %+v\n", r)
 	config := LoadConfiguration()
 
 	var all Pets
