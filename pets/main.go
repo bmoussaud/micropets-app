@@ -128,7 +128,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Printf("* ERROR * Accessing backend [%s][%s]:[%s]\n", backend.Name, URL, err)
 		} else {
-			fmt.Printf("* process result")
+			fmt.Printf("* process result\n")
 			all.Total = all.Total + pets.Total
 			all.Hostnames = append(all.Hostnames, Path{backend.Name, pets.Hostname})
 			fmt.Printf("* Hostnames %s\n", all.Hostname)
