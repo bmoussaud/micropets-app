@@ -148,14 +148,16 @@ func index(w http.ResponseWriter, r *http.Request) {
 func LoadConfiguration() Config {
 	viper.SetConfigType("json")
 	viper.SetConfigName("pets_config") // name of config file (without extension)
-	if envCfgFile := os.Getenv("SERVICE_CONFIG_DIR"); envCfgFile != "" {
-		fmt.Printf("Load configuration from %s\n", envCfgFile)
-		viper.SetConfigFile(envCfgFile)
-	} else {
-		viper.AddConfigPath("/etc/micropets/")  // path to look for the config file in
-		viper.AddConfigPath("$HOME/.micropets") // call multiple times to add many search paths
-		viper.AddConfigPath(".")                // optionally look for config in the working directory
+	if serviceConfigDir := os.Getenv("SERVICE_CONFIG_DIR"); serviceConfigDir != "" {
+		fmt.Printf("Load configuration from %s\n", serviceConfigDir)
+		viper.AddConfigPath(serviceConfigDir)
+
 	}
+	//add default config path
+	viper.AddConfigPath("/etc/micropets/")  // path to look for the config file in
+	viper.AddConfigPath("$HOME/.micropets") // call multiple times to add many search paths
+	viper.AddConfigPath(".")                // optionally look for config in the working directory
+
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file
 		panic(fmt.Errorf("fatal error config file: %s ", err))
