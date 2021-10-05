@@ -51,7 +51,7 @@ spec:
               containerPort: #@ data.values.service.port
           volumeMounts:
             - name: config-volume
-              mountPath: #@ data.values.service.config_path                    
+              mountPath: #@ data.values.service.config_path          
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 5

@@ -10,6 +10,7 @@ service:
   image: harbor.mytanzu.xyz/library/micropet-dogs:latest 
   stage: LOCAL_DEV
   color: green
+  config_path: /workspace/src/assets/config
 registry:
   server: harbor.mytanzu.xyz/library
   
