@@ -73,7 +73,7 @@ func lookupService(service string) string {
 	return service
 }
 
-func queryPets(backend string) Pets {
+func queryPets(backend string) (Pets, error) {
 
 	header := req.Header{
 		"Accept":  "application/json",
@@ -85,11 +85,11 @@ func queryPets(backend string) Pets {
 	r, err := req.Get(backend, header)
 	if err != nil {
 		fmt.Printf("##########################@ ERROR Connecting backend [%s]\n", backend)
-		return pets
-	} 
+		return pets, err
+	}
 	r.ToJSON(&pets)
 
-	return pets
+	return pets, nil
 }
 
 func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
@@ -124,13 +124,18 @@ func index(w http.ResponseWriter, r *http.Request) {
 		URL := fmt.Sprintf("http://%s:%s%s", backend.Host, backend.Port, backend.Context)
 		lookupService(backend.Host)
 		fmt.Printf("* Accessing %d\t %s\t %s\n", i, backend.Name, URL)
-		pets := queryPets(URL)
-		all.Total = all.Total + pets.Total
-		all.Hostnames = append(all.Hostnames, Path{backend.Name, pets.Hostname})
-		fmt.Printf("* Hostnames %s\n", all.Hostname)
-		for _, pet := range pets.Pets {
-			pet.Type = backend.Name
-			all.Pets = append(all.Pets, pet)
+		pets, err := queryPets(URL)
+		if err != nil {
+			fmt.Printf("* ERROR * Accessing backend [%s][%s]:[%s]\n", backend.Name, URL, err)
+		} else {
+			fmt.Printf("* process result")
+			all.Total = all.Total + pets.Total
+			all.Hostnames = append(all.Hostnames, Path{backend.Name, pets.Hostname})
+			fmt.Printf("* Hostnames %s\n", all.Hostname)
+			for _, pet := range pets.Pets {
+				pet.Type = backend.Name
+				all.Pets = append(all.Pets, pet)
+			}
 		}
 	}
 
