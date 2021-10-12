@@ -56,12 +56,12 @@ docker push registry.local:5000/containous/whoami:latest
 Create new K3S cluster using the docker registry created previously.
 It deploys [Helm](https://helm.sh/) & [Traefik](https://doc.traefik.io/traefik/).
 
-Edit `k3s/Makefile and set the value for
+Edit `k3s/Makefile` and set the value for
 
 - CLUSTER_NAME
 
 ```bash
-make create-cluster install-traefik
+make create-cluster install-traefik CLUSTER_NAME=my-local-cluster
 ```
 
 ### Test k3s configuration

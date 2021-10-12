@@ -53,6 +53,18 @@ k8s-deploy:
           $(MAKE) --directory=$$d k8s-deploy; \
         done
 
+workload:
+	for d in $(services); \
+    	do                               \
+          $(MAKE) --directory=$$d workload; \
+        done
+
+unworkload:
+	for d in $(services); \
+    	do                               \
+          $(MAKE) --directory=$$d unworkload; \
+        done
+
 deploy-front:
 	kubectx  aws-front
 	kustomize build kustomize/aws/front  | kapp -y deploy  -a micropets -f -
