@@ -4,6 +4,7 @@ service:
   name: gui
   port: 9999
   mode: RANDOM_NUMBER
+  frequencyError: 10
   replicas: 1
   version: latest
   virtual_host: front.mytanzu.xyz

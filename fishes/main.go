@@ -29,6 +29,8 @@ type Fishes struct {
 }
 
 var mode = "ALL"
+var frequencyError = -1
+var calls = 0
 
 func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
@@ -46,14 +48,16 @@ func index(w http.ResponseWriter, r *http.Request) {
 		host = "Unknown"
 	}
 
-	fishes := Fishes{3,
+	fishes := Fishes{4,
 		host,
 		[]Fish{
-			Fish{"Nemo", "Poisson Clown", 14,
+			{"Nemo", "Poisson Clown", 14,
 				"https://www.sciencesetavenir.fr/assets/img/2019/07/10/cover-r4x3w1000-5d258790dd324-f96f05d4901fc6ce0ab038a685e4d5c99f6cdfe2-jpg.jpg"},
-			Fish{"Glumpy", "Neon Tetra", 14,
+			{"Glumpy", "Neon Tetra", 11,
 				"https://www.fishkeepingworld.com/wp-content/uploads/2018/02/Neon-Tetra-New.jpg"},
-			Fish{"Argo", "Combattant", 14,
+			{"Dory", "Pacific regal blue tang", 12,
+				"http://www.oceanlight.com/stock-photo/palette-surgeonfish-image-07922-671143.jpg"},
+			{"Argo", "Combattant", 27,
 				"https://www.aquaportail.com/pictures1003/anemone-clown_1267799900_poisson-combattant.jpg"}}}
 
 	if mode == "RANDOM_NUMBER" {
@@ -64,14 +68,21 @@ func index(w http.ResponseWriter, r *http.Request) {
 			fishes.Total = fishes.Total - 1
 		}
 	}
+
 	js, err := json.Marshal(fishes)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
+	calls = calls + 1
+	if frequencyError > 0 && calls%frequencyError == 0 {
+		fmt.Printf("Fails this call (%d)", calls)
+		http.Error(w, "Unexpected Error when querying the fish repository", http.StatusServiceUnavailable)
+	} else {
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(js)
+	}
 
 }
 
@@ -99,8 +110,7 @@ func main() {
 	if err != nil {
 		fmt.Printf("config file not found, use default values\n")
 	} else {
-		var readPort string
-		readPort = properties.GetString("listen.port", port)
+		readPort := properties.GetString("listen.port", port)
 		//fmt.Printf(readPort)
 		if strings.HasPrefix(readPort, ":{{") {
 			fmt.Printf("config file fount but it contains unreplaced values %s\n", readPort)
@@ -108,17 +118,18 @@ func main() {
 			port = readPort
 		}
 
-		var readMode string
-		readMode = properties.GetString("mode", mode)
+		readMode := properties.GetString("mode", mode)
 		if strings.HasPrefix(readPort, ":{{") {
 			fmt.Printf("config file fount but it contains unreplaced values %s\n", readMode)
 		} else {
 			mode = readMode
 		}
 
+		readFrequencyError := properties.GetInt("frequencyError", frequencyError)
+		frequencyError = readFrequencyError
 	}
 
 	http.HandleFunc("/", index)
-	fmt.Printf("******* Starting to the Fishes service on port %s, mode %s\n", port, mode)
+	fmt.Printf("******* Starting to the Fishes service on port %s, mode %s, frequency Error %d\n", port, mode, frequencyError)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
