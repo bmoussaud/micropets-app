@@ -66,7 +66,7 @@ docker-hub-push: docker-build
 	docker push $(DOCKER_HUB_IMAGE)
 	docker push $(DOCKER_HUB_IMAGE_DEV)
 
-docker-run: cnb-image
+docker-run: 
 	docker run --rm  --name $(BINARY_NAME)  -v $(ROOT_DIR):/config -e SERVICE_CONFIG_DIR=/config -p 7002:7002 $(LOCAL_DOCKER_IMAGE)
 
 cnb-image:

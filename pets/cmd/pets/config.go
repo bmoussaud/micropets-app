@@ -42,7 +42,7 @@ var GlobalConfig Config
 func LoadConfiguration() Config {
 	if !GlobalConfig.setup {
 		viper.SetConfigType("json")
-		viper.SetEnvPrefix("mp")           // will be uppercased automatically
+		viper.SetEnvPrefix("mp")           // will be uppercased automatically eg. MP_OBSERVABILITY.TOKEN=$(TO_TOKEN)
 		viper.SetConfigName("pets_config") // name of config file (without extension)
 		viper.AutomaticEnv()
 

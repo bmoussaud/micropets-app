@@ -36,21 +36,15 @@ var delayPeriod = 0.0
 
 var delayAmplitude = 0.0
 
-var calls = 0.0
+var calls = 0
+
+var frequencyError = -1
 
 func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
-
-/*
-func fallback(w http.ResponseWriter, r *http.Request) {
-	setupResponse(&w, r)
-	fmt.Printf("fallback : Handling %+v\n", r)
-	w.WriteHeader(200)
-	w.Write([]byte("fallback"))
-}*/
 
 func index(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
@@ -98,9 +92,13 @@ func index(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Current Unix Time: %s\n", elapsed)
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
-
+	if frequencyError > 0 && calls%frequencyError == 0 {
+		fmt.Printf("Fails this call (%d)", calls)
+		http.Error(w, "Unexpected Error when querying the cats repository", http.StatusServiceUnavailable)
+	} else {
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(js)
+	}
 }
 
 //GetLocation returns the full path of the config file based on the current executable location or using SERVICE_CONFIG_DIR env
@@ -150,6 +148,7 @@ func main() {
 
 		delayPeriod = properties.GetFloat64("delay.period", delayPeriod)
 		delayAmplitude = properties.GetFloat64("delay.amplitude", delayAmplitude)
+		frequencyError = properties.GetInt("frequencyError", frequencyError)
 	}
 
 	http.HandleFunc("/cats/v1/data", index)
@@ -164,5 +163,6 @@ func main() {
 
 	fmt.Printf("******* Starting to the cats service on port %s, mode %s\n", port, mode)
 	fmt.Printf("******* Delay Period %f Amplitude %f\n", delayPeriod, delayAmplitude)
+	fmt.Printf("******* Frequency Error %d\n", frequencyError)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
