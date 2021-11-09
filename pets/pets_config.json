@@ -1,6 +1,6 @@
 {
   "service": {
-    "port": ":7004",
+    "port": ":9000",
     "listen": "true"
   },
   "backends": [
@@ -16,5 +16,14 @@
       "port": "80",
       "context": "/dogs"
     }
-  ]
+  ],
+  "observability": {
+    "enable": true,
+    "application": "micropets",
+    "service": "pets",
+    "cluster": "us-west",
+    "shard": "primary",
+    "server": "https://vmware.wavefront.com",    
+    "token": "xxxx-xxx-yyyy-zzzz"
+  }
 }

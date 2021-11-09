@@ -21,8 +21,9 @@
     }
   ],
   "observability": {
-    "enable": false,
-    "application": "micropets-pets",
+    "enable": true,
+    "application": "micropets",
+    "service": "pets",
     "cluster": "us-west",
     "shard": "primary",
     "server": "xxxx.wavefront.com",

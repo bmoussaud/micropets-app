@@ -1,7 +1,30 @@
 {
-  "port":":{{pets.listen.port}}",
+  "service": {
+    "port": ":9000",
+    "listen": "true"
+  },
   "backends": [
-    {"type":"cats","url":"http://localhost:{{cats.listen.port}}"},
-    {"type":"dogs","url":"http://localhost:{{dogs.listen.port}}"}
-  ]
+    {
+      "name": "cats",
+      "host": "localhost",
+      "port": "7002"
+    },
+    {
+      "name": "dogs",
+      "host": "localhost",
+      "port": "7003"
+    },
+    {
+      "name": "fishes",
+      "host": "localhost",
+      "port": "7007"
+    }
+  ],
+  "observability": {
+    "application": "micropets-pets",
+    "cluster": "us-west",
+    "shard": "primary",
+    "server": "xxxx.wavefront.com",
+    "token": "x-y-z-y"
+  }
 }

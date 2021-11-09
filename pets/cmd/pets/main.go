@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -10,22 +11,8 @@ import (
 	"sort"
 
 	"github.com/imroc/req"
-	"github.com/spf13/viper"
+	"github.com/opentracing/opentracing-go"
 )
-
-//Config Structure
-type Config struct {
-	Service struct {
-		Port   string
-		Listen bool
-	}
-	Backends []struct {
-		Name    string `json:"name"`
-		Host    string `json:"host"`
-		Port    string `json:"port"`
-		Context string `json:"context"`
-	}
-}
 
 //Pet Structure
 type Pet struct {
@@ -73,22 +60,35 @@ func lookupService(service string) string {
 	return service
 }
 
-func queryPets(backend string) (Pets, error) {
+func queryPets(spanCtx opentracing.SpanContext, backend string) (Pets, error) {
 
-	header := req.Header{
-		"Accept":  "application/json",
-		"Expires": "10ms",
-	}
 	var pets Pets
 	req.Debug = true
 	fmt.Printf("##########################@ 2 Connecting backend [%s]\n", backend)
-	r, err := req.Get(backend, header)
+	req, err := http.NewRequest("GET", backend, nil)
+	if err != nil {
+		return pets, err
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Expires", "10ms")
+
+	if LoadConfiguration().Observability.Enable {
+		opentracing.GlobalTracer().Inject(spanCtx, opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(req.Header))
+	}
+
+	response, err := http.DefaultClient.Do(req)
 	if err != nil {
 		fmt.Printf("##########################@ ERROR Connecting backend [%s]\n", backend)
 		return pets, err
 	}
-	r.ToJSON(&pets)
+	defer response.Body.Close()
 
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return pets, fmt.Errorf("ReadAll got error %s", err.Error())
+	}
+
+	json.Unmarshal(body, &pets)
 	return pets, nil
 }
 
@@ -108,6 +108,9 @@ func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
+	span := NewServerSpan(r, "index")
+	defer span.Finish()
+	
 	setupResponse(&w, r)
 	fmt.Printf("index Handling %+v\n", r)
 	config := LoadConfiguration()
@@ -124,7 +127,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		URL := fmt.Sprintf("http://%s:%s%s", backend.Host, backend.Port, backend.Context)
 		lookupService(backend.Host)
 		fmt.Printf("* Accessing %d\t %s\t %s\n", i, backend.Name, URL)
-		pets, err := queryPets(URL)
+		pets, err := queryPets(span.Context(), URL)
 		if err != nil {
 			fmt.Printf("* ERROR * Accessing backend [%s][%s]:[%s]\n", backend.Name, URL, err)
 		} else {
@@ -150,42 +153,15 @@ func index(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
-
 }
 
-//LoadConfiguration method
-func LoadConfiguration() Config {
-	viper.SetConfigType("json")
-	viper.SetConfigName("pets_config") // name of config file (without extension)
-	if serviceConfigDir := os.Getenv("SERVICE_CONFIG_DIR"); serviceConfigDir != "" {
-		fmt.Printf("Load configuration from %s\n", serviceConfigDir)
-		viper.AddConfigPath(serviceConfigDir)
 
-	}
-	//add default config path
-	viper.AddConfigPath("/etc/micropets/")  // path to look for the config file in
-	viper.AddConfigPath("$HOME/.micropets") // call multiple times to add many search paths
-	viper.AddConfigPath(".")                // optionally look for config in the working directory
-
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil {             // Handle errors reading the config file
-		panic(fmt.Errorf("fatal error config file: %s ", err))
-	}
-
-	var config Config
-	err = viper.Unmarshal(&config)
-	if err != nil {
-		panic(fmt.Errorf("unable to decode into struct, %v", err))
-	}
-
-	fmt.Printf("Resolved Configuration\n")
-	fmt.Printf("%+v\n", config)
-	return config
-}
 
 func main() {
-
 	config := LoadConfiguration()
+
+	NewGlobalTracer()
+
 	if config.Service.Listen {
 		port := config.Service.Port
 		http.HandleFunc("/readiness", readiness_and_liveness)

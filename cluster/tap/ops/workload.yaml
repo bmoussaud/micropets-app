@@ -1,0 +1,13 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: prod-dogs
+  labels:
+    app.tanzu.vmware.com/workload-type: micropet-service-to-prod
+spec:
+  image: harbor.mytanzu.xyz/library/micropet-tap-dogs:dev
+  params:
+    - name: mode
+      value: "RANDOM_NUMBER"
+    - name: port
+      value: 7003
