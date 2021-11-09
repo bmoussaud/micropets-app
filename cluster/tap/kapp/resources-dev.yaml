@@ -41,6 +41,8 @@ data:
     listen.port: :(@=  str(data.values.service.port) @)
     mode: (@=  str(data.values.service.mode) @)
     frequencyError: 10
+    delay.period: 100
+    delay.amplitude: 0.3
 #@ end
 ---
 apiVersion: v1
