@@ -20,7 +20,7 @@ data:
               "amplitude": 0.3
             }
         }
-#@ if data.values.service.name == "pets"
+#@ if data.values.service.name == "pets":
         ,"backends": [
             {
                 "name": "cats",
