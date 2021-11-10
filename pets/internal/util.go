@@ -2,11 +2,8 @@ package internal
 
 import (
 	"fmt"
-
 	"math/rand"
-
 	"time"
-	//opentracing "github.com/opentracing/opentracing-go"
 )
 
 var RAND = rand.New(rand.NewSource(time.Now().UnixNano()))
