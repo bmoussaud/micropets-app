@@ -8,19 +8,19 @@ metadata:
     kapp.k14s.io/versioned : ""
   name: #@ data.values.service.name + "-config"
 data:
-#@ if data.values.service.name == "pets" or data.values.service.name == "cats":
   pets_config.json: |-
     {
         "service": {
             "port": ":(@=  str(data.values.service.port) @)",
             "listen": "true",
-            "mode": "RANDOM_NUMBER",
+            "mode": "(@=  str(data.values.service.mode) @)",
             "frequencyError": 10,
             "delay": {
               "period": 100,
               "amplitude": 0.3
             }
         }
+#@ if data.values.service.name == "pets"
         ,"backends": [
             {
                 "name": "cats",
@@ -32,23 +32,16 @@ data:
                 "name": "dogs",
                 "host": "dogs-service",
                 "port": "7003",
-                "context": "/"
+                "context": "/dogs/v1/data"
             },
             {
                 "name": "fishes",
                 "host": "fishes-service",
                 "port": "7007",
-                "context": "/"
+                "context": "/dogs/v1/data"
             }
         ]
     }
-#@ else:
-  config.properties: |-
-    listen.port: :(@=  str(data.values.service.port) @)
-    mode: (@=  str(data.values.service.mode) @)
-    frequencyError: 10
-    delay.period: 100
-    delay.amplitude: 0.3
 #@ end
 ---
 apiVersion: v1
@@ -83,14 +76,9 @@ spec:
         - name: config-volume
           configMap:
             name:  #@ data.values.service.name + "-config"
-            items:
-            #@ if data.values.service.name == "pets" or  data.values.service.name == "cats" :
+            items:            
             - key: pets_config.json
-              path: pets_config.json
-            #@ else:
-            - key: config.properties
-              path: config.properties
-            #@ end            
+              path: pets_config.json            
       containers:
         - name: #@ data.values.service.name
           image: #@ data.values.service.image
