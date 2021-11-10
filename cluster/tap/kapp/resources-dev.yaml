@@ -19,9 +19,8 @@ data:
               "period": 100,
               "amplitude": 0.3
             }
-        }
-#@ if data.values.service.name == "pets":
-        ,"backends": [
+        },
+        "backends": [
             {
                 "name": "cats",
                 "host": "cats-service",
@@ -42,7 +41,7 @@ data:
             }
         ]
     }
-#@ end
+
 ---
 apiVersion: v1
 kind: Secret
