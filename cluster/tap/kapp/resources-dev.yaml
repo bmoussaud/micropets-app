@@ -8,14 +8,21 @@ metadata:
     kapp.k14s.io/versioned : ""
   name: #@ data.values.service.name + "-config"
 data:
-#@ if data.values.service.name == "pets" :
+#@ if data.values.service.name == "pets" or data.values.service.name == "cats":
   pets_config.json: |-
     {
         "service": {
             "port": ":(@=  str(data.values.service.port) @)",
-            "listen": "true"
-        },
-        "backends": [
+            "listen": "true",
+            "mode": "RANDOM_NUMBER",
+            "frequencyError": 10,
+            "delay": {
+              "period": 100,
+              "amplitude": 0.3
+            }
+        }
+#@ if data.values.service.name == "pets":
+        ,"backends": [
             {
                 "name": "cats",
                 "host": "cats-service",
@@ -35,6 +42,7 @@ data:
                 "context": "/"
             }
         ]
+#@ end
     }
 #@ else:
   config.properties: |-
@@ -78,14 +86,13 @@ spec:
           configMap:
             name:  #@ data.values.service.name + "-config"
             items:
-            #@ if data.values.service.name == "pets" :
+            #@ if data.values.service.name == "pets" or  data.values.service.name == "cats" :
             - key: pets_config.json
               path: pets_config.json
             #@ else:
             - key: config.properties
               path: config.properties
-            #@ end
-            
+            #@ end            
       containers:
         - name: #@ data.values.service.name
           image: #@ data.values.service.image

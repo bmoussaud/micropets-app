@@ -14,8 +14,8 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: #@ configfile("cats-config", "service_config.properties")
-data: #@ load_configfile("service_config.properties")
+  name: #@ configfile("cats-config", "service_config.json")
+data: #@ load_configfile("service_config.json")
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -39,10 +39,10 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: #@ configfile("cats-config", "service_config.properties")
+            name: #@ configfile("cats-config", "service_config.json")
             items:
-            - key: service_config.properties
-              path: config.properties
+            - key: service_config.json
+              path: service_config.json
       containers:
         - name: cats          
           image: #@ data.values.registry.server + "/micropet-cats:" +data.values.service.version
@@ -77,9 +77,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: cats-db-credentials
-                  key: password
-            - name: SERVICE_CONFIG_DIR
-              value: /config
+                  key: password            
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 5

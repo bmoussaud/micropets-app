@@ -1,0 +1,21 @@
+{
+  "service": {
+    "port": ":7002",
+    "listen": "true",
+    "mode": "RANDOM_NUMBER",
+    "frequencyError": 10,
+    "delay": {
+      "period": 100,
+      "amplitude": 0.3
+    }
+  },
+  "observability": {
+    "enable": false,
+    "application": "micropets",
+    "service": "pets",
+    "cluster": "us-west",
+    "shard": "primary",
+    "server": "xxxx.wavefront.com",
+    "token": "x-y-z-y"
+  }
+}

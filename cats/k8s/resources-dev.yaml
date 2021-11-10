@@ -8,19 +8,6 @@ data:
   user: YWRtaW4K
   password: cGxlYXNlY2hhbmdlbWU=
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: cats-config-old
-  annotations:
-    kustomize.config.k8s.io/needs-hash: "true"
-data:
-  config.properties: |
-    listen.port: :7002
-    mode: RANDOM_NUMBER
-    delay.period: 10
-    delay.amplitude: 1
----
 kind: Deployment
 apiVersion: apps/v1
 metadata:  
@@ -45,8 +32,8 @@ spec:
           configMap:
             name: cats-config
             items:
-            - key: config.properties
-              path: config.properties
+            - key: pets_config.json
+              path: pets_config.json
       containers:
         - name: cats
           image: localregistry:5000/micropet/cats:dev
@@ -81,9 +68,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: cats-db-credentials
-                  key: password
-            - name: SERVICE_CONFIG_DIR
-              value: /config
+                  key: password            
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 5

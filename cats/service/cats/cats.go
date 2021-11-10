@@ -1,4 +1,4 @@
-package main
+package cats
 
 import (
 	"encoding/json"
@@ -9,10 +9,9 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
-	"github.com/magiconair/properties"
+	. "moussaud.org/cats/internal"
 )
 
 //Cat Struct
@@ -30,15 +29,7 @@ type Cats struct {
 	Cats     []Cat `json:"Pets"`
 }
 
-var mode = "ALL"
-
-var delayPeriod = 0.0
-
-var delayAmplitude = 0.0
-
 var calls = 0
-
-var frequencyError = -1
 
 func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
@@ -57,7 +48,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	cats := Cats{4, "Unknown", []Cat{cat1, cat2, cat3, cat4}}
 
 	calls = calls + 1
-	if mode == "RANDOM_NUMBER" {
+	if GlobalConfig.Service.Mode == "RANDOM_NUMBER" {
 		total := rand.Intn(cats.Total) + 1
 		fmt.Printf("reduce results to total %d/%d\n", total, cats.Total)
 		for i := 1; i < total; i++ {
@@ -80,11 +71,11 @@ func index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if delayPeriod > 0 {
-		y := (math.Pi) / (2 * delayPeriod) * float64(calls)
+	if GlobalConfig.Service.Delay.Period > 0 {
+		y := math.Pi / float64(2*GlobalConfig.Service.Delay.Period*calls)
 		sin_y := math.Sin(y)
 		abs_y := math.Abs(sin_y)
-		sleep := int(abs_y * delayAmplitude * 1000.0)
+		sleep := int(abs_y * GlobalConfig.Service.Delay.Amplitude * 1000.0)
 		//fmt.Printf("waitTime %f - %f - %f - %f  -> sleep %d seconds  \n", calls, y, math.Sin(y), abs_y, sleep)
 		start := time.Now()
 		time.Sleep(time.Duration(sleep) * time.Millisecond)
@@ -92,7 +83,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Current Unix Time: %s\n", elapsed)
 	}
 
-	if frequencyError > 0 && calls%frequencyError == 0 {
+	if GlobalConfig.Service.FrequencyError > 0 && calls%GlobalConfig.Service.FrequencyError == 0 {
 		fmt.Printf("Fails this call (%d)", calls)
 		http.Error(w, "Unexpected Error when querying the cats repository", http.StatusServiceUnavailable)
 	} else {
@@ -121,35 +112,8 @@ func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("ok"))
 }
 
-func main() {
-	var port = ":7002"
-
-	configLocation := GetLocation("config.properties")
-	fmt.Printf("******* %s\n", configLocation)
-	properties, err := properties.LoadFile(configLocation, properties.UTF8)
-
-	if err != nil {
-		fmt.Printf("config file not found, use default values\n")
-	} else {
-		readPort := properties.GetString("listen.port", port)
-		//fmt.Printf(readPort)
-		if strings.HasPrefix(readPort, ":{{") {
-			fmt.Printf("config file found but it contains unreplaced values %s\n", readPort)
-		} else {
-			port = readPort
-		}
-
-		readMode := properties.GetString("mode", mode)
-		if strings.HasPrefix(readPort, ":{{") {
-			fmt.Printf("config file found but it contains unreplaced values %s\n", readMode)
-		} else {
-			mode = readMode
-		}
-
-		delayPeriod = properties.GetFloat64("delay.period", delayPeriod)
-		delayAmplitude = properties.GetFloat64("delay.amplitude", delayAmplitude)
-		frequencyError = properties.GetInt("frequencyError", frequencyError)
-	}
+func Start() {
+	config := LoadConfiguration()
 
 	http.HandleFunc("/cats/v1/data", index)
 
@@ -161,8 +125,8 @@ func main() {
 
 	//http.HandleFunc("/", fallback)
 
-	fmt.Printf("******* Starting to the cats service on port %s, mode %s\n", port, mode)
-	fmt.Printf("******* Delay Period %f Amplitude %f\n", delayPeriod, delayAmplitude)
-	fmt.Printf("******* Frequency Error %d\n", frequencyError)
-	log.Fatal(http.ListenAndServe(port, nil))
+	fmt.Printf("******* Starting to the cats service on port %s, mode %s\n", config.Service.Port, config.Service.Mode)
+	fmt.Printf("******* Delay Period %d Amplitude %f\n", config.Service.Delay.Period, config.Service.Delay.Amplitude)
+	fmt.Printf("******* Frequency Error %d\n", config.Service.FrequencyError)
+	log.Fatal(http.ListenAndServe(config.Service.Port, nil))
 }

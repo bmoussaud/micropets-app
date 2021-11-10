@@ -11,4 +11,4 @@ images:
 configMapGenerator:
 - name: cats-config
   files:
-  - config.properties
+  - pets_config.json
