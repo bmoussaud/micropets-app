@@ -67,7 +67,7 @@ docker-hub-push: docker-build
 	docker push $(DOCKER_HUB_IMAGE_DEV)
 
 docker-run: cnb-image
-	docker run --rm  --name $(BINARY_NAME)  -v $(ROOT_DIR):/config -e SERVICE_CONFIG_DIR=/config -p 7003:7003 $(LOCAL_DOCKER_IMAGE)
+	docker run --rm  --name $(BINARY_NAME)  -v $(ROOT_DIR):/config  -p 7003:7003 $(LOCAL_DOCKER_IMAGE)
 
 cnb-image:
 	pack build $(LOCAL_DOCKER_IMAGE) --buildpack gcr.io/paketo-buildpacks/go --builder paketobuildpacks/builder:base

@@ -1,0 +1,21 @@
+{
+  "service": {
+    "port": ":9001",
+    "listen": "true",
+    "mode": "RANDOM_NUMBER",
+    "frequencyError": 10,
+    "delay": {
+      "period": 100,
+      "amplitude": 0.3
+    }
+  },
+  "observability": {
+    "enable": true,
+    "application": "micropets",
+    "service": "pets",
+    "cluster": "us-west",
+    "shard": "primary",
+    "server": "xxxx.wavefront.com",
+    "token": "x-y-z-y"
+  }
+}
