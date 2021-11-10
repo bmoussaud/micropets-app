@@ -1,13 +1,11 @@
-package main
+package internal
 
 import (
-	
 	"fmt"
-	
-	"math/rand"
-	
-	"time"
 
+	"math/rand"
+
+	"time"
 	//opentracing "github.com/opentracing/opentracing-go"
 )
 
