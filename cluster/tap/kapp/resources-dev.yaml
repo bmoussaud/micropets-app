@@ -21,7 +21,6 @@ data:
               "amplitude": 0.3
             }
         }
-#@ if data.values.service.name == "pets":
         ,"backends": [
             {
                 "name": "cats",
@@ -42,7 +41,6 @@ data:
                 "context": "/"
             }
         ]
-#@ end
     }
 #@ else:
   config.properties: |-
