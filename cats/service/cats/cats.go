@@ -10,7 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"time"
-
+	
 	. "moussaud.org/cats/internal"
 )
 
@@ -38,6 +38,10 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
+
+	span := NewServerSpan(r, "index")
+	defer span.Finish()
+
 	setupResponse(&w, r)
 	//fmt.Printf("Handling %+v\n", r)
 	//fmt.Printf("MODE %s\n", mode)

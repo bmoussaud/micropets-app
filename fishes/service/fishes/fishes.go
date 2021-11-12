@@ -38,6 +38,9 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
+	span := NewServerSpan(r, "index")
+	defer span.Finish()
+
 	setupResponse(&w, r)
 	host, err := os.Hostname()
 	if err != nil {
@@ -57,6 +60,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 				"https://www.aquaportail.com/pictures1003/anemone-clown_1267799900_poisson-combattant.jpg"}}}
 
 	calls = calls + 1
+
 	if GlobalConfig.Service.Mode == "RANDOM_NUMBER" {
 		total := rand.Intn(fishes.Total) + 1
 		fmt.Printf("total %d\n", total)
