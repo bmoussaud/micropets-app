@@ -10,7 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"time"
-	
+
 	. "moussaud.org/cats/internal"
 )
 
@@ -76,11 +76,11 @@ func index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if GlobalConfig.Service.Delay.Period > 0 {
-		y := math.Pi / float64(2*GlobalConfig.Service.Delay.Period*calls)
+		y := float64(calls) * math.Pi / float64(2*GlobalConfig.Service.Delay.Period)
 		sin_y := math.Sin(y)
 		abs_y := math.Abs(sin_y)
 		sleep := int(abs_y * GlobalConfig.Service.Delay.Amplitude * 1000.0)
-		fmt.Printf("waitTime %f - %f - %f - %f  -> sleep %d seconds  \n", calls, y, math.Sin(y), abs_y, sleep)
+		fmt.Printf("waitTime %d - %f - %f - %f  -> sleep %d seconds  \n", calls, y, math.Sin(y), abs_y, sleep)
 		start := time.Now()
 		time.Sleep(time.Duration(sleep) * time.Millisecond)
 		elapsed := time.Since(start)
