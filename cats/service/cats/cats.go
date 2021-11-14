@@ -31,6 +31,8 @@ type Cats struct {
 
 var calls = 0
 
+var shift = 0
+
 func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
@@ -76,11 +78,11 @@ func index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if GlobalConfig.Service.Delay.Period > 0 {
-		y := float64(calls) * math.Pi / float64(2*GlobalConfig.Service.Delay.Period)
+		y := float64(calls+shift ) * math.Pi / float64(2*GlobalConfig.Service.Delay.Period)
 		sin_y := math.Sin(y)
 		abs_y := math.Abs(sin_y)
 		sleep := int(abs_y * GlobalConfig.Service.Delay.Amplitude * 1000.0)
-		fmt.Printf("waitTime %d - %f - %f - %f  -> sleep %d seconds  \n", calls, y, math.Sin(y), abs_y, sleep)
+		fmt.Printf("waitTime %d - %f - %f - %f  -> sleep %d ms  \n", calls, y, math.Sin(y), abs_y, sleep)
 		start := time.Now()
 		time.Sleep(time.Duration(sleep) * time.Millisecond)
 		elapsed := time.Since(start)
@@ -129,8 +131,14 @@ func Start() {
 
 	//http.HandleFunc("/", fallback)
 
+	rand.Seed(time.Now().UnixNano())
+	shift = rand.Intn(100)
+
 	fmt.Printf("******* Starting to the cats service on port %s, mode %s\n", config.Service.Port, config.Service.Mode)
-	fmt.Printf("******* Delay Period %d Amplitude %f\n", config.Service.Delay.Period, config.Service.Delay.Amplitude)
+	fmt.Printf("******* Delay Period %d Amplitude %f shift %d \n", config.Service.Delay.Period, config.Service.Delay.Amplitude, shift)
 	fmt.Printf("******* Frequency Error %d\n", config.Service.FrequencyError)
+
+	
+
 	log.Fatal(http.ListenAndServe(config.Service.Port, nil))
 }
