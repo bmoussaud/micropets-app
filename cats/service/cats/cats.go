@@ -39,12 +39,21 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
+func db_authentication(r *http.Request) {
+	span := NewServerSpan(r, "db_authentication")
+	defer span.Finish()
+	time.Sleep(time.Duration(13) * time.Millisecond)
+}
+
 func index(w http.ResponseWriter, r *http.Request) {
 
 	span := NewServerSpan(r, "index")
 	defer span.Finish()
 
 	setupResponse(&w, r)
+	
+	db_authentication(r)
+
 	//fmt.Printf("Handling %+v\n", r)
 	//fmt.Printf("MODE %s\n", mode)
 	cat1 := Cat{"Orphee", "Persan", 12, "https://cdn.pixabay.com/photo/2020/02/29/13/51/cat-4890133_960_720.jpg"}
@@ -116,7 +125,7 @@ func GetLocation(file string) string {
 func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
 	span := NewServerSpan(r, "readiness_and_liveness")
 	defer span.Finish()
-	
+
 	w.WriteHeader(200)
 	w.Write([]byte("ok"))
 }
