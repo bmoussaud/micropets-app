@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "cats"
+		},
+		{
+			"path": "dogs"
+		},
+		{
+			"path": "fishes"
+		},
+		{
+			"path": "pets"
+		},
+		{
+			"path": "gui"
+		}
+	],
+	"settings": {}
+}
