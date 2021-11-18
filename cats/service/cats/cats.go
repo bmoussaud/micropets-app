@@ -11,6 +11,9 @@ import (
 	"path/filepath"
 	"time"
 
+	otrext "github.com/opentracing/opentracing-go/ext"
+	otrlog "github.com/opentracing/opentracing-go/log"
+
 	. "moussaud.org/cats/internal"
 )
 
@@ -99,10 +102,10 @@ func index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	
-
 	if GlobalConfig.Service.FrequencyError > 0 && calls%GlobalConfig.Service.FrequencyError == 0 {
 		fmt.Printf("Fails this call (%d)", calls)
+		otrext.Error.Set(span, true)
+		span.LogFields(otrlog.String("error.kind", "Unexpected Error when querying the cats repository"))
 		http.Error(w, "Unexpected Error when querying the cats repository", http.StatusServiceUnavailable)
 	} else {
 		w.Header().Set("Content-Type", "application/json")

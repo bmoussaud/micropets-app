@@ -14,6 +14,9 @@ import (
 	"github.com/imroc/req"
 	"github.com/opentracing/opentracing-go"
 
+	otrext "github.com/opentracing/opentracing-go/ext"
+	otrlog "github.com/opentracing/opentracing-go/log"
+
 	. "moussaud.org/pets/internal"
 )
 
@@ -164,12 +167,22 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 	if all.Total == 0 {
 		fmt.Printf("Zero answer from all the services (1)\n")
+		otrext.Error.Set(span, true)
+		span.LogFields(
+			otrlog.String("error.kind", "failure"),
+			otrlog.String("message", "service unavailable"),
+		)
 		http.Error(w, "Zero answer from all the services (1) ", http.StatusInternalServerError)
 		return
 	}
 
 	if len(all.Pets) == 0 {
 		fmt.Printf("Zero answer from all the services (2)\n")
+		otrext.Error.Set(span, true)
+		span.LogFields(
+			otrlog.String("error.kind", "failure"),
+			otrlog.String("message", "service unavailable"),
+		)
 		http.Error(w, "Zero answer from all the services (2) ", http.StatusInternalServerError)
 		return
 	}
