@@ -160,12 +160,11 @@ func index(w http.ResponseWriter, r *http.Request) {
 	})
 
 	calls = calls + 1
-	/*if calls%20 == 0 {
-		fmt.Printf("Zero answer from all the services (0) %d\n ", calls)
+	if calls%200 == 0 {
+		//fmt.Printf("Zero answer from all the services (0) %d\n ", calls)
 		all.Total = 0
 	}
-	*/
-
+	
 	if all.Total == 0 {
 		fmt.Printf("Zero answer from all the services (1)\n")
 		otrext.Error.Set(span, true)
