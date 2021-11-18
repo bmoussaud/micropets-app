@@ -172,28 +172,18 @@ func index(w http.ResponseWriter, r *http.Request) {
 			otrlog.String("error.kind", "failure"),
 			otrlog.String("message", "service unavailable"),
 		)
-		http.Error(w, "Zero answer from all the services (1) ", http.StatusInternalServerError)
+		//http.Error(w, "Zero answer from all the services (1) ", http.StatusInternalServerError)
+		WriteError(w, "no answer from all the pets services", http.StatusServiceUnavailable)
 		return
+	} else {
+		js, err := json.Marshal(all)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(js)
 	}
-
-	if len(all.Pets) == 0 {
-		fmt.Printf("Zero answer from all the services (2)\n")
-		otrext.Error.Set(span, true)
-		span.LogFields(
-			otrlog.String("error.kind", "failure"),
-			otrlog.String("message", "service unavailable"),
-		)
-		http.Error(w, "Zero answer from all the services (2) ", http.StatusInternalServerError)
-		return
-	}
-
-	js, err := json.Marshal(all)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
 }
 
 func Start() {

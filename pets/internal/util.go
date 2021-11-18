@@ -1,10 +1,17 @@
 package internal
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"math/rand"
+	"net/http"
 	"time"
 )
+
+type ErrorStatus struct {
+    Error string `json:"error"`
+}
 
 var RAND = rand.New(rand.NewSource(time.Now().UnixNano()))
 
@@ -20,4 +27,12 @@ func RandSimDelay() {
 	if RAND.Float64() < SimDelayChance {
 		time.Sleep(time.Duration(RAND.Intn(SimDelayMS)) * time.Millisecond)
 	}
+}
+
+func WriteError(w http.ResponseWriter, err string, statusCode int) []byte {
+	log.Println(err)
+	bytes, _ := json.Marshal(ErrorStatus{Error: err})
+	w.WriteHeader(statusCode)
+	w.Write(bytes)
+	return bytes
 }
