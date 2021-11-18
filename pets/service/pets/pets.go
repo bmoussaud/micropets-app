@@ -154,6 +154,18 @@ func index(w http.ResponseWriter, r *http.Request) {
 		return all.Pets[i].Name < all.Pets[j].Name
 	})
 
+	if all.Total == 0 {
+		fmt.Printf("Zero answer from all the services (1) ")
+		http.Error(w, "Zero answer from all the services (1) ", http.StatusInternalServerError)
+		return
+	}
+
+	if len(all.Pets) == 0 {
+		fmt.Printf("Zero answer from all the services (2) ")
+		http.Error(w, "Zero answer from all the services (2) ", http.StatusInternalServerError)
+		return
+	}
+
 	js, err := json.Marshal(all)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
