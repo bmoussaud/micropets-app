@@ -51,7 +51,7 @@ k8s-deploy:
 	kubectl apply -f k8s/resources-dev.yaml
 
 cnb-image:
-	pack build $(LOCAL_DOCKER_IMAGE) --env BP_NODE_VERSION=14 --buildpack gcr.io/paketo-buildpacks/nodejs --builder paketobuildpacks/builder:base
+	pack build $(LOCAL_DOCKER_IMAGE) --env BP_NODE_VERSION=14 --buildpack gcr.io/paketo-buildpacks/nodejs:0.9.0 --builder paketobuildpacks/builder:base
 
 
 deploy-cnb:	
