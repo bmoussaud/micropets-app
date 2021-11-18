@@ -42,7 +42,18 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 func db_authentication(r *http.Request) {
 	span := NewServerSpan(r, "db_authentication")
 	defer span.Finish()
-	time.Sleep(time.Duration(13) * time.Millisecond)
+	
+	if GlobalConfig.Service.Delay.Period > 0 {
+		y := float64(calls+shift ) * math.Pi / float64(2*GlobalConfig.Service.Delay.Period)
+		sin_y := math.Sin(y)
+		abs_y := math.Abs(sin_y)
+		sleep := int(abs_y * GlobalConfig.Service.Delay.Amplitude * 1000.0)
+		fmt.Printf("waitTime %d - %f - %f - %f  -> sleep %d ms  \n", calls, y, math.Sin(y), abs_y, sleep)
+		start := time.Now()
+		time.Sleep(time.Duration(sleep) * time.Millisecond)
+		elapsed := time.Since(start)
+		fmt.Printf("Current Unix Time: %s\n", elapsed)
+	}
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
@@ -51,6 +62,8 @@ func index(w http.ResponseWriter, r *http.Request) {
 	defer span.Finish()
 
 	setupResponse(&w, r)
+	time.Sleep(time.Duration(10) * time.Millisecond)
+
 	
 	db_authentication(r)
 
@@ -86,17 +99,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if GlobalConfig.Service.Delay.Period > 0 {
-		y := float64(calls+shift ) * math.Pi / float64(2*GlobalConfig.Service.Delay.Period)
-		sin_y := math.Sin(y)
-		abs_y := math.Abs(sin_y)
-		sleep := int(abs_y * GlobalConfig.Service.Delay.Amplitude * 1000.0)
-		fmt.Printf("waitTime %d - %f - %f - %f  -> sleep %d ms  \n", calls, y, math.Sin(y), abs_y, sleep)
-		start := time.Now()
-		time.Sleep(time.Duration(sleep) * time.Millisecond)
-		elapsed := time.Since(start)
-		fmt.Printf("Current Unix Time: %s\n", elapsed)
-	}
+	
 
 	if GlobalConfig.Service.FrequencyError > 0 && calls%GlobalConfig.Service.FrequencyError == 0 {
 		fmt.Printf("Fails this call (%d)", calls)
