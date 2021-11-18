@@ -95,6 +95,9 @@ func queryPets(spanCtx opentracing.SpanContext, backend string) (Pets, error) {
 }
 
 func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
+	span := NewServerSpan(r, "readiness_and_liveness")
+	defer span.Finish()
+
 	setupResponse(&w, r)
 	//fmt.Printf("Handling %+v\n", r)
 	var all Pets

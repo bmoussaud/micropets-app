@@ -115,6 +115,9 @@ func GetLocation(file string) string {
 }
 
 func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
+	span := NewServerSpan(r, "readiness_and_liveness")
+	defer span.Finish()
+	
 	w.WriteHeader(200)
 	w.Write([]byte("ok"))
 }
