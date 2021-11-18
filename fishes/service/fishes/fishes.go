@@ -39,9 +39,21 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
+func db_authentication(r *http.Request) {
+	span := NewServerSpan(r, "db_authentication")
+	defer span.Finish()
+	
+	if GlobalConfig.Service.Delay.Period > 0 {
+		time.Sleep(time.Duration(2) * time.Millisecond)
+	}
+}
+
+
 func index(w http.ResponseWriter, r *http.Request) {
 	span := NewServerSpan(r, "index")
 	defer span.Finish()
+
+	time.Sleep(time.Duration(3) * time.Millisecond)
 
 	setupResponse(&w, r)
 	host, err := os.Hostname()
@@ -63,6 +75,9 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 	calls = calls + 1
 
+	time.Sleep(time.Duration(len(fishes.Fishes)) * time.Millisecond)
+	db_authentication(r)
+
 	if GlobalConfig.Service.Mode == "RANDOM_NUMBER" {
 		total := rand.Intn(fishes.Total) + 1
 		fmt.Printf("total %d\n", total)
@@ -72,6 +87,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	
 	js, err := json.Marshal(fishes)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

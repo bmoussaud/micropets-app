@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"sort"
+	"time"
 
 	"github.com/imroc/req"
 	"github.com/opentracing/opentracing-go"
@@ -74,6 +75,7 @@ func queryPets(spanCtx opentracing.SpanContext, backend string) (Pets, error) {
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Expires", "10ms")
 
+	//Inject the opentracing header
 	if LoadConfiguration().Observability.Enable {
 		opentracing.GlobalTracer().Inject(spanCtx, opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(req.Header))
 	}
@@ -144,6 +146,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 				pet.Type = backend.Name
 				all.Pets = append(all.Pets, pet)
 			}
+			time.Sleep(time.Duration(pets.Total) * time.Millisecond)
 		}
 	}
 

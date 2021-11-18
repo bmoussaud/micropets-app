@@ -39,6 +39,15 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
+func db_authentication(r *http.Request) {
+	span := NewServerSpan(r, "db_authentication")
+	defer span.Finish()
+	
+	if GlobalConfig.Service.Delay.Period > 0 {
+		time.Sleep(time.Duration(2) * time.Millisecond)
+	}
+}
+
 func index(w http.ResponseWriter, r *http.Request) {
 
 	span := NewServerSpan(r, "index")
@@ -54,6 +63,9 @@ func index(w http.ResponseWriter, r *http.Request) {
 	pet5 := Dog{"Beethoven", "Great St Bernard", 30, "https://upload.wikimedia.org/wikipedia/commons/6/64/Hummel_Vedor_vd_Robandahoeve.jpg"}
 	pets := Dogs{5, "UKN", []Dog{pet1, pet2, pet3, pet4, pet5}}
 
+	time.Sleep(time.Duration(len(pets.Dogs)) * time.Millisecond)
+	db_authentication(r)
+
 	calls = calls + 1
 	if GlobalConfig.Service.Mode == "RANDOM_NUMBER" {
 		total := rand.Intn(pets.Total) + 1
@@ -63,6 +75,8 @@ func index(w http.ResponseWriter, r *http.Request) {
 			pets.Total = pets.Total - 1
 		}
 	}
+
+	
 
 	host, err := os.Hostname()
 
@@ -117,7 +131,7 @@ func GetLocation(file string) string {
 func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
 	span := NewServerSpan(r, "readiness_and_liveness")
 	defer span.Finish()
-	
+
 	w.WriteHeader(200)
 	w.Write([]byte("ok"))
 }
