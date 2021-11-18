@@ -17,6 +17,8 @@ import (
 	. "moussaud.org/pets/internal"
 )
 
+var calls = 0
+
 //Pet Structure
 type Pet struct {
 	Name     string
@@ -153,6 +155,12 @@ func index(w http.ResponseWriter, r *http.Request) {
 	sort.SliceStable(all.Pets, func(i, j int) bool {
 		return all.Pets[i].Name < all.Pets[j].Name
 	})
+
+	calls = calls + 1
+	if calls%20 == 0 {
+		fmt.Printf("Zero answer from all the services (0) %d ", calls)
+		all.Total = 0
+	}
 
 	if all.Total == 0 {
 		fmt.Printf("Zero answer from all the services (1) ")
