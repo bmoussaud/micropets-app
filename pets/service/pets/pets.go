@@ -158,18 +158,18 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 	calls = calls + 1
 	if calls%20 == 0 {
-		fmt.Printf("Zero answer from all the services (0) %d ", calls)
+		fmt.Printf("Zero answer from all the services (0) %d\n ", calls)
 		all.Total = 0
 	}
 
 	if all.Total == 0 {
-		fmt.Printf("Zero answer from all the services (1) ")
+		fmt.Printf("Zero answer from all the services (1)\n")
 		http.Error(w, "Zero answer from all the services (1) ", http.StatusInternalServerError)
 		return
 	}
 
 	if len(all.Pets) == 0 {
-		fmt.Printf("Zero answer from all the services (2) ")
+		fmt.Printf("Zero answer from all the services (2)\n")
 		http.Error(w, "Zero answer from all the services (2) ", http.StatusInternalServerError)
 		return
 	}
