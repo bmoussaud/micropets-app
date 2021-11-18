@@ -160,17 +160,18 @@ func index(w http.ResponseWriter, r *http.Request) {
 	})
 
 	calls = calls + 1
-	if calls%20 == 0 {
+	/*if calls%20 == 0 {
 		fmt.Printf("Zero answer from all the services (0) %d\n ", calls)
 		all.Total = 0
 	}
+	*/
 
 	if all.Total == 0 {
 		fmt.Printf("Zero answer from all the services (1)\n")
 		otrext.Error.Set(span, true)
 		span.LogFields(
-			otrlog.String("error.kind", "failure"),
-			otrlog.String("message", "service unavailable"),
+			otrlog.String("error.kind", "global failure"),
+			otrlog.String("message", "pet service unavailable"),
 		)
 		//http.Error(w, "Zero answer from all the services (1) ", http.StatusInternalServerError)
 		WriteError(w, "no answer from all the pets services", http.StatusServiceUnavailable)
