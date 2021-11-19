@@ -51,8 +51,8 @@ k8s-deploy:
 	kubectl apply -f k8s/resources-dev.yaml
 
 cnb-image:
+# TODO: Test pack build <image> -b paketo-buildpacks/nodejs -b paketo-buildpacks/nginx -e "BP_NODE_RUN_SCRIPTS=build"
 	pack build $(LOCAL_DOCKER_IMAGE) --env BP_NODE_VERSION=14 --buildpack gcr.io/paketo-buildpacks/nodejs:0.9.0 --builder paketobuildpacks/builder:base
-
 
 deploy-cnb:	
 	ytt --ignore-unknown-comments  -v image_prefix=$(IMAGE_PREFIX) -f kpack.yml | kapp deploy --yes --into-ns $(MICROPETS_NS) -a micropet-$(BINARY_NAME)-kpack -f-

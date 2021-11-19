@@ -15,4 +15,6 @@ spec:
       value: "RANDOM_NUMBER"
     - name: port
       value: 9000
+    - name: observability
+      value: false
     

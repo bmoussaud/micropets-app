@@ -24,7 +24,7 @@
     "application": "micropets-pets",
     "cluster": "us-west",
     "shard": "primary",
-    "server": "xxxx.wavefront.com",
+    "server": "my.wavefront.com",
     "token": "x-y-z-y"
   }
 }
