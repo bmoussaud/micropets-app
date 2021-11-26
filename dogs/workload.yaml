@@ -3,13 +3,13 @@ kind: Workload
 metadata:
   name: dogs
   labels:
-    app.tanzu.vmware.com/workload-type: micropet-service
+    app.tanzu.vmware.com/workload-type: micropet-service-knative
 spec:
   source:
     git:
       url: https://github.com/bmoussaud/micropets-app/
       ref:
-        branch: master      
+        branch: master
   params:
     - name: mode
       value: "RANDOM_NUMBER"

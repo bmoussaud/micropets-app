@@ -16,9 +16,12 @@ MicroPet is a MicroService Application that includes 4 components:
 All the services are built into a Docker Images
 All the service have deployed in a Kubernetes Cluster following the pattern:
 
-Ingress <--> Service <--> Deployement <--> {ConfigMap,Secrets}
 
-![Architecture](img/micropets-msa-2.png)
+![Architecture](img/micropets-msa-3.png)
+
+Ingress <--> Service <--> Deployment <--> {ConfigMap,Secrets}
+
+![Kubernetes Resources](img/micropets-msa-k8s.png)
 
 Note: All the procedure has tested only on Mac using
 

@@ -3,7 +3,7 @@ kind: Workload
 metadata:
   name: fishes
   labels:
-    app.tanzu.vmware.com/workload-type: micropet-service
+    app.tanzu.vmware.com/workload-type: micropet-service-knative
 spec:
   source:
     git:
@@ -17,4 +17,3 @@ spec:
       value: 7007
     - name: observability
       value: false
-    
