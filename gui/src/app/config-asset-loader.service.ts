@@ -12,7 +12,7 @@ export interface Configuration {
 @Injectable({providedIn: 'root'})
 export class ConfigAssetLoaderService {
 
-  private readonly CONFIG_URL = 'assets/config/config.json';
+  private readonly CONFIG_URL = 'assets/config.json';
   private configuration$!: Observable<Configuration>;
 
   constructor(private http: HttpClient) {
