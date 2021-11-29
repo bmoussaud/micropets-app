@@ -17,7 +17,7 @@ All the services are built into a Docker Images
 All the service have deployed in a Kubernetes Cluster following the pattern:
 
 
-![Architecture](img/micropets-msa-3.png)
+![Architecture](img/micropets-msa.png)
 
 Ingress <--> Service <--> Deployment <--> {ConfigMap,Secrets}
 

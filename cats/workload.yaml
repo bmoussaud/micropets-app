@@ -3,7 +3,7 @@ kind: Workload
 metadata:
   name: cats
   labels:
-    app.tanzu.vmware.com/workload-type: micropet-service-knative
+    app.tanzu.vmware.com/workload-type: micropet-service
 spec:
   source:
     git:
