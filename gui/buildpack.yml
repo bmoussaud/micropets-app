@@ -1,0 +1,5 @@
+staticfile:
+  nginx:
+    pushstate: true
+    root: dist
+
