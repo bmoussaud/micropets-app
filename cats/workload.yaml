@@ -16,4 +16,4 @@ spec:
     - name: port
       value: 7002
     - name: observability
-      value: false
+      value: true

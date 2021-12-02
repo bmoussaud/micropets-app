@@ -89,7 +89,7 @@ undeploy-kapp:
 	kapp delete -y -a micropet-$(BINARY_NAME)-service
 
 workload:
-	kubectl apply -f Workload.yaml -n $(MICROPETS_NS)
+	kubectl apply -f workload.yaml -n $(MICROPETS_NS)
 
 unworkload:
 	kubectl delete Workload $(BINARY_NAME) -n $(MICROPETS_NS)
@@ -99,7 +99,6 @@ watch_workload:
 
 desc_workload:
 	kubectl describe Workload $(BINARY_NAME) -n  $(MICROPETS_NS)
-
 
 
 load:

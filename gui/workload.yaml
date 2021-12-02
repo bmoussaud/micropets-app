@@ -10,4 +10,9 @@ spec:
       url: https://github.com/bmoussaud/micropets-app/
       ref:
         branch: master
+  params:
+    - name: broker_service
+      value: "http://front.mytanzu.xyz/pets/v1"    
+    - name: observability
+      value: true
   

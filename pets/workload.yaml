@@ -3,7 +3,7 @@ kind: Workload
 metadata:
   name: pets
   labels:
-    app.tanzu.vmware.com/workload-type: micropet-service-knative
+    app.tanzu.vmware.com/workload-type: micropet-service
 spec:
   source:
     git:
@@ -16,5 +16,5 @@ spec:
     - name: port
       value: 9000
     - name: observability
-      value: false
+      value: true
     
