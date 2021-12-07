@@ -12,7 +12,7 @@ spec:
         branch: master
   params:
     - name: broker_service
-      value: "http://front.mytanzu.xyz/pets/v1"    
+      value: "http://micropets.europe.mytanzu.xyz/pets"
     - name: observability
       value: true
   
