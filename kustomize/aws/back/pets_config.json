@@ -14,13 +14,13 @@
             "name": "dogs",
             "host": "dogs-service",
             "port": "7003",
-            "context": "/"
+            "context": "/dogs/v1/data"
         },
         {
             "name": "fishes",
             "host": "fishes-service",
             "port": "7007",
-            "context": "/"
+            "context": "/fishes/v1/data"
         }
     ]
 }

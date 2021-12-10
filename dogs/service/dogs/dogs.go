@@ -20,6 +20,7 @@ type Dog struct {
 	Kind string
 	Age  int
 	URL  string
+	From string
 }
 
 //Dogs type
@@ -42,7 +43,7 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 func db_authentication(r *http.Request) {
 	span := NewServerSpan(r, "db_authentication")
 	defer span.Finish()
-	
+
 	if GlobalConfig.Service.Delay.Period > 0 {
 		time.Sleep(time.Duration(2) * time.Millisecond)
 	}
@@ -56,11 +57,11 @@ func index(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
 	//fmt.Printf("Handling %+v\n", r)
 	//fmt.Printf("MODE %s\n", mode)
-	pet1 := Dog{"Medor", "BullDog", 18, "https://www.petmd.com/sites/default/files/10New_Bulldog_0.jpeg"}
-	pet2 := Dog{"BenoitBil", "Bull Terrier", 12, "https://www.petmd.com/sites/default/files/07New_Collie.jpeg"}
-	pet3 := Dog{"Rantaplan", "Labrador Retriever", 24, "https://www.petmd.com/sites/default/files/01New_GoldenRetriever.jpeg"}
-	pet4 := Dog{"Lassie", "Golden Retriever", 20, "https://www.petmd.com/sites/default/files/11New_MixedBreed.jpeg"}
-	pet5 := Dog{"Beethoven", "Great St Bernard", 30, "https://upload.wikimedia.org/wikipedia/commons/6/64/Hummel_Vedor_vd_Robandahoeve.jpg"}
+	pet1 := Dog{"Medor", "BullDog", 18, "https://www.petmd.com/sites/default/files/10New_Bulldog_0.jpeg", GlobalConfig.Service.From}
+	pet2 := Dog{"Bil", "Bull Terrier", 12, "https://www.petmd.com/sites/default/files/07New_Collie.jpeg", GlobalConfig.Service.From}
+	pet3 := Dog{"Rantaplan", "Labrador Retriever", 24, "https://www.petmd.com/sites/default/files/01New_GoldenRetriever.jpeg", GlobalConfig.Service.From}
+	pet4 := Dog{"Lassie", "Golden Retriever", 20, "https://www.petmd.com/sites/default/files/11New_MixedBreed.jpeg", GlobalConfig.Service.From}
+	pet5 := Dog{"Beethoven", "Great St Bernard", 30, "https://upload.wikimedia.org/wikipedia/commons/6/64/Hummel_Vedor_vd_Robandahoeve.jpg", GlobalConfig.Service.From}
 	pets := Dogs{5, "UKN", []Dog{pet1, pet2, pet3, pet4, pet5}}
 
 	time.Sleep(time.Duration(len(pets.Dogs)) * time.Millisecond)
@@ -75,8 +76,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 			pets.Total = pets.Total - 1
 		}
 	}
-
-	
 
 	host, err := os.Hostname()
 
@@ -148,15 +147,13 @@ func Start() {
 	http.HandleFunc("/readiness", readiness_and_liveness)
 
 	//http.HandleFunc("/", fallback)
-	
+
 	rand.Seed(time.Now().UnixNano())
 	shift = rand.Intn(100)
-	
+
 	fmt.Printf("******* Starting to the dogs service on port %s, mode %s\n", config.Service.Port, config.Service.Mode)
 	fmt.Printf("******* Delay Period %d Amplitude %f shift %d \n", config.Service.Delay.Period, config.Service.Delay.Amplitude, shift)
 	fmt.Printf("******* Frequency Error %d\n", config.Service.FrequencyError)
-
-	
 
 	log.Fatal(http.ListenAndServe(config.Service.Port, nil))
 }

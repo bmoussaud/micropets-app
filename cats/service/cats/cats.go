@@ -23,6 +23,7 @@ type Cat struct {
 	Kind string
 	Age  int
 	URL  string
+	From string
 }
 
 //Cats Struct
@@ -72,10 +73,10 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 	//fmt.Printf("Handling %+v\n", r)
 	//fmt.Printf("MODE %s\n", mode)
-	cat1 := Cat{"Orphee", "Persan", 12, "https://cdn.pixabay.com/photo/2020/02/29/13/51/cat-4890133_960_720.jpg"}
-	cat2 := Cat{"Pirouette", "Bengal", 1, "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/934px-Paintedcats_Red_Star_standing.jpg"}
-	cat3 := Cat{"Pamina", "Angora", 120, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Turkish_Angora_Odd-Eyed.jpg/440px-Turkish_Angora_Odd-Eyed.jpg"}
-	cat4 := Cat{"Clochette", "Siamois", 120, "https://www.woopets.fr/assets/races/home/siamois-124x153.jpg"}
+	cat1 := Cat{"Orphee", "Persan", 12, "https://cdn.pixabay.com/photo/2020/02/29/13/51/cat-4890133_960_720.jpg",GlobalConfig.Service.From}
+	cat2 := Cat{"Pirouette", "Bengal", 1, "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/934px-Paintedcats_Red_Star_standing.jpg",GlobalConfig.Service.From}
+	cat3 := Cat{"Pamina", "Angora", 120, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Turkish_Angora_Odd-Eyed.jpg/440px-Turkish_Angora_Odd-Eyed.jpg",GlobalConfig.Service.From}
+	cat4 := Cat{"Clochette", "Siamois", 120, "https://www.woopets.fr/assets/races/home/siamois-124x153.jpg",GlobalConfig.Service.From}
 	cats := Cats{4, "Unknown", []Cat{cat1, cat2, cat3, cat4}}
 
 	calls = calls + 1

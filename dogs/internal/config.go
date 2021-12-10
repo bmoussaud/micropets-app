@@ -19,6 +19,7 @@ type Config struct {
 			Period int
 			Amplitude float64
 		}
+		From string
 	}
 	Observability struct {
 		Application string

@@ -16,5 +16,5 @@ spec:
     - name: port
       value: 9000
     - name: observability
-      value: true
+      value: false
     

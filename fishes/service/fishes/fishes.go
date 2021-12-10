@@ -20,6 +20,7 @@ type Fish struct {
 	Kind string
 	Age  int
 	URL  string
+	From string
 }
 
 //fishes Struct
@@ -31,7 +32,7 @@ type Fishes struct {
 
 var calls = 0
 
-var shift = 0 
+var shift = 0
 
 func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
@@ -42,12 +43,11 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 func db_authentication(r *http.Request) {
 	span := NewServerSpan(r, "db_authentication")
 	defer span.Finish()
-	
+
 	if GlobalConfig.Service.Delay.Period > 0 {
 		time.Sleep(time.Duration(2) * time.Millisecond)
 	}
 }
-
 
 func index(w http.ResponseWriter, r *http.Request) {
 	span := NewServerSpan(r, "index")
@@ -65,13 +65,13 @@ func index(w http.ResponseWriter, r *http.Request) {
 		host,
 		[]Fish{
 			{"Nemo", "Poisson Clown", 14,
-				"https://www.sciencesetavenir.fr/assets/img/2019/07/10/cover-r4x3w1000-5d258790dd324-f96f05d4901fc6ce0ab038a685e4d5c99f6cdfe2-jpg.jpg"},
+				"https://www.sciencesetavenir.fr/assets/img/2019/07/10/cover-r4x3w1000-5d258790dd324-f96f05d4901fc6ce0ab038a685e4d5c99f6cdfe2-jpg.jpg", GlobalConfig.Service.From},
 			{"Glumpy", "Neon Tetra", 11,
-				"https://www.fishkeepingworld.com/wp-content/uploads/2018/02/Neon-Tetra-New.jpg"},
+				"https://www.fishkeepingworld.com/wp-content/uploads/2018/02/Neon-Tetra-New.jpg", GlobalConfig.Service.From},
 			{"Dory", "Pacific regal blue tang", 12,
-				"http://www.oceanlight.com/stock-photo/palette-surgeonfish-image-07922-671143.jpg"},
+				"http://www.oceanlight.com/stock-photo/palette-surgeonfish-image-07922-671143.jpg", GlobalConfig.Service.From},
 			{"Argo", "Combattant", 27,
-				"https://www.aquaportail.com/pictures1003/anemone-clown_1267799900_poisson-combattant.jpg"}}}
+				"https://www.aquaportail.com/pictures1003/anemone-clown_1267799900_poisson-combattant.jpg", GlobalConfig.Service.From}}}
 
 	calls = calls + 1
 
@@ -87,7 +87,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	
 	js, err := json.Marshal(fishes)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

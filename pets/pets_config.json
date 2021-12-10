@@ -14,7 +14,7 @@
       "name": "dogs",
       "host": "front.mytanzu.xyz",
       "port": "80",
-      "context": "/dogs"
+      "context": "/dogs/v1/data"
     }
   ],
   "observability": {

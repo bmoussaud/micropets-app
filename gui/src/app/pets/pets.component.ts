@@ -44,7 +44,7 @@ export class PetsComponent implements OnInit {
 
   public config!: Configuration
 
-  displayedColumns = ['name', 'kind', 'age', 'pic']
+  displayedColumns = ['name', 'kind', 'age', 'pic', 'from']
 
   constructor(private http: HttpClient, private router: Router, private location: Location, private configService: ConfigAssetLoaderService) {    
     

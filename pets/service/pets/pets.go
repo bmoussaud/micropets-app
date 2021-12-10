@@ -30,6 +30,7 @@ type Pet struct {
 	Age      int
 	URL      string
 	Hostname string
+	From     string
 }
 
 //Path Structure

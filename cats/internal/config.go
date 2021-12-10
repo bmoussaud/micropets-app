@@ -19,6 +19,7 @@ type Config struct {
 			Period int
 			Amplitude float64
 		}
+		From string
 	}
 	Observability struct {
 		Application string
@@ -30,7 +31,6 @@ type Config struct {
 		Source      string
 		Enable      bool
 	}
-
 	//internal flag
 	setup bool
 }
@@ -65,6 +65,8 @@ func LoadConfiguration() Config {
 		if err != nil {
 			panic(fmt.Errorf("unable to decode into struct, %v", err))
 		}
+
+
 		GlobalConfig.setup = true
 		fmt.Printf("Resolved Configuration\n")
 		fmt.Printf("%+v\n", GlobalConfig)
