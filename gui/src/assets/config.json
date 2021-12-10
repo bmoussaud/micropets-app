@@ -1,5 +1,5 @@
 {  
-    "petServiceUrl": "http://pets.svc.cnr.mytanzu.xyz/pets",
+    "petServiceUrl": "http://europe2.mytanzu.xyz/pets",
     "stage": "supply_chain_1",
     "debug": "False",
     "stage_color": "green"
