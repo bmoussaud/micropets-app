@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strconv"
 	"time"
 
 	. "moussaud.org/dogs/internal"
@@ -49,20 +51,33 @@ func db_authentication(r *http.Request) {
 	}
 }
 
-func index(w http.ResponseWriter, r *http.Request) {
-
-	span := NewServerSpan(r, "index")
-	defer span.Finish()
-
-	setupResponse(&w, r)
-	//fmt.Printf("Handling %+v\n", r)
-	//fmt.Printf("MODE %s\n", mode)
+func db() Dogs {
 	pet1 := Dog{"Medor", "BullDog", 18, "https://www.petmd.com/sites/default/files/10New_Bulldog_0.jpeg", GlobalConfig.Service.From}
 	pet2 := Dog{"Bil", "Bull Terrier", 12, "https://www.petmd.com/sites/default/files/07New_Collie.jpeg", GlobalConfig.Service.From}
 	pet3 := Dog{"Rantaplan", "Labrador Retriever", 24, "https://www.petmd.com/sites/default/files/01New_GoldenRetriever.jpeg", GlobalConfig.Service.From}
 	pet4 := Dog{"Lassie", "Golden Retriever", 20, "https://www.petmd.com/sites/default/files/11New_MixedBreed.jpeg", GlobalConfig.Service.From}
 	pet5 := Dog{"Beethoven", "Great St Bernard", 30, "https://upload.wikimedia.org/wikipedia/commons/6/64/Hummel_Vedor_vd_Robandahoeve.jpg", GlobalConfig.Service.From}
 	pets := Dogs{5, "UKN", []Dog{pet1, pet2, pet3, pet4, pet5}}
+
+	host, err := os.Hostname()
+
+	if err != nil {
+		pets.Hostname = "Unknown"
+	} else {
+		pets.Hostname = host
+	}
+
+	return pets
+}
+
+func index(w http.ResponseWriter, r *http.Request) {
+
+	span := NewServerSpan(r, "index")
+	defer span.Finish()
+
+	setupResponse(&w, r)
+
+	pets := db()
 
 	time.Sleep(time.Duration(len(pets.Dogs)) * time.Millisecond)
 	db_authentication(r)
@@ -75,14 +90,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 			pets.Dogs = pets.Dogs[:len(pets.Dogs)-1]
 			pets.Total = pets.Total - 1
 		}
-	}
-
-	host, err := os.Hostname()
-
-	if err != nil {
-		pets.Hostname = "Unknown"
-	} else {
-		pets.Hostname = host
 	}
 
 	js, err := json.Marshal(pets)
@@ -108,6 +115,36 @@ func index(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Unexpected Error when querying the dogs repository", http.StatusServiceUnavailable)
 	} else {
 		w.Header().Set("Content-Type", "application/json")
+		w.Write(js)
+	}
+}
+
+func single(w http.ResponseWriter, r *http.Request) {
+
+	span := NewServerSpan(r, "single")
+	defer span.Finish()
+
+	setupResponse(&w, r)
+	time.Sleep(time.Duration(10) * time.Millisecond)
+
+	db_authentication(r)
+	dogs := db()
+
+	re := regexp.MustCompile(`/`)
+	submatchall := re.Split(r.URL.Path, -1)
+	id, _ := strconv.Atoi(submatchall[4])
+
+	if id >= len(dogs.Dogs) {
+		http.Error(w, fmt.Sprintf("invalid index %d", id), http.StatusInternalServerError)
+	} else {
+		element := dogs.Dogs[id]
+		fmt.Println(element)
+		w.Header().Set("Content-Type", "application/json")
+		js, err := json.Marshal(element)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 		w.Write(js)
 	}
 }
@@ -139,6 +176,7 @@ func Start() {
 	config := LoadConfiguration()
 
 	http.HandleFunc("/dogs/v1/data", index)
+	http.HandleFunc("/dogs/v1/data/", single)
 
 	http.HandleFunc("/dogs/liveness", readiness_and_liveness)
 	http.HandleFunc("/dogs/readiness", readiness_and_liveness)
