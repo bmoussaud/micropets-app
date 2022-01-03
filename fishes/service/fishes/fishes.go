@@ -18,11 +18,13 @@ import (
 
 //Fish Struct
 type Fish struct {
-	Name string
-	Kind string
-	Age  int
-	URL  string
-	From string
+	Index int
+	Name  string
+	Kind  string
+	Age   int
+	URL   string
+	From  string
+	URI   string
 }
 
 //fishes Struct
@@ -60,14 +62,14 @@ func db() Fishes {
 	fishes := Fishes{4,
 		host,
 		[]Fish{
-			{"Nemo", "Poisson Clown", 14,
-				"https://www.sciencesetavenir.fr/assets/img/2019/07/10/cover-r4x3w1000-5d258790dd324-f96f05d4901fc6ce0ab038a685e4d5c99f6cdfe2-jpg.jpg", GlobalConfig.Service.From},
-			{"Glumpy", "Neon Tetra", 11,
-				"https://www.fishkeepingworld.com/wp-content/uploads/2018/02/Neon-Tetra-New.jpg", GlobalConfig.Service.From},
-			{"Dory", "Pacific regal blue tang", 12,
-				"http://www.oceanlight.com/stock-photo/palette-surgeonfish-image-07922-671143.jpg", GlobalConfig.Service.From},
-			{"Argo", "Combattant", 27,
-				"https://www.aquaportail.com/pictures1003/anemone-clown_1267799900_poisson-combattant.jpg", GlobalConfig.Service.From}}}
+			{70, "Nemo", "Poisson Clown", 14,
+				"https://www.sciencesetavenir.fr/assets/img/2019/07/10/cover-r4x3w1000-5d258790dd324-f96f05d4901fc6ce0ab038a685e4d5c99f6cdfe2-jpg.jpg", GlobalConfig.Service.From, "/fishes/v1/data/0"},
+			{71, "Glumpy", "Neon Tetra", 11,
+				"https://www.fishkeepingworld.com/wp-content/uploads/2018/02/Neon-Tetra-New.jpg", GlobalConfig.Service.From, "/fishes/v1/data/1"},
+			{72, "Dory", "Pacific regal blue tang", 12,
+				"http://www.oceanlight.com/stock-photo/palette-surgeonfish-image-07922-671143.jpg", GlobalConfig.Service.From, "/fishes/v1/data/2"},
+			{73, "Argo", "Combattant", 27,
+				"https://www.aquaportail.com/pictures1003/anemone-clown_1267799900_poisson-combattant.jpg", GlobalConfig.Service.From, "/fishes/v1/data/3"}}}
 
 	return fishes
 }
@@ -180,7 +182,6 @@ func Start() {
 
 	http.HandleFunc("/fishes/v1/data", index)
 	http.HandleFunc("/fishes/v1/data/", single)
-
 
 	http.HandleFunc("/fishes/liveness", readiness_and_liveness)
 	http.HandleFunc("/fishes/readiness", readiness_and_liveness)

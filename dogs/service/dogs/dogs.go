@@ -18,11 +18,13 @@ import (
 
 //Dog type
 type Dog struct {
-	Name string
-	Kind string
-	Age  int
-	URL  string
-	From string
+	Index int
+	Name  string
+	Kind  string
+	Age   int
+	URL   string
+	From  string
+	URI   string
 }
 
 //Dogs type
@@ -52,11 +54,11 @@ func db_authentication(r *http.Request) {
 }
 
 func db() Dogs {
-	pet1 := Dog{"Medor", "BullDog", 18, "https://www.petmd.com/sites/default/files/10New_Bulldog_0.jpeg", GlobalConfig.Service.From}
-	pet2 := Dog{"Bil", "Bull Terrier", 12, "https://www.petmd.com/sites/default/files/07New_Collie.jpeg", GlobalConfig.Service.From}
-	pet3 := Dog{"Rantaplan", "Labrador Retriever", 24, "https://www.petmd.com/sites/default/files/01New_GoldenRetriever.jpeg", GlobalConfig.Service.From}
-	pet4 := Dog{"Lassie", "Golden Retriever", 20, "https://www.petmd.com/sites/default/files/11New_MixedBreed.jpeg", GlobalConfig.Service.From}
-	pet5 := Dog{"Beethoven", "Great St Bernard", 30, "https://upload.wikimedia.org/wikipedia/commons/6/64/Hummel_Vedor_vd_Robandahoeve.jpg", GlobalConfig.Service.From}
+	pet1 := Dog{30, "Medor", "BullDog", 18, "https://www.petmd.com/sites/default/files/10New_Bulldog_0.jpeg", GlobalConfig.Service.From, "/dogs/v1/data/0"}
+	pet2 := Dog{31, "Bil", "Bull Terrier", 12, "https://www.petmd.com/sites/default/files/07New_Collie.jpeg", GlobalConfig.Service.From, "/dogs/v1/data/1"}
+	pet3 := Dog{32, "Rantaplan", "Labrador Retriever", 24, "https://www.petmd.com/sites/default/files/01New_GoldenRetriever.jpeg", GlobalConfig.Service.From, "/dogs/v1/data/2"}
+	pet4 := Dog{33, "Lassie", "Golden Retriever", 20, "https://www.petmd.com/sites/default/files/11New_MixedBreed.jpeg", GlobalConfig.Service.From, "/dogs/v1/data/3"}
+	pet5 := Dog{34, "Beethoven", "Great St Bernard", 30, "https://upload.wikimedia.org/wikipedia/commons/6/64/Hummel_Vedor_vd_Robandahoeve.jpg", GlobalConfig.Service.From, "/dogs/v1/data/4"}
 	pets := Dogs{5, "UKN", []Dog{pet1, pet2, pet3, pet4, pet5}}
 
 	host, err := os.Hostname()

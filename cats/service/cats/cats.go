@@ -21,11 +21,13 @@ import (
 
 //Cat Struct
 type Cat struct {
-	Name string
-	Kind string
-	Age  int
-	URL  string
-	From string
+	Index int
+	Name  string
+	Kind  string
+	Age   int
+	URL   string
+	From  string
+	URI   string
 }
 
 //Cats Struct
@@ -46,10 +48,10 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 }
 
 func db() Cats {
-	cat1 := Cat{"Orphee", "Persan", 12, "https://cdn.pixabay.com/photo/2020/02/29/13/51/cat-4890133_960_720.jpg", GlobalConfig.Service.From}
-	cat2 := Cat{"Pirouette", "Bengal", 1, "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/934px-Paintedcats_Red_Star_standing.jpg", GlobalConfig.Service.From}
-	cat3 := Cat{"Pamina", "Angora", 120, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Turkish_Angora_Odd-Eyed.jpg/440px-Turkish_Angora_Odd-Eyed.jpg", GlobalConfig.Service.From}
-	cat4 := Cat{"Clochette", "Siamois", 120, "https://www.woopets.fr/assets/races/home/siamois-124x153.jpg", GlobalConfig.Service.From}
+	cat1 := Cat{20, "Orphee", "Persan", 12, "https://cdn.pixabay.com/photo/2020/02/29/13/51/cat-4890133_960_720.jpg", GlobalConfig.Service.From, "/cats/v1/data/0"}
+	cat2 := Cat{21, "Pirouette", "Bengal", 1, "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/934px-Paintedcats_Red_Star_standing.jpg", GlobalConfig.Service.From, "/cats/v1/data/1"}
+	cat3 := Cat{22, "Pamina", "Angora", 120, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Turkish_Angora_Odd-Eyed.jpg/440px-Turkish_Angora_Odd-Eyed.jpg", GlobalConfig.Service.From, "/cats/v1/data/2"}
+	cat4 := Cat{23, "Clochette", "Siamois", 120, "https://www.woopets.fr/assets/races/home/siamois-124x153.jpg", GlobalConfig.Service.From, "/cats/v1/data/3"}
 	cats := Cats{4, "Unknown", []Cat{cat1, cat2, cat3, cat4}}
 	host, err := os.Hostname()
 
@@ -93,7 +95,7 @@ func single(w http.ResponseWriter, r *http.Request) {
 	re := regexp.MustCompile(`/`)
 	submatchall := re.Split(r.URL.Path, -1)
 	id, _ := strconv.Atoi(submatchall[4])
-	
+
 	if id >= len(cats.Cats) {
 		http.Error(w, fmt.Sprintf("invalid index %d", id), http.StatusInternalServerError)
 	} else {
