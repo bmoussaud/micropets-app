@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strconv"
 	"time"
 
 	otrext "github.com/opentracing/opentracing-go/ext"
@@ -43,12 +45,29 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
+func db() Cats {
+	cat1 := Cat{"Orphee", "Persan", 12, "https://cdn.pixabay.com/photo/2020/02/29/13/51/cat-4890133_960_720.jpg", GlobalConfig.Service.From}
+	cat2 := Cat{"Pirouette", "Bengal", 1, "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/934px-Paintedcats_Red_Star_standing.jpg", GlobalConfig.Service.From}
+	cat3 := Cat{"Pamina", "Angora", 120, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Turkish_Angora_Odd-Eyed.jpg/440px-Turkish_Angora_Odd-Eyed.jpg", GlobalConfig.Service.From}
+	cat4 := Cat{"Clochette", "Siamois", 120, "https://www.woopets.fr/assets/races/home/siamois-124x153.jpg", GlobalConfig.Service.From}
+	cats := Cats{4, "Unknown", []Cat{cat1, cat2, cat3, cat4}}
+	host, err := os.Hostname()
+
+	if err != nil {
+		cats.Hostname = "Unknown"
+	} else {
+		cats.Hostname = host
+	}
+
+	return cats
+}
+
 func db_authentication(r *http.Request) {
 	span := NewServerSpan(r, "db_authentication")
 	defer span.Finish()
-	
+
 	if GlobalConfig.Service.Delay.Period > 0 {
-		y := float64(calls+shift ) * math.Pi / float64(2*GlobalConfig.Service.Delay.Period)
+		y := float64(calls+shift) * math.Pi / float64(2*GlobalConfig.Service.Delay.Period)
 		sin_y := math.Sin(y)
 		abs_y := math.Abs(sin_y)
 		sleep := int(abs_y * GlobalConfig.Service.Delay.Amplitude * 1000.0)
@@ -60,6 +79,36 @@ func db_authentication(r *http.Request) {
 	}
 }
 
+func single(w http.ResponseWriter, r *http.Request) {
+
+	span := NewServerSpan(r, "single")
+	defer span.Finish()
+
+	setupResponse(&w, r)
+	time.Sleep(time.Duration(10) * time.Millisecond)
+
+	db_authentication(r)
+	cats := db()
+
+	re := regexp.MustCompile(`/`)
+	submatchall := re.Split(r.URL.Path, -1)
+	id, _ := strconv.Atoi(submatchall[4])
+	
+	if id >= len(cats.Cats) {
+		http.Error(w, fmt.Sprintf("invalid index %d", id), http.StatusInternalServerError)
+	} else {
+		element := cats.Cats[id]
+		fmt.Println(element)
+		w.Header().Set("Content-Type", "application/json")
+		js, err := json.Marshal(element)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Write(js)
+	}
+}
+
 func index(w http.ResponseWriter, r *http.Request) {
 
 	span := NewServerSpan(r, "index")
@@ -68,16 +117,9 @@ func index(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
 	time.Sleep(time.Duration(10) * time.Millisecond)
 
-	
 	db_authentication(r)
 
-	//fmt.Printf("Handling %+v\n", r)
-	//fmt.Printf("MODE %s\n", mode)
-	cat1 := Cat{"Orphee", "Persan", 12, "https://cdn.pixabay.com/photo/2020/02/29/13/51/cat-4890133_960_720.jpg",GlobalConfig.Service.From}
-	cat2 := Cat{"Pirouette", "Bengal", 1, "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/934px-Paintedcats_Red_Star_standing.jpg",GlobalConfig.Service.From}
-	cat3 := Cat{"Pamina", "Angora", 120, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Turkish_Angora_Odd-Eyed.jpg/440px-Turkish_Angora_Odd-Eyed.jpg",GlobalConfig.Service.From}
-	cat4 := Cat{"Clochette", "Siamois", 120, "https://www.woopets.fr/assets/races/home/siamois-124x153.jpg",GlobalConfig.Service.From}
-	cats := Cats{4, "Unknown", []Cat{cat1, cat2, cat3, cat4}}
+	cats := db()
 
 	calls = calls + 1
 	if GlobalConfig.Service.Mode == "RANDOM_NUMBER" {
@@ -89,20 +131,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	host, err := os.Hostname()
-
-	if err != nil {
-		cats.Hostname = "Unknown"
-	} else {
-		cats.Hostname = host
-	}
-
-	js, err := json.Marshal(cats)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	if GlobalConfig.Service.FrequencyError > 0 && calls%GlobalConfig.Service.FrequencyError == 0 {
 		fmt.Printf("Fails this call (%d)", calls)
 		otrext.Error.Set(span, true)
@@ -110,6 +138,11 @@ func index(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Unexpected Error when querying the cats repository", http.StatusServiceUnavailable)
 	} else {
 		w.Header().Set("Content-Type", "application/json")
+		js, err := json.Marshal(cats)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 		w.Write(js)
 	}
 }
@@ -141,6 +174,7 @@ func Start() {
 	config := LoadConfiguration()
 
 	http.HandleFunc("/cats/v1/data", index)
+	http.HandleFunc("/cats/v1/data/", single)
 
 	http.HandleFunc("/cats/liveness", readiness_and_liveness)
 	http.HandleFunc("/cats/readiness", readiness_and_liveness)
@@ -156,8 +190,6 @@ func Start() {
 	fmt.Printf("******* Starting to the cats service on port %s, mode %s\n", config.Service.Port, config.Service.Mode)
 	fmt.Printf("******* Delay Period %d Amplitude %f shift %d \n", config.Service.Delay.Period, config.Service.Delay.Amplitude, shift)
 	fmt.Printf("******* Frequency Error %d\n", config.Service.FrequencyError)
-
-	
 
 	log.Fatal(http.ListenAndServe(config.Service.Port, nil))
 }
