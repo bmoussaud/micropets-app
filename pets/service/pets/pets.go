@@ -8,6 +8,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"regexp"
 	"sort"
 	"time"
 
@@ -120,7 +121,7 @@ func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
 	w.Write(js)
 }
 
-func index(w http.ResponseWriter, r *http.Request) {
+func pets(w http.ResponseWriter, r *http.Request) {
 	span := NewServerSpan(r, "index")
 	defer span.Finish()
 
@@ -187,6 +188,23 @@ func index(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func detail(w http.ResponseWriter, r *http.Request) {
+	span := NewServerSpan(r, "detail")
+	defer span.Finish()
+
+	re := regexp.MustCompile(`/`)
+
+	submatchall := re.Split(r.URL.Path, -1)
+	for _, element := range submatchall {
+		fmt.Println(element)
+	}
+	service := submatchall[1]
+	id := submatchall[2]
+
+	fmt.Fprintf(w, "Display a specific pet with ID %s ... => %s %s ", r.URL.Path, service, id)
+
+}
+
 func Start() {
 
 	config := LoadConfiguration()
@@ -195,7 +213,8 @@ func Start() {
 		port := config.Service.Port
 		http.HandleFunc("/readiness", readiness_and_liveness)
 		http.HandleFunc("/liveness", readiness_and_liveness)
-		http.HandleFunc("/pets", index)
+		http.HandleFunc("/pets", pets)
+		http.HandleFunc("/pets/", detail)
 		fmt.Printf("******* Starting to the Pets service on port %s\n", port)
 		for i, backend := range config.Backends {
 			fmt.Printf("* Managing %d\t %s\t %s:%s%s\n", i, backend.Name, backend.Host, backend.Port, backend.Context)
