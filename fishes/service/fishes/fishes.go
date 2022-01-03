@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strconv"
 	"time"
 
 	. "moussaud.org/fishes/internal"
@@ -49,13 +51,7 @@ func db_authentication(r *http.Request) {
 	}
 }
 
-func index(w http.ResponseWriter, r *http.Request) {
-	span := NewServerSpan(r, "index")
-	defer span.Finish()
-
-	time.Sleep(time.Duration(3) * time.Millisecond)
-
-	setupResponse(&w, r)
+func db() Fishes {
 	host, err := os.Hostname()
 	if err != nil {
 		host = "Unknown"
@@ -73,7 +69,19 @@ func index(w http.ResponseWriter, r *http.Request) {
 			{"Argo", "Combattant", 27,
 				"https://www.aquaportail.com/pictures1003/anemone-clown_1267799900_poisson-combattant.jpg", GlobalConfig.Service.From}}}
 
+	return fishes
+}
+
+func index(w http.ResponseWriter, r *http.Request) {
+	span := NewServerSpan(r, "index")
+	defer span.Finish()
+
+	time.Sleep(time.Duration(3) * time.Millisecond)
+
+	setupResponse(&w, r)
+
 	calls = calls + 1
+	fishes := db()
 
 	time.Sleep(time.Duration(len(fishes.Fishes)) * time.Millisecond)
 	db_authentication(r)
@@ -114,6 +122,36 @@ func index(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func single(w http.ResponseWriter, r *http.Request) {
+
+	span := NewServerSpan(r, "single")
+	defer span.Finish()
+
+	setupResponse(&w, r)
+	time.Sleep(time.Duration(10) * time.Millisecond)
+
+	db_authentication(r)
+	fishes := db()
+
+	re := regexp.MustCompile(`/`)
+	submatchall := re.Split(r.URL.Path, -1)
+	id, _ := strconv.Atoi(submatchall[4])
+
+	if id >= len(fishes.Fishes) {
+		http.Error(w, fmt.Sprintf("invalid index %d", id), http.StatusInternalServerError)
+	} else {
+		element := fishes.Fishes[id]
+		fmt.Println(element)
+		w.Header().Set("Content-Type", "application/json")
+		js, err := json.Marshal(element)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Write(js)
+	}
+}
+
 //GetLocation returns the full path of the config file based on the current executable location or using SERVICE_CONFIG_DIR env
 func GetLocation(file string) string {
 	if serviceConfigDirectory := os.Getenv("SERVICE_CONFIG_DIR"); serviceConfigDirectory != "" {
@@ -141,6 +179,8 @@ func Start() {
 	config := LoadConfiguration()
 
 	http.HandleFunc("/fishes/v1/data", index)
+	http.HandleFunc("/fishes/v1/data/", single)
+
 
 	http.HandleFunc("/fishes/liveness", readiness_and_liveness)
 	http.HandleFunc("/fishes/readiness", readiness_and_liveness)
