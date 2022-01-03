@@ -25,6 +25,7 @@ var calls = 0
 
 //Pet Structure
 type Pet struct {
+	Index    int
 	Name     string
 	Type     string
 	Kind     string
@@ -32,6 +33,7 @@ type Pet struct {
 	URL      string
 	Hostname string
 	From     string
+	URI      string
 }
 
 //Path Structure
@@ -103,6 +105,39 @@ func queryPets(spanCtx opentracing.SpanContext, backend string) (Pets, error) {
 	return pets, nil
 }
 
+func queryPet(spanCtx opentracing.SpanContext, backend string) (Pet, error) {
+
+	var pet Pet
+	req.Debug = true
+	fmt.Printf("##########################@ 2 Connecting backend [%s]\n", backend)
+	req, err := http.NewRequest("GET", backend, nil)
+	if err != nil {
+		return pet, err
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Expires", "10ms")
+
+	//Inject the opentracing header
+	if LoadConfiguration().Observability.Enable {
+		opentracing.GlobalTracer().Inject(spanCtx, opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(req.Header))
+	}
+
+	response, err := http.DefaultClient.Do(req)
+	if err != nil {
+		fmt.Printf("##########################@ ERROR Connecting backend [%s]\n", backend)
+		return pet, err
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return pet, fmt.Errorf("ReadAll got error %s", err.Error())
+	}
+
+	json.Unmarshal(body, &pet)
+	return pet, nil
+}
+
 func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
 	span := NewServerSpan(r, "readiness_and_liveness")
 	defer span.Finish()
@@ -151,6 +186,7 @@ func pets(w http.ResponseWriter, r *http.Request) {
 			fmt.Printf("* Hostnames %s\n", all.Hostname)
 			for _, pet := range pets.Pets {
 				pet.Type = backend.Name
+				pet.URI = fmt.Sprintf("/pets%s", pet.URI)
 				all.Pets = append(all.Pets, pet)
 			}
 			time.Sleep(time.Duration(pets.Total) * time.Millisecond)
@@ -192,16 +228,37 @@ func detail(w http.ResponseWriter, r *http.Request) {
 	span := NewServerSpan(r, "detail")
 	defer span.Finish()
 
+	config := LoadConfiguration()
+
 	re := regexp.MustCompile(`/`)
-
+	// /pets/dogs/v1/data/1
 	submatchall := re.Split(r.URL.Path, -1)
-	for _, element := range submatchall {
-		fmt.Println(element)
-	}
-	service := submatchall[1]
-	id := submatchall[2]
+	service := submatchall[2]
+	id := submatchall[5]
+	// TODO use the context provided by the request /pets/dogs/v1/data/1 => /dogs/v1/data/1
 
-	fmt.Fprintf(w, "Display a specific pet with ID %s ... => %s %s ", r.URL.Path, service, id)
+	//fmt.Fprintf(w, "Display a specific pet with ID %s ... => %s %s ", r.URL.Path, service, id)
+	for _, backend := range config.Backends {
+		if service == backend.Name {
+			URL := fmt.Sprintf("http://%s:%s%s/%s", backend.Host, backend.Port, backend.Context, id)
+			fmt.Printf("* Accessing %s\t %s\n", backend.Name, URL)
+			pet, err := queryPet(span.Context(), URL)
+			if err != nil {
+				fmt.Printf("* ERROR * Accessing backend [%s][%s]:[%s]\n", backend.Name, URL, err)
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			} else {
+				fmt.Printf("* process result\n")
+				js, err := json.Marshal(pet)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				w.Header().Set("Content-Type", "application/json")
+				w.Write(js)
+			}
+		}
+	}
 
 }
 
