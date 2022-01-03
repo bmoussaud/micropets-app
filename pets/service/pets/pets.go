@@ -195,7 +195,7 @@ func Start() {
 		port := config.Service.Port
 		http.HandleFunc("/readiness", readiness_and_liveness)
 		http.HandleFunc("/liveness", readiness_and_liveness)
-		http.HandleFunc("/", index)
+		http.HandleFunc("/pets", index)
 		fmt.Printf("******* Starting to the Pets service on port %s\n", port)
 		for i, backend := range config.Backends {
 			fmt.Printf("* Managing %d\t %s\t %s:%s%s\n", i, backend.Name, backend.Host, backend.Port, backend.Context)
