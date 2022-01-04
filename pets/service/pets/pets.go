@@ -227,7 +227,9 @@ func pets(w http.ResponseWriter, r *http.Request) {
 func detail(w http.ResponseWriter, r *http.Request) {
 	span := NewServerSpan(r, "detail")
 	defer span.Finish()
-
+	
+	setupResponse(&w, r)
+	fmt.Printf("index Handling %+v\n", r)
 	config := LoadConfiguration()
 
 	re := regexp.MustCompile(`/`)
@@ -249,6 +251,7 @@ func detail(w http.ResponseWriter, r *http.Request) {
 				return
 			} else {
 				fmt.Printf("* process result\n")
+				pet.Type = backend.Name
 				js, err := json.Marshal(pet)
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
