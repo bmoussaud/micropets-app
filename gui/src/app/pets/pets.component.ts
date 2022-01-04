@@ -90,7 +90,7 @@ export class PetsComponent implements OnInit {
           }
         }
 
-        console.log(urls)
+        //console.log(urls)
 
         this.petsService.getPets(urls)
           .subscribe((pets: any) => {
