@@ -83,7 +83,11 @@ export class PetsComponent implements OnInit {
       .subscribe(result => {
         var urls: string[] = new Array(result['Pets'].length)
         for (let index = 0; index < result['Pets'].length; index++) {
-          urls[index] = this.config.petServiceUrl + result['Pets'][index].URI
+          if (this.config.petServiceUrl == "/") {
+            urls[index] = result['Pets'][index].URI
+          } else {
+            urls[index] = this.config.petServiceUrl + result['Pets'][index].URI
+          }
         }
 
         console.log(urls)
