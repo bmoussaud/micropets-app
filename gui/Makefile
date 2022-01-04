@@ -58,7 +58,7 @@ cnb-image-2:
 # WIP TODO: Test pack build <image> -b paketo-buildpacks/nodejs -b paketo-buildpacks/nginx -e "BP_NODE_RUN_SCRIPTS=build"
 #	pack build $(LOCAL_DOCKER_IMAGE) --buildpack gcr.io/paketo-buildpacks/nodejs:0.11.1   --env "BP_NODE_RUN_SCRIPTS=build" --env "NODE_ENV=production" --builder paketobuildpacks/builder:base
 #	pack build $(LOCAL_DOCKER_IMAGE) --buildpack gcr.io/paketo-buildpacks/nodejs --env "BP_NODE_RUN_SCRIPTS=build" --env "NODE_ENV=development"
-	pack build $(LOCAL_DOCKER_IMAGE) --buildpack gcr.io/paketo-buildpacks/nodejs --env "BP_NODE_RUN_SCRIPTS=build" --env "NODE_ENV=development"  --buildpack paketo-buildpacks/nginx --buildpack paketo-community/staticfile
+	pack build $(LOCAL_DOCKER_IMAGE) --buildpack gcr.io/paketo-buildpacks/nodejs:0.11.0 --env "BP_NODE_RUN_SCRIPTS=build" --env "NODE_ENV=development"  --env "NPM_CONFIG_LOGLEVEL=verbose" --buildpack paketo-buildpacks/nginx --buildpack paketo-community/staticfile
 
 docker-run:
 	docker run --interactive --tty --init --env PORT=8080 --publish 8080:8080 --name $(BINARY_NAME) $(LOCAL_DOCKER_IMAGE) 

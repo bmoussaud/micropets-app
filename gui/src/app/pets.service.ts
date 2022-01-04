@@ -34,7 +34,11 @@ export class PetsService {
   constructor(private http: HttpClient) { }
 
   public getPetsData(url: string): Observable<PetsData> {
-    return this.http.get<PetsData>(url+"/pets");
+    if (url == "/") {
+      return this.http.get<PetsData>("/pets");
+    } else {
+      return this.http.get<PetsData>(url + "/pets");
+    }
   }
 
   public getPet(url: string): Observable<PetsEntity> {

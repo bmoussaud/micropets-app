@@ -12,7 +12,7 @@ spec:
         branch: master
   params:
     - name: broker_service
-      value: "/pets"
+      value: "/"
     - name: observability
       value: true
   
