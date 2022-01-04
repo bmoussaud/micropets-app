@@ -1,36 +1,4 @@
-<!--
-<div class="app-content">
-  <div>
-    <input placeholder="Search" (keyup.enter)="search($event)"/>
-  </div>
-  <table style="width: 100%; margin-top: 10px; border-collapse: collapse">
-    <thead style="text-align: left">
-      <tr>
-        <th>Name</th>
-        <th>Kind</th>
-        <th>Age</th>
-        <th>URL</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let pet of pets" style="border-top: 1px solid black">
-        <td>{{ pet.Name }}</td>
-        <td>{{ pet.Kind }}</td>
-        <td>{{ pet.Age }}</td>
-        <td><img src="{{ pet.Url}}"/></td>
-      </tr>
-    </tbody>
-  </table>
-
-</div>
--->
 <div class="corner-ribbon top-right sticky {{env_color}}">{{env}}</div>
-
-
-
-
-
-
 
 <div>
   <mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
@@ -42,9 +10,7 @@
 
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-       <div class="corner-ribbon top-right sticky {{env_color}}">{{env}}</div> {{element.Name}}
-      </mat-cell>
+      <mat-cell *matCellDef="let element">{{element.Name}}</mat-cell>
     </ng-container>
     <ng-container matColumnDef="kind">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Kind</mat-header-cell>

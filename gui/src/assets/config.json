@@ -1,6 +1,7 @@
 {  
-    "petServiceUrl": "http://front.mytanzu.xyz/pets",
+    "petServiceUrl": "http://localhost:9000",
     "stage": "supply_chain_dev",
     "debug": "False",
-    "stage_color": "green"
+    "stage_color": "green",
+    "load_one_by_one": "True"
   }

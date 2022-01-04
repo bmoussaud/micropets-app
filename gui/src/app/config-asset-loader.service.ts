@@ -7,6 +7,7 @@ export interface Configuration {
   petServiceUrl: string;
   stage: string;
   stage_color: string;
+  load_one_by_one: string
 }
 
 @Injectable({providedIn: 'root'})

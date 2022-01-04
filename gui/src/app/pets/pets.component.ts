@@ -1,30 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { map } from 'rxjs/operators'
+import { concatMap, map, mergeMap } from 'rxjs/operators'
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfigAssetLoaderService, Configuration } from '../config-asset-loader.service';
+import { PetsService, PetsData, PetsEntity, HostnamesEntity } from '../pets.service';
+import { from } from 'rxjs';
 
 
-export interface PetsData {
-  Total: number;
-  Hostname: string;
-  Hostnames: (HostnamesEntity)[] 
-  Pets: (PetsEntity)[] 
-}
-export interface HostnamesEntity {
-  Service: string;
-  Hostname: string;
-}
-export interface PetsEntity {
-  Name: string;
-  Type: string;
-  Kind: string;
-  Age: number;
-  URL: string;
-  Hostname: string;
-}
 
 
 @Component({
@@ -35,7 +17,7 @@ export interface PetsEntity {
 export class PetsComponent implements OnInit {
 
   public pets: PetsEntity[] = []
-  public hostnames: any[] = []
+  public hostnames: (HostnamesEntity)[] = []
   public env: string = ""
   public hostnamesstr: string = ""
   public env_color: string = "pink"
@@ -46,13 +28,16 @@ export class PetsComponent implements OnInit {
 
   displayedColumns = ['name', 'kind', 'age', 'pic', 'from']
 
-  constructor(private http: HttpClient, private router: Router, private location: Location, private configService: ConfigAssetLoaderService) {    
-    
-    this.configService.loadConfigurations().subscribe((data: Configuration) => this.config = {
-      petServiceUrl: data.petServiceUrl,
-      stage: data.stage,
-      stage_color: data.stage_color,
-    });
+  constructor(private location: Location, private configService: ConfigAssetLoaderService, private petsService: PetsService) {
+
+    this.configService.loadConfigurations()
+      .subscribe((data: Configuration) => this.config = {
+        petServiceUrl: data.petServiceUrl,
+        stage: data.stage,
+        stage_color: data.stage_color,
+        load_one_by_one: data.load_one_by_one
+      });
+
   }
 
   ngOnInit() {
@@ -63,9 +48,17 @@ export class PetsComponent implements OnInit {
   }
 
   private refresh() {
+    if (this.config.load_one_by_one == "True") {
+      this.refresh_one_by_one()
+    } else {
+      this.refresh_all()
+    }
+  }
+
+  private refresh_all() {
     //console.log("------------------- refresh")
     //console.log(this.config.petServiceUrl)
-    this.http.get<PetsData>(this.config.petServiceUrl)
+    this.petsService.getPetsData(this.config.petServiceUrl)
       .pipe(map(result => result))
       .subscribe(result => {
         this.pets = result['Pets'];
@@ -83,6 +76,40 @@ export class PetsComponent implements OnInit {
         this.dataSourceHostnames = new MatTableDataSource(this.hostnames)
       });
   }
+
+  private refresh_one_by_one() {
+    this.petsService.getPetsData(this.config.petServiceUrl)
+      .pipe(map(result => result))
+      .subscribe(result => {
+        var urls: string[] = new Array(result['Pets'].length)
+        for (let index = 0; index < result['Pets'].length; index++) {
+          urls[index] = this.config.petServiceUrl + result['Pets'][index].URI
+        }
+
+        console.log(urls)
+
+        this.petsService.getPets(urls)
+          .subscribe((pets: any) => {
+            this.pets = pets
+            this.dataSource = new MatTableDataSource(this.pets);
+          })
+
+        this.hostnames = result['Hostnames'];
+        var h: string[] = new Array(4)
+        for (let index = 0; index < this.hostnames.length; index++) {
+          const element = this.hostnames[index];
+          h[index] = element.Hostname
+        }
+        this.hostnamesstr = h.join(", ")
+
+        this.env = this.config.stage;
+        this.env_color = this.config.stage_color;
+        this.dataSourceHostnames = new MatTableDataSource(this.hostnames)
+      });
+
+
+  }
+
 
 
 }
