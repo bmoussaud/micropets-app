@@ -3,8 +3,9 @@ kind: Workload
 metadata:
   name: pets
   labels:
-    app.tanzu.vmware.com/workload-type: micropet-service
+    app.tanzu.vmware.com/workload-type: micropet-service-git
 spec:
+  serviceAccountName: cartographer-workload-sa
   source:
     git:
       url: https://github.com/bmoussaud/micropets-app/

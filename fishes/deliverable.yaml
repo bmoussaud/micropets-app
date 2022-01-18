@@ -1,0 +1,17 @@
+apiVersion: carto.run/v1alpha1
+kind: Deliverable
+metadata:
+  name: fishes
+  labels:
+    app.tanzu.vmware.com/workload-type: micropets-delivery
+spec:
+  source:
+    git:
+      url: https://github.com/bmoussaud/mygitwriter
+      ref:
+        branch: main
+  params:
+  - name: environment
+    value: aws/aws-front
+  - name: application
+    value: micropets

@@ -3,7 +3,7 @@ kind: Workload
 metadata:
   name: gui
   labels:
-    app.tanzu.vmware.com/workload-type: micropet-gui-service
+    app.tanzu.vmware.com/workload-type: micropet-service-git-gui
 spec:
   source:
     git:
@@ -13,6 +13,6 @@ spec:
   params:
     - name: broker_service
       value: "/"
-    - name: observability
-      value: true
+    - name: color
+      value: blue
   

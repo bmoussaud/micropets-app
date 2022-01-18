@@ -65,6 +65,19 @@ unworkload:
           $(MAKE) --directory=$$d unworkload; \
         done
 
+
+deliverable:
+	for d in $(services); \
+    	do                               \
+          $(MAKE) --directory=$$d deliverable; \
+        done
+
+undeliverable:
+	for d in $(services); \
+    	do                               \
+          $(MAKE) --directory=$$d undeliverable; \
+        done
+
 deploy-front:
 	kubectx  aws-front
 	kustomize build kustomize/aws/front  | kapp -y deploy  -a micropets -f -

@@ -91,3 +91,8 @@ watch_workload:
 desc_workload:
 	kubectl describe Workload $(BINARY_NAME) -n  $(MICROPETS_NS)
 
+deliverable:
+	kubectl apply -f deliverable.yaml -n $(MICROPETS_NS)
+
+undeliverable:
+	kubectl delete Deliverable $(BINARY_NAME) -n $(MICROPETS_NS)
