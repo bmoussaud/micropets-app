@@ -1,6 +1,6 @@
 {  
     "petServiceUrl": "http://localhost:9000",
-    "stage": "supply_chain_dev",
+    "stage": "Local Dev",
     "debug": "False",
     "stage_color": "green",
     "load_one_by_one": "True"
