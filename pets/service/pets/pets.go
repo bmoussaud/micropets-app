@@ -227,7 +227,7 @@ func pets(w http.ResponseWriter, r *http.Request) {
 func detail(w http.ResponseWriter, r *http.Request) {
 	span := NewServerSpan(r, "detail")
 	defer span.Finish()
-	
+
 	setupResponse(&w, r)
 	fmt.Printf("index Handling %+v\n", r)
 	config := LoadConfiguration()
@@ -273,6 +273,7 @@ func Start() {
 		port := config.Service.Port
 		http.HandleFunc("/readiness", readiness_and_liveness)
 		http.HandleFunc("/liveness", readiness_and_liveness)
+		http.HandleFunc("/public", readiness_and_liveness)
 		http.HandleFunc("/pets", pets)
 		http.HandleFunc("/pets/", detail)
 		fmt.Printf("******* Starting to the Pets service on port %s\n", port)
