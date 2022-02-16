@@ -11,6 +11,10 @@ metadata:
   annotations:
     'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/component=gui'
     'github.com/project-slug': 'bmoussaud/microgui-app/gui'
+  links:
+    - url: http://front.tap.aks.mytanzu.xyz/
+      title: 'Micropets UI Information'
+      icon: locallibrary
 spec:
   type: service
   lifecycle: experimental
