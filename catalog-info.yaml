@@ -1,23 +1,16 @@
 apiVersion: backstage.io/v1alpha1
 kind: Location
 metadata:
-  name: micropets-catalog-info
+  name: micropets-catalog-location
   description: The catalog for the micropets application
   annotations:
     'backstage.io/techdocs-ref': dir:.
 spec:
   targets:
-    - ./cats/catalog-info.yaml
-    - ./dogs/catalog-info.yaml
-    - ./fishes/catalog-info.yaml
-    - ./pets/catalog-info.yaml
-    - ./gui/catalog-info.yaml
+    - ./cats/catalog-component.yaml
+    - ./dogs/catalog-component.yaml
+    - ./fishes/catalog-component.yaml
+    - ./pets/catalog-component.yaml
+    - ./gui/catalog-component.yaml
     
-    - ./components/yelb-ui/yelb-ui.yaml
-    - ./components/redis-server/redis-server.yaml
-    - ./components/yelb-db/yelb-db.yaml
-    - ./components/yelb-appserver/yelb-appserver.yaml
-    - ./groups/org.yaml
-    - ./systems/yelb-system.yaml
-    - ./resources/yelb-db-resource.yaml
-    - ./domains/cloudapps-domain.yaml
+ 
