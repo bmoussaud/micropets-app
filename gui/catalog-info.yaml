@@ -1,0 +1,20 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: micropet-service-gui  
+  description: Microgui GUI Service
+  tags:
+    - web
+    - tanzu
+    - js
+    - node  
+  annotations:
+    'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/component=gui'
+    'github.com/project-slug': 'bmoussaud/microgui-app/gui'
+spec:
+  type: service
+  lifecycle: experimental
+  owner: bmoussaud
+  system: microgui
+  dependsOn: [Component:micropet-service-pets]
+  
