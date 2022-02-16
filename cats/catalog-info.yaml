@@ -2,7 +2,9 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: micropet-service-cats
-  description: Micropets Application
+  annotations:
+    github.com/project-slug: bmoussaud/micropets-app/cats
+  description: Micropets Cats Service
   tags:
     - web
     - tanzu
