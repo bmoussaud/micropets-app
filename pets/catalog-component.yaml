@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: micropet-service-pets  
+  name: pets  
   description: Micropets Pets Service
   tags:
     - web
@@ -15,5 +15,5 @@ spec:
   lifecycle: experimental
   owner: the-pet-team
   system: micropets
-  dependsOn: [Component:micropet-service-cats,Component:micropet-service-dogs,Component:micropet-service-fishes ]
+  dependsOn: [Component:cats,Component:dogs,Component:fishes]
   
