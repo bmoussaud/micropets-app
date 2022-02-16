@@ -9,7 +9,7 @@ metadata:
     - golang  
   annotations:
     'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/part-of=micro-pet'
-    github.com/project-slug: bmoussaud/micropets-app/cats
+    'github.com/project-slug': 'bmoussaud/micropets-app/cats'
 spec:
   type: service
   lifecycle: experimental
