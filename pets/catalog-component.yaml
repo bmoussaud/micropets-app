@@ -13,7 +13,7 @@ metadata:
 spec:
   type: service
   lifecycle: experimental
-  owner: bmoussaud
+  owner: the-pet-team
   system: micropets
   dependsOn: [Component:micropet-service-cats,Component:micropet-service-dogs,Component:micropet-service-fishes ]
   

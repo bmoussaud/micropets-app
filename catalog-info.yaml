@@ -12,5 +12,8 @@ spec:
     - ./fishes/catalog-component.yaml
     - ./pets/catalog-component.yaml
     - ./gui/catalog-component.yaml
+    - ./catalog/micropet-system.yaml
+    - ./catalog/cloudapps-domain.yaml
+    - ./catalog/the-pet-team.yaml
     
  

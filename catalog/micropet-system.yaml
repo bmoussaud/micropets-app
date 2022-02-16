@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: micropets
+  description: Micropets Application
+  annotations:
+    'backstage.io/techdocs-ref': dir:.
+spec:
+  owner: the-pet-team
+  domain: cloud-apps

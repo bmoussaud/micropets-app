@@ -14,7 +14,7 @@ metadata:
 spec:
   type: service
   lifecycle: experimental
-  owner: bmoussaud
-  system: microgui
+  owner: the-pet-team
+  system: micropets
   dependsOn: [Component:micropet-service-pets]
   

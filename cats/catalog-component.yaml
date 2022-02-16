@@ -13,5 +13,5 @@ metadata:
 spec:
   type: service
   lifecycle: experimental
-  owner: bmoussaud
+  owner: the-pet-team
   system: micropets
