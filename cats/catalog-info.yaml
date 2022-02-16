@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: micropet-service-cats
+  description: Micropets Application
+  tags:
+    - web
+    - tanzu
+    - golang  
+  annotations:
+    'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/part-of=micro-pet'
+spec:
+  type: service
+  lifecycle: experimental
+  owner: default-team
