@@ -5,6 +5,7 @@ metadata:
   description: The catalog for the micropets application
   annotations:
     'backstage.io/techdocs-ref': dir:.
+
 spec:
   targets:
     - ./cats/catalog-component.yaml
