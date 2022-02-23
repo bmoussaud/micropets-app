@@ -50,7 +50,7 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 func db() Cats {
 	cat1 := Cat{20, "Orphée", "Persan", 12, "https://cdn.pixabay.com/photo/2020/02/29/13/51/cat-4890133_960_720.jpg", GlobalConfig.Service.From, "/cats/v1/data/0"}
 	cat2 := Cat{21, "Pirouette", "Bengal", 1, "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Paintedcats_Red_Star_standing.jpg/934px-Paintedcats_Red_Star_standing.jpg", GlobalConfig.Service.From, "/cats/v1/data/1"}
-	cat3 := Cat{22, "Pamina", "Angora", 120, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Turkish_Angora_Odd-Eyed.jpg/440px-Turkish_Angora_Odd-Eyed.jpg", GlobalConfig.Service.From, "/cats/v1/data/2"}
+	cat3 := Cat{22, "Paminaaaa", "Angora", 120, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Turkish_Angora_Odd-Eyed.jpg/440px-Turkish_Angora_Odd-Eyed.jpg", GlobalConfig.Service.From, "/cats/v1/data/2"}
 	cat4 := Cat{23, "Clochette", "Siamois", 120, "https://www.woopets.fr/assets/races/home/siamois-124x153.jpg", GlobalConfig.Service.From, "/cats/v1/data/3"}
 	cats := Cats{4, "Unknown", []Cat{cat1, cat2, cat3, cat4}}
 	host, err := os.Hostname()
