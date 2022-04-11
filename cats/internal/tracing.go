@@ -41,8 +41,8 @@ func NewGlobalTracer() io.Closer {
 		}
 
 		appTags := application.New(ObservabilityConfig.Application, ObservabilityConfig.Service)
-		log.Printf("* Enabled Observability new Application  %s/%s \n", ObservabilityConfig.Application, ObservabilityConfig.Service)
-		log.Printf("* Enabled Observability on Cluster  %s/%s \n", ObservabilityConfig.Cluster, ObservabilityConfig.Shard)
+		log.Printf("** Enabled Observability new Application  %s/%s \n", ObservabilityConfig.Application, ObservabilityConfig.Service)
+		log.Printf("** Enabled Observability on Cluster  %s/%s \n", ObservabilityConfig.Cluster, ObservabilityConfig.Shard)
 
 		appTags.Cluster = ObservabilityConfig.Cluster
 		appTags.Shard = ObservabilityConfig.Shard
