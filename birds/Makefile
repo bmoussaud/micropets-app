@@ -1,4 +1,5 @@
-BINARY_NAME=$(current_dir)
+
+BINARY_NAME=birds
 REGISTRY=localregistry:5000
 MICROPETS_NS=micropets-supplychain
 MICROPETS_RUN_NS=micropets-run
