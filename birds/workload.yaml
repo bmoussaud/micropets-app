@@ -3,7 +3,7 @@ kind: Workload
 metadata:
   name: birds
   labels:
-    app.tanzu.vmware.com/workload-type: micropet-service-git
+    app.tanzu.vmware.com/workload-type: micropet-service-git    
 spec:
   serviceAccountName: cartographer-workload-sa
   source:

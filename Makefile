@@ -1,9 +1,10 @@
 service_cats := cats
 service_dogs := dogs
 service_fishes := fishes
+service_birds := birds
 service_pets := pets
 service_gui := gui
-services := $(service_cats) $(service_dogs) $(service_fishes) $(service_pets) $(service_gui)
+services := $(service_cats) $(service_dogs) $(service_fishes)  $(service_birds) $(service_pets) $(service_gui)
 
 deploy-kapp:
 	for d in $(services); \
@@ -96,7 +97,6 @@ kill-front-services:
 	kubectl delete deployment front-cats-app -n micropet-test
 	kubectl delete deployment front-dogs-app -n micropet-test
 	kubectl delete deployment front-fishes-app -n micropet-test
-
 	
 undeploy-app:	
 	kapp -y delete -a micropets
