@@ -1,0 +1,13 @@
+apiVersion: sql.tanzu.vmware.com/v1
+kind: Postgres
+metadata:
+  name: birds
+spec:
+  memory: 800Mi
+  cpu: "0.8"
+  storageClassName: standard
+  storageSize: 1G
+  pgConfig:
+    dbname: birds
+    username: pgadmin
+    appUser: admin

@@ -16,3 +16,4 @@ spec:
       ref:
         branch: main
       url: http://github.com/bmoussaud/micropets-app-gitops.git
+  
