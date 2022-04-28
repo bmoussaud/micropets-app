@@ -84,4 +84,14 @@ public class BirdsController {
         }
     }
 
+    @GetMapping(value = "/liveness")
+    public String liveness() {
+        return "OK-liveness";
+    }
+
+    @GetMapping(value = "/readiness")
+    public String readiness() {
+        return "OK-readiness";
+    }
+
 }
