@@ -40,7 +40,7 @@ public class BirdsController {
                 """;
 
     @GetMapping(value = "/birds/v1/data", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BirdSummary> birds() {
+    public BirdSummary birds() {
         BirdSummary summary = new BirdSummary();
         try {
             if (birds.count() == 0) {
@@ -56,11 +56,11 @@ public class BirdsController {
             return this.load();
         }
 
-        return new ResponseEntity<>(summary, HttpStatus.FOUND);
+        return summary;
     }
 
     @GetMapping(value = "/birds/v1/load", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BirdSummary> load() {
+    public BirdSummary load() {
 
         jdbcTemplate.execute(DROP_TABLE);
         jdbcTemplate.execute(CREATE_TABLE);
@@ -74,7 +74,9 @@ public class BirdsController {
         return this.birds();
     }
 
-    //@PostMapping(path = "/birds/v1/data", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    // @PostMapping(path = "/birds/v1/data", consumes =
+    // MediaType.APPLICATION_JSON_VALUE, produces =
+    // MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Bird> create(@RequestBody Bird newBird) {
         Bird bird = birds.save(newBird);
         if (bird == null) {
