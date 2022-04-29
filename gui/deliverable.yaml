@@ -3,15 +3,17 @@ kind: Deliverable
 metadata:
   name: gui
   labels:
-    app.tanzu.vmware.com/workload-type: micropets-delivery-gui
+    app.tanzu.vmware.com/workload-type: micropets-delivery
 spec:
-  source:
-    git:
-      url: https://github.com/bmoussaud/mygitwriter
-      ref:
-        branch: main
   params:
   - name: environment
     value: aws/aws-front
   - name: application
-    value: micropets
+    value: micropets/20220329
+  serviceAccountName: cartographer-deliverable-sa
+  source:
+    git:
+      ref:
+        branch: main
+      url: http://github.com/bmoussaud/micropets-app-gitops.git
+  

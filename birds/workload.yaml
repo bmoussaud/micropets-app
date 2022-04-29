@@ -18,3 +18,5 @@ spec:
       value: 8080
     - name: observability
       value: true
+    - name: usedb
+      value: true
