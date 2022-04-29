@@ -74,7 +74,7 @@ public class BirdsController {
         return this.birds();
     }
 
-    @PostMapping(path = "/birds/v1/data", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    //@PostMapping(path = "/birds/v1/data", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Bird> create(@RequestBody Bird newBird) {
         Bird bird = birds.save(newBird);
         if (bird == null) {
