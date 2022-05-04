@@ -74,12 +74,15 @@ public class BirdsController {
         jdbcTemplate.execute(DROP_TABLE);
         jdbcTemplate.execute(CREATE_TABLE);
 
-        Bird bird1 = new Bird("Tweety", "Yellow Canary", 2,
-                "https://upload.wikimedia.org/wikipedia/en/0/02/Tweety.svg");
-        Bird bird2 = new Bird("Hector", "African Grey Parrot", 5,
-                "https://petkeen.com/wp-content/uploads/2020/11/African-Grey-Parrot.webp");
-        birds.save(bird1);
-        birds.save(bird2);
+        birds.save(new Bird("Tweety", "Yellow Canary", 2,
+                "https://upload.wikimedia.org/wikipedia/en/0/02/Tweety.svg"));
+        birds.save(new Bird("Hector", "African Grey Parrot", 5,
+                "https://petkeen.com/wp-content/uploads/2020/11/African-Grey-Parrot.webp"));
+        birds.save(new Bird("Micheline", "Budgerigar", 3,
+                "https://petkeen.com/wp-content/uploads/2020/11/Budgerigar.webp"));
+
+        birds.save(new Bird("Piplette", "Cockatoo", 1,
+                "https://petkeen.com/wp-content/uploads/2020/11/Cockatoo.webp"));
         return this.birds();
     }
 
