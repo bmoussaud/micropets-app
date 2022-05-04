@@ -61,14 +61,11 @@ public class BirdsController {
     }
 
     @GetMapping(value = "/birds/v1/data/{index}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public BirdSummary bird(@PathVariable Long index) {
+    public Bird bird(@PathVariable Long index) {
         log.error("bird find by id => " + index);
-        BirdSummary summary = new BirdSummary();
         Bird bird = birds.findById(index).get();
         log.error("bird => " + bird);
-        summary.addBird(bird);
-        log.error("summary => " + summary);
-        return summary;
+        return bird;
     }
 
     @GetMapping(value = "/birds/v1/load", produces = MediaType.APPLICATION_JSON_VALUE)

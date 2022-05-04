@@ -136,6 +136,7 @@ func queryPet(spanCtx opentracing.SpanContext, backend string) (Pet, error) {
 
 	fmt.Printf("#queryPet@ body [%s]\n", string(body))
 	json.Unmarshal(body, &pet)
+	fmt.Printf("#queryPet@ body [%+v]\n", pet)
 	return pet, nil
 }
 
