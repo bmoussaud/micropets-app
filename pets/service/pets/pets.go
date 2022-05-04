@@ -239,7 +239,7 @@ func detail(w http.ResponseWriter, r *http.Request) {
 	id := submatchall[5]
 	// TODO use the context provided by the request /pets/dogs/v1/data/1 => /dogs/v1/data/1
 
-	//fmt.Fprintf(w, "Display a specific pet with ID %s ... => %s %s ", r.URL.Path, service, id)
+	fmt.Fprintf(w, "Display a specific pet with ID %s ... => %s %s ", r.URL.Path, service, id)
 	for _, backend := range config.Backends {
 		if service == backend.Name {
 			URL := fmt.Sprintf("http://%s:%s%s/%s", backend.Host, backend.Port, backend.Context, id)
