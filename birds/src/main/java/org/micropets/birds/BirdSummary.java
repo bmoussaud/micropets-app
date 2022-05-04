@@ -4,6 +4,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.function.Predicate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -37,5 +39,18 @@ public class BirdSummary {
     @Override
     public String toString() {
         return "BirdSummary [hostname=" + hostname + ", pets=" + pets + ", total=" + total + "]";
+    }
+
+    public BirdSummary filter() {
+        Random random = new Random();
+        int number = random.nextInt(pets.size());
+        this.pets.removeIf(new Predicate<Bird>() {
+            @Override
+            public boolean test(Bird bird) {
+                return bird.index > number;
+            }
+        });
+        this.total = pets.size();
+        return this;
     }
 }

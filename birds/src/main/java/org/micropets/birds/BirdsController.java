@@ -47,7 +47,6 @@ public class BirdsController {
             if (birds.count() == 0) {
                 return this.load();
             } else {
-
                 for (Bird bird : birds.findAll()) {
                     summary.addBird(bird);
                 }
@@ -57,7 +56,7 @@ public class BirdsController {
             return this.load();
         }
 
-        return summary;
+        return summary.filter();
     }
 
     @GetMapping(value = "/birds/v1/data/{index}", produces = MediaType.APPLICATION_JSON_VALUE)
