@@ -7,7 +7,7 @@ IMAGE_PREFIX=harbor.mytanzu.xyz/library/micropet
 LOCAL_DOCKER_IMAGE=micropet-$(BINARY_NAME)-local-build
 
 run-database:
-	docker run -p 5432:5432 --name bird-postgres -e POSTGRES_BD=birds -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+	docker run -p 5432:5432 --rm --name bird-postgres -e POSTGRES_BD=birds -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 
 run-app:
 	./mvnw spring-boot:run
