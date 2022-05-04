@@ -1,0 +1,129 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "6"
+    kapp.k14s.io/identity: v1;micropets-supplychain/apps/Deployment/app-birds;apps/v1
+    kapp.k14s.io/original: '{"apiVersion":"apps/v1","kind":"Deployment","metadata":{"labels":{"app.kubernetes.io/component":"birds","app.kubernetes.io/part-of":"micro-pet","k8s-app":"micro-pet","kapp.k14s.io/app":"1651173839463498994","kapp.k14s.io/association":"v1.780cd9622883a1b5bed5ea179884b8a8","service":"birds"},"name":"app-birds","namespace":"micropets-supplychain"},"spec":{"replicas":1,"selector":{"matchLabels":{"app.kubernetes.io/component":"birds","app.kubernetes.io/part-of":"micro-pet","k8s-app":"micro-pet","kapp.k14s.io/app":"1651173839463498994","service":"birds"}},"template":{"metadata":{"labels":{"app.kubernetes.io/component":"birds","app.kubernetes.io/part-of":"micro-pet","k8s-app":"micro-pet","kapp.k14s.io/app":"1651173839463498994","kapp.k14s.io/association":"v1.780cd9622883a1b5bed5ea179884b8a8","service":"birds"}},"spec":{"containers":[{"env":[{"name":"SERVICE_CONFIG_DIR","value":"/config"},{"name":"POSTGRES_URL","value":"jdbc:postgresql://birds:5432/birds"},{"name":"POSTGRES_USERNAME","valueFrom":{"secretKeyRef":{"key":"username","name":"birds-app-user-db-secret"}}},{"name":"POSTGRES_PASSWORD","valueFrom":{"secretKeyRef":{"key":"password","name":"birds-app-user-db-secret"}}}],"image":"harbor.mytanzu.xyz/library/micropet-tap-birds@sha256:8adb20bb706746e611c3d2fd1b63a5b6e3ed706019b4f59aa65b9432445765a3","livenessProbe":{"httpGet":{"path":"/liveness","port":8080},"initialDelaySeconds":10,"periodSeconds":2},"name":"birds","ports":[{"containerPort":8080,"name":"http-birds"}],"readinessProbe":{"httpGet":{"path":"/readiness","port":8080},"initialDelaySeconds":10,"periodSeconds":2},"volumeMounts":[{"mountPath":"/config","name":"config-volume"}]}],"restartPolicy":"Always","schedulerName":"default-scheduler","terminationGracePeriodSeconds":5,"volumes":[{"configMap":{"items":[{"key":"pets_config.json","path":"pets_config.json"}],"name":"birds-config-ver-2"},"name":"config-volume"}]}}}}'
+    kapp.k14s.io/original-diff-md5: 027a85c1b40747fcff93fc2957fea668
+  creationTimestamp: "2022-04-28T19:23:59Z"
+  generation: 12
+  labels:
+    app.kubernetes.io/component: birds
+    app.kubernetes.io/part-of: micro-pet
+    k8s-app: micro-pet
+    kapp.k14s.io/app: "1651173839463498994"
+    kapp.k14s.io/association: v1.780cd9622883a1b5bed5ea179884b8a8
+    service: birds
+  name: app-birds
+  namespace: micropets-supplychain
+  resourceVersion: "324210483"
+  uid: b4f47bff-677a-48ac-b519-f1032d436fe5
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: birds
+      app.kubernetes.io/part-of: micro-pet
+      k8s-app: micro-pet
+      kapp.k14s.io/app: "1651173839463498994"
+      service: birds
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/component: birds
+        app.kubernetes.io/part-of: micro-pet
+        k8s-app: micro-pet
+        kapp.k14s.io/app: "1651173839463498994"
+        kapp.k14s.io/association: v1.780cd9622883a1b5bed5ea179884b8a8
+        service: birds
+    spec:
+      containers:
+      - env:
+        - name: SERVICE_CONFIG_DIR
+          value: /config
+        - name: POSTGRES_URL
+          value: jdbc:postgresql://birds:5432/birds
+        - name: POSTGRES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: birds-app-user-db-secret
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: birds-app-user-db-secret
+        image: harbor.mytanzu.xyz/library/micropet-tap-birds@sha256:8adb20bb706746e611c3d2fd1b63a5b6e3ed706019b4f59aa65b9432445765a3
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /liveness
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 2
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: birds
+        ports:
+        - containerPort: 8080
+          name: http-birds
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /readiness
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 2
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /config
+          name: config-volume
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 5
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: pets_config.json
+            path: pets_config.json
+          name: birds-config-ver-2
+        name: config-volume
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2022-04-28T19:24:11Z"
+    lastUpdateTime: "2022-04-28T19:24:11Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2022-04-28T19:23:59Z"
+    lastUpdateTime: "2022-04-29T06:13:03Z"
+    message: ReplicaSet "app-birds-5bf86d6d44" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 12
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

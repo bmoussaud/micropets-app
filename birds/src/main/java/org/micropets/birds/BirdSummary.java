@@ -34,4 +34,8 @@ public class BirdSummary {
         }
     }
 
+    @Override
+    public String toString() {
+        return "BirdSummary [hostname=" + hostname + ", pets=" + pets + ", total=" + total + "]";
+    }
 }

@@ -1,0 +1,16 @@
+apiVersion: sql.tanzu.vmware.com/v1
+kind: Postgres
+metadata:
+  name: my-postgress
+  namespace: postgres-operator-demo
+spec:
+  memory: 800Mi
+  cpu: "0.8"
+  storageClassName: standard
+  storageSize: 1G
+  pgConfig:
+    dbname: mydb
+    username: pgadmin
+    appUser: appuser
+  highAvailability:
+   enabled: false
