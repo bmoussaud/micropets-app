@@ -3,7 +3,6 @@ package org.micropets.birds;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 
 public class Bird {
 
@@ -108,7 +107,7 @@ public class Bird {
 
     @Override
     public String toString() {
-        return "Bird [age=" + age + ", hostname=" + hostname + ", index=" + index + ", name=" + name + ", type=" + type
+        return "Bird:[age=" + age + ", hostname=" + hostname + ", index=" + index + ", name=" + name + ", type=" + type
                 + ", uri=" + uri + ", url=" + url + "]";
     }
 
