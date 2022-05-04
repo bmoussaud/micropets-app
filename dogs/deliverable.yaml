@@ -9,7 +9,7 @@ spec:
   - name: environment
     value: aws/aws-front
   - name: application
-    value: micropets
+    value: micropets/current
   serviceAccountName: cartographer-deliverable-sa
   source:
     git:
