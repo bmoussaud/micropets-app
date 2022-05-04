@@ -109,7 +109,7 @@ func queryPet(spanCtx opentracing.SpanContext, backend string) (Pet, error) {
 
 	var pet Pet
 	req.Debug = true
-	fmt.Printf("##########################@ 2 Connecting backend [%s]\n", backend)
+	fmt.Printf("#queryPet@ Connecting backend [%s]\n", backend)
 	req, err := http.NewRequest("GET", backend, nil)
 	if err != nil {
 		return pet, err
@@ -124,7 +124,7 @@ func queryPet(spanCtx opentracing.SpanContext, backend string) (Pet, error) {
 
 	response, err := http.DefaultClient.Do(req)
 	if err != nil {
-		fmt.Printf("##########################@ ERROR Connecting backend [%s]\n", backend)
+		fmt.Printf("#queryPet@ ERROR Connecting backend [%s]\n", backend)
 		return pet, err
 	}
 	defer response.Body.Close()
@@ -239,21 +239,24 @@ func detail(w http.ResponseWriter, r *http.Request) {
 	id := submatchall[5]
 	// TODO use the context provided by the request /pets/dogs/v1/data/1 => /dogs/v1/data/1
 
-	fmt.Fprintf(w, "Display a specific pet with ID %s ... => %s %s ", r.URL.Path, service, id)
+	fmt.Printf("Display a specific pet with ID %s ... => %s %s \n", r.URL.Path, service, id)
 	for _, backend := range config.Backends {
 		if service == backend.Name {
 			URL := fmt.Sprintf("http://%s:%s%s/%s", backend.Host, backend.Port, backend.Context, id)
 			fmt.Printf("* Accessing %s\t %s\n", backend.Name, URL)
 			pet, err := queryPet(span.Context(), URL)
+			fmt.Printf("* result pet from queryPet %+v\n", pet)
 			if err != nil {
 				fmt.Printf("* ERROR * Accessing backend [%s][%s]:[%s]\n", backend.Name, URL, err)
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			} else {
 				fmt.Printf("* process result\n")
+				
 				pet.Type = backend.Name
 				js, err := json.Marshal(pet)
 				if err != nil {
+					fmt.Printf("* ERROR * Marshalling JSON Pet")
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
