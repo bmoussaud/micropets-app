@@ -134,6 +134,7 @@ func queryPet(spanCtx opentracing.SpanContext, backend string) (Pet, error) {
 		return pet, fmt.Errorf("ReadAll got error %s", err.Error())
 	}
 
+	fmt.Printf("#queryPet@ body [%s]\n", string(body))
 	json.Unmarshal(body, &pet)
 	return pet, nil
 }
@@ -252,7 +253,7 @@ func detail(w http.ResponseWriter, r *http.Request) {
 				return
 			} else {
 				fmt.Printf("* process result\n")
-				
+
 				pet.Type = backend.Name
 				js, err := json.Marshal(pet)
 				if err != nil {
