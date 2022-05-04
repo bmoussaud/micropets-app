@@ -3,7 +3,7 @@ kind: Deliverable
 metadata:
   name: dogs
   labels:
-    app.tanzu.vmware.com/workload-type: micropets-delivery
+    app.tanzu.vmware.com/workload-type: micropets-delivery-smoke
 spec:
   params:
   - name: environment
