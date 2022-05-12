@@ -59,7 +59,7 @@ func db() Dogs {
 	pet3 := Dog{32, "Rantaplan", "Labrador Retriever", 24, "https://www.petmd.com/sites/default/files/01New_GoldenRetriever.jpeg", GlobalConfig.Service.From, "/dogs/v1/data/2"}
 	pet4 := Dog{33, "Lassie", "Golden Retriever", 20, "https://www.petmd.com/sites/default/files/11New_MixedBreed.jpeg", GlobalConfig.Service.From, "/dogs/v1/data/3"}
 	pet5 := Dog{34, "Beethoven", "Great St Bernard", 30, "https://upload.wikimedia.org/wikipedia/commons/6/64/Hummel_Vedor_vd_Robandahoeve.jpg", GlobalConfig.Service.From, "/dogs/v1/data/4"}
-	pets := Dogs{5, "UKN", []Dog{pet1, pet2, pet3, pet4, pet5}}
+	pets := Dogs{5, "NotKnown", []Dog{pet1, pet2, pet3, pet4, pet5}}
 
 	host, err := os.Hostname()
 
