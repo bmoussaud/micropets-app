@@ -43,8 +43,8 @@ clean:
 	rm -f $(BINARY_WINDOWS)
 
 run:
-	$(GOBUILD) -o $(BINARY_NAME) -v main.go
-	./$(BINARY_NAME)
+	$(GOBUILD) -o $(BINARY_NAME) -v ./cmd/pets
+	SERVICE_CONFIG_DIR=/config ./$(BINARY_NAME)
 
 deps:
 	GO111MODULE=auto $(GOGET) github.com/kelseyhightower/envconfig

@@ -24,7 +24,7 @@
     }
   ],
   "observability": {
-    "enable": true,
+    "enable": false,
     "application": "micropets",
     "service": "pets",
     "cluster": "us-west",
