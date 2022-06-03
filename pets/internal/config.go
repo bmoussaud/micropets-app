@@ -1,11 +1,18 @@
 package internal
 
 import (
+	"context"
 	"fmt"
 
 	"os"
+	"strconv"
 
 	"github.com/spf13/viper"
+
+	v1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
+	ctrl "sigs.k8s.io/controller-runtime"
 )
 
 //Config Structure
@@ -65,10 +72,68 @@ func LoadConfiguration() Config {
 		if err != nil {
 			panic(fmt.Errorf("unable to decode into struct, %v", err))
 		}
+
+		if len(GlobalConfig.Backends) == 0 {
+			fmt.Printf("* No defined backends, use dynamic mode!\n")
+			var dynamicConfig = QueryBackendService()
+			GlobalConfig.Backends = dynamicConfig.Backends
+			DumpBackendConfig(GlobalConfig)
+		}
+
 		GlobalConfig.setup = true
 		fmt.Printf("Resolved Configuration\n")
 		fmt.Printf("%+v\n", GlobalConfig)
 
 	}
 	return GlobalConfig
+}
+
+func DumpBackendConfig(config Config) {
+	fmt.Printf("******* Backends are:\n")
+	for i, backend := range config.Backends {
+		fmt.Printf("* Managing %d\t %s\t %s:%s%s\n", i, backend.Name, backend.Host, backend.Port, backend.Context)
+	}
+}
+
+func QueryBackendService() Config {
+	var config Config
+	ctx := context.Background()
+	k8sconfig := ctrl.GetConfigOrDie()
+	clientset := kubernetes.NewForConfigOrDie(k8sconfig)
+
+	//TODO: manage namespace
+	namespace := "dev-tap"
+	items, err := GetK8SServices(clientset, ctx, namespace)
+
+	if err != nil {
+		fmt.Println(err)
+		return config
+	} else {
+		for _, item := range items {
+			var svcName = item.ObjectMeta.Name
+			var svcPort int32 = item.Spec.Ports[0].Port
+			config.Backends = append(config.Backends, struct {
+				Name    string "json:\"name\""
+				Host    string "json:\"host\""
+				Port    string "json:\"port\""
+				Context string "json:\"context\""
+			}{svcName, fmt.Sprintf("%s.%s.svc.cluster.local", svcName, namespace), strconv.FormatUint(uint64(svcPort), 10), fmt.Sprintf("/%s/v1/data", svcName)})
+		}
+	}
+	return config
+}
+
+func GetK8SServices(clientset *kubernetes.Clientset, ctx context.Context,
+	namespace string) ([]v1.Service, error) {
+	listOptions := metav1.ListOptions{
+		LabelSelector: "app.kubernetes.io/part-of=micro-pet, app.kubernetes.io/component=backend",
+		Limit:         100,
+	}
+
+	list, err := clientset.CoreV1().Services(namespace).
+		List(ctx, listOptions)
+	if err != nil {
+		return nil, err
+	}
+	return list.Items, nil
 }

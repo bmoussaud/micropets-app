@@ -11,11 +11,11 @@ spec:
       url: https://github.com/bmoussaud/micropets-app/
       ref:
         branch: master
-  params:
-    - name: mode
-      value: "RANDOM_NUMBER"
+  params:    
     - name: port
       value: 9000
     - name: observability
       value: false
+    - name: component
+      value: broker
     

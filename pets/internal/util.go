@@ -10,7 +10,7 @@ import (
 )
 
 type ErrorStatus struct {
-    Error string `json:"error"`
+	Error string `json:"error"`
 }
 
 var RAND = rand.New(rand.NewSource(time.Now().UnixNano()))

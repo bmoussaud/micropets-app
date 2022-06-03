@@ -49,6 +49,8 @@ run:
 deps:
 	GO111MODULE=auto $(GOGET) github.com/kelseyhightower/envconfig
 	GO111MODULE=auto $(GOGET) github.com/magiconair/properties
+	GO111MODULE=auto $(GOGET) k8s.io/client-go/kubernetes
+	GO111MODULE=auto $(GOGET) sigs.k8s.io/controller-runtime
 
 # Cross compilation
 build-windows:

@@ -267,7 +267,6 @@ func detail(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-
 }
 
 func Start() {
