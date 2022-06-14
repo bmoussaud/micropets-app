@@ -20,5 +20,5 @@ spec:
   lifecycle: experimental
   owner: the-pet-team
   system: micropets
-  dependsOn: [Component:micropet-service-pets]
+  dependsOn: [Component:pets]
   
