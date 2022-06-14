@@ -42,3 +42,6 @@ spec:
       /pets:
         get:
           summary: List all pets
+      /pets/{kind}/{id}:
+        get:
+          summary: Retrieve details about the {kind} pet based on its {id}
