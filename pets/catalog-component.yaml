@@ -17,4 +17,28 @@ spec:
   system: micropets
   dependsOn: [Component:cats,Component:dogs,Component:fishes]
   providesApis:
-    - pets
+    - pets-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: pets-api
+  description: Manage Pets 
+spec:
+  type: openapi
+  lifecycle: production  
+  owner: the-pet-team
+  system: micropets
+  definition: |
+    openapi: "3.0.0"
+    info:
+      version: 1.0.0
+      title: PET API
+      license:
+        name: MIT
+    servers:
+      - url: /pets
+    paths:
+      /pets:
+        get:
+          summary: List all pets

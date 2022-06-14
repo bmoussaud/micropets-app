@@ -20,5 +20,5 @@ spec:
   lifecycle: experimental
   owner: the-pet-team
   system: micropets
-  consumesApis: [Component:pets]
+  consumesApis: [API:pets-api]
   
