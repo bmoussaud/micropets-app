@@ -16,4 +16,5 @@ spec:
   owner: the-pet-team
   system: micropets
   dependsOn: [Component:cats,Component:dogs,Component:fishes]
-  
+  providesApis:
+    - pets
