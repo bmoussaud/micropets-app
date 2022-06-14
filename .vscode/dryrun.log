@@ -1,0 +1,47 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app'
+for d in cats dogs fishes  birds pets gui; \
+    	do                               \
+          /Library/Developer/CommandLineTools/usr/bin/make --directory=$d deploy-kapp; \
+        done
+ 
+make[1]: Entering directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/cats'
+kubectl create namespace micropets-run --dry-run=client -o yaml | kubectl apply -f -
+kubectl get namespace micropets-run 
+ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropets-run -a micropet-cats-service -f-
+make[1]: Leaving directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/cats'
+ 
+make[1]: Entering directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/dogs'
+kubectl create namespace micropets-run --dry-run=client -o yaml | kubectl apply -f -
+kubectl get namespace micropets-run 
+ 
+ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropets-run -a micropet-dogs-service -f-
+make[1]: Leaving directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/dogs'
+ 
+make[1]: Entering directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/fishes'
+kubectl create namespace micropets-run --dry-run=client -o yaml | kubectl apply -f -
+kubectl get namespace micropets-run 
+ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropets-run -a micropet-fishes-service -f-
+ 
+make[1]: Leaving directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/fishes'
+ 
+make[1]: Entering directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/birds'
+make[1]: Leaving directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/birds'
+ 
+make[1]: *** No rule to make target `deploy-kapp'.
+
+make[1]: Entering directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/pets'
+kubectl create namespace micropets-run --dry-run=client -o yaml | kubectl apply -f -
+kubectl get namespace micropets-run 
+ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropets-run -a micropet-pets-service -f-
+make[1]: Leaving directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/pets'
+ 
+make[1]: Entering directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/gui'
+kubectl create namespace micropets-run --dry-run=client -o yaml | kubectl apply -f -
+kubectl get namespace micropets-run 
+ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropets-run -a micropet-gui-service -f-
+ 
+make[1]: Leaving directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/gui'
+ 
+make: Leaving directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app'
+ 

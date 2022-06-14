@@ -1,0 +1,1 @@
+{"buildTargets":["cnb-image","deliverable","deploy-back","deploy-cnb","deploy-front","deploy-kapp","docker-build","docker-push","k8s-deploy","kill-front-services","undeliverable","undeploy-app","undeploy-cnb","undeploy-kapp","unworkload","workload"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}

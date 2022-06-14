@@ -9,7 +9,7 @@ metadata:
     - js
     - ui  
   annotations:
-    'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/component=gui'
+    'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/name=gui'
     'github.com/project-slug': 'bmoussaud/microgui-app/gui'
   links:
     - url: http://front.tap.aks.mytanzu.xyz/

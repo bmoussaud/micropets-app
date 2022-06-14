@@ -8,7 +8,7 @@ metadata:
     - tanzu
     - golang  
   annotations:
-    'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/component=fishes'
+    'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/name=fishes'
     'github.com/project-slug': 'bmoussaud/micropets-app/fishes'
 spec:
   type: service
