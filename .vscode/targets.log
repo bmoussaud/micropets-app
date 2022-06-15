@@ -10,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Wed Jun 15 10:43:32 2022
+# Make data base, printed on Wed Jun 15 13:56:02 2022
 
 # Variables
 
@@ -19,6 +19,7 @@ JENV_SHELL = zsh
 # automatic
 ?F = $(notdir $?)
 # automatic
+ 
 <D = $(patsubst %/,%,$(dir $<))
 # environment
 ELECTRON_NO_ATTACH_CONSOLE = 1
@@ -33,7 +34,6 @@ VSCODE_LOG_NATIVE = false
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # environment
- 
 TANZUNET_USER = bmoussaud@vmware.com
 # makefile
 CURDIR := /Users/benoitmoussaud/Workspace/bmoussaud/micropets-app
@@ -62,7 +62,7 @@ __CFBundleIdentifier = com.microsoft.VSCode
 # makefile (from `Makefile', line 1)
 service_cats := cats
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/hf/8pk_3fy92yz2zwggqskmgvy40000gn/T/vscode-ipc-bc28412f-74bc-4e3c-ac1c-d11aa83d71cc.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/hf/8pk_3fy92yz2zwggqskmgvy40000gn/T/vscode-ipc-a036d288-01a3-420c-baaa-066b5dd75dec.sock
 # environment
 AWS_DEFAULT_REGION = eu-west-3
 # environment
@@ -208,6 +208,7 @@ COLORFGBG = 15;0
 # environment
 __CF_USER_TEXT_ENCODING = 0x1F5:0x0:0x1
 # environment
+ 
 COMMAND_MODE = unix2003
 # default
 MAKEFILES := 
@@ -239,7 +240,6 @@ TERM = xterm-256color
 VSCODE_PID = 84065
 # environment
 STARSHIP_SHELL = zsh
- 
 # variable set hash-table stats:
 # Load=112/1024=11%, Rehash=0, Collisions=23/142=16%
 
@@ -437,6 +437,7 @@ docker-push:
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 45):
 	for d in $(services); \
+ 
 	do                               \
 	$(MAKE) --directory=$$d docker-push; \
 	done
@@ -476,6 +477,6 @@ undeploy-kapp:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Wed Jun 15 10:43:32 2022
+# Finished Make data base on Wed Jun 15 13:56:02 2022
 
  
