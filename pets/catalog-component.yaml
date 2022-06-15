@@ -10,6 +10,10 @@ metadata:
   annotations:
     'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/name=pets'
     'github.com/project-slug': 'bmoussaud/micropets-app/pets'
+  links:
+    - url: https://en.wikipedia.org/wiki/Pet
+      title: 'Pets (wikipedia) '
+      icon: locallibrary
 spec:
   type: service
   lifecycle: experimental
@@ -18,6 +22,7 @@ spec:
   dependsOn: [Component:cats,Component:dogs,Component:fishes]
   providesApis:
     - pets-api
+  
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API

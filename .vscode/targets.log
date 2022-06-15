@@ -10,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Tue Jun 14 16:27:34 2022
+# Make data base, printed on Wed Jun 15 10:43:32 2022
 
 # Variables
 
@@ -21,10 +21,7 @@ JENV_SHELL = zsh
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
 # environment
-AWS_SECRET_ACCESS_KEY = dEQLWdmsaQr+ZwzE++N6dYFHKjBleGLYybHE+rLV
-# environment
 ELECTRON_NO_ATTACH_CONSOLE = 1
- 
 # environment
 PROVIDE_FULLSTACK_ACTION = true
 # makefile (from `Makefile', line 6)
@@ -36,6 +33,7 @@ VSCODE_LOG_NATIVE = false
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # environment
+ 
 TANZUNET_USER = bmoussaud@vmware.com
 # makefile
 CURDIR := /Users/benoitmoussaud/Workspace/bmoussaud/micropets-app
@@ -44,7 +42,7 @@ SHELL = /bin/sh
 # environment
 DIRHISTORY_SIZE = 30
 # environment
-VSCODE_NLS_CONFIG = {"locale":"fr","availableLanguages":{"*":"fr"},"_languagePackId":"90c96d63e4230154cb1307da73de84dd.fr","_translationsConfigFile":"/Users/benoitmoussaud/Library/Application Support/Code/clp/90c96d63e4230154cb1307da73de84dd.fr/tcf.json","_cacheRoot":"/Users/benoitmoussaud/Library/Application Support/Code/clp/90c96d63e4230154cb1307da73de84dd.fr","_resolvedLanguagePackCoreLocation":"/Users/benoitmoussaud/Library/Application Support/Code/clp/90c96d63e4230154cb1307da73de84dd.fr/4af164ea3a06f701fe3e89a2bcbb421d2026b68f","_corruptedFile":"/Users/benoitmoussaud/Library/Application Support/Code/clp/90c96d63e4230154cb1307da73de84dd.fr/corrupted.info","_languagePackSupport":true}
+VSCODE_NLS_CONFIG = {"locale":"fr","availableLanguages":{"*":"fr"},"_languagePackId":"575d78304484aa5fa0cbb32d34fd883d.fr","_translationsConfigFile":"/Users/benoitmoussaud/Library/Application Support/Code/clp/575d78304484aa5fa0cbb32d34fd883d.fr/tcf.json","_cacheRoot":"/Users/benoitmoussaud/Library/Application Support/Code/clp/575d78304484aa5fa0cbb32d34fd883d.fr","_resolvedLanguagePackCoreLocation":"/Users/benoitmoussaud/Library/Application Support/Code/clp/575d78304484aa5fa0cbb32d34fd883d.fr/4af164ea3a06f701fe3e89a2bcbb421d2026b68f","_corruptedFile":"/Users/benoitmoussaud/Library/Application Support/Code/clp/575d78304484aa5fa0cbb32d34fd883d.fr/corrupted.info","_languagePackSupport":true}
 # environment
 BAT_PAGER = 
 # makefile (from `Makefile', line 7)
@@ -52,9 +50,7 @@ services := cats dogs fishes  birds pets gui
 # environment
 _ = /usr/bin/make
 # environment
-GITHUB_TOKEN = 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
-# environment
-STARSHIP_SESSION_KEY = 2835214052252372
+STARSHIP_SESSION_KEY = 6120148773095958
 # automatic
 @F = $(notdir $@)
 # environment
@@ -66,11 +62,11 @@ __CFBundleIdentifier = com.microsoft.VSCode
 # makefile (from `Makefile', line 1)
 service_cats := cats
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/hf/8pk_3fy92yz2zwggqskmgvy40000gn/T/vscode-ipc-cb57bb52-36c1-4e9a-87a8-d1cc23040707.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/hf/8pk_3fy92yz2zwggqskmgvy40000gn/T/vscode-ipc-bc28412f-74bc-4e3c-ac1c-d11aa83d71cc.sock
 # environment
 AWS_DEFAULT_REGION = eu-west-3
 # environment
-VSCODE_CWD = /Users/benoitmoussaud/Workspace/bmoussaud/micropets-app
+VSCODE_CWD = /Users/benoitmoussaud/Workspace/bmoussaud/micropets-app-operator
 # environment
 GOPROXY = https://proxy.golang.org,direct
 # environment
@@ -158,19 +154,17 @@ USER = benoitmoussaud
 # default
 MAKECMDGOALS := all
 # environment
-TERM_SESSION_ID = w0t3p0:08DC0EAC-A582-4D69-A607-0E5CE6DA8925
+TERM_SESSION_ID = w0t6p0:38ADFF3A-7918-424F-B536-F123E26E2734
 # environment
 BAT_STYLE = numbers,changes,header
 # environment
 JENV_LOADED = 1
 # environment
-VCS_ADMIN_BMOUSSAUD = -ehlXzOi8KyzYH3FjiHeX-hvTNIPy8r5xt0DSb7D68UW3tlkR4FG3HcZA0WaZ2xF
+VCS_ADMIN_BMOUSSAUD = xxxxxxxxxx
 # environment
 LESS = -R
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
-# environment
-AWS_ACCESS_KEY_ID = AKIAYT2MWI3PK5UWX44N
 # default
 MAKE_COMMAND := /Library/Developer/CommandLineTools/usr/bin/make
 # environment
@@ -196,7 +190,7 @@ MFLAGS = -Rrqp
 # environment
 TERM_PROGRAM_VERSION = 3.4.15
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.108953620.108953626.E91BDEDB-FFCE-49DB-8964-A3D996EFBAC3
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.108953620.108953626.472714C5-7F0A-4B20-8D98-14DAF22F8D86
 # environment
 LC_TERMINAL_VERSION = 3.4.15
 # automatic
@@ -204,11 +198,11 @@ LC_TERMINAL_VERSION = 3.4.15
 # environment
 RECOMMENDER_API_URL = https://gw.api.openshift.io//api/v2
 # environment
-TMC_API_TOKEN = -ehlXzOi8KyzYH3FjiHeX-hvTNIPy8r5xt0DSb7D68UW3tlkR4FG3HcZA0WaZ2xF
+TMC_API_TOKEN = xxxxxxxxxx
 # automatic
 +F = $(notdir $+)
 # environment
-ITERM_SESSION_ID = w0t3p0:08DC0EAC-A582-4D69-A607-0E5CE6DA8925
+ITERM_SESSION_ID = w0t6p0:38ADFF3A-7918-424F-B536-F123E26E2734
 # environment
 COLORFGBG = 15;0
 # environment
@@ -230,24 +224,24 @@ LC_ALL = C
 # default
 SUFFIXES := 
 # environment
-TO_TOKEN = df3e4928-3fdc-44b5-80d5-01bcc522f97b
+TO_TOKEN = 7d6cb8a3-1cf4-475e-9ea8-0b2ed0f218b9
 # environment
-TANZUNET_PASSWORD = j[YjNv2T@
+TANZUNET_PASSWORD = q%8hLGisM6
 # environment
 AWS_REGION = eu-west-3
 # environment
 MAKELEVEL := 0
 # environment
- 
 LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 67545
+VSCODE_PID = 84065
 # environment
 STARSHIP_SHELL = zsh
+ 
 # variable set hash-table stats:
-# Load=115/1024=11%, Rehash=0, Collisions=24/145=17%
+# Load=112/1024=11%, Rehash=0, Collisions=23/142=16%
 
 # Pattern-specific Variable Values
 
@@ -482,6 +476,6 @@ undeploy-kapp:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Tue Jun 14 16:27:34 2022
+# Finished Make data base on Wed Jun 15 10:43:32 2022
 
  
