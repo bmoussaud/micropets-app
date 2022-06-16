@@ -68,7 +68,7 @@ func db() Fishes {
 				"https://www.fishkeepingworld.com/wp-content/uploads/2018/02/Neon-Tetra-New.jpg", GlobalConfig.Service.From, "/fishes/v1/data/1"},
 			{72, "Dory", "Pacific regal blue tang", 12,
 				"http://www.oceanlight.com/stock-photo/palette-surgeonfish-image-07922-671143.jpg", GlobalConfig.Service.From, "/fishes/v1/data/2"},
-			{73, "Argo", "Fighter", 27,
+			{73, "Argo", "French Fighter", 27,
 				"https://www.aquaportail.com/pictures1003/anemone-clown_1267799900_poisson-combattant.jpg", GlobalConfig.Service.From, "/fishes/v1/data/3"}}}
 
 	return fishes
