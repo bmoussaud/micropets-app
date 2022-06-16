@@ -20,27 +20,25 @@ make[1]: Leaving directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-
 make[1]: Entering directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/fishes'
 kubectl create namespace micropets-run --dry-run=client -o yaml | kubectl apply -f -
 kubectl get namespace micropets-run 
-ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropets-run -a micropet-fishes-service -f-
  
+ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropets-run -a micropet-fishes-service -f-
 make[1]: Leaving directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/fishes'
  
 make[1]: Entering directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/birds'
+make[1]: Leaving directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/birds'
  
 make[1]: *** No rule to make target `deploy-kapp'.
 
-make[1]: Leaving directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/birds'
- 
 make[1]: Entering directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/pets'
 kubectl create namespace micropets-run --dry-run=client -o yaml | kubectl apply -f -
 kubectl get namespace micropets-run 
- 
 ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropets-run -a micropet-pets-service -f-
+ 
 make[1]: Leaving directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/pets'
  
 make[1]: Entering directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/gui'
 kubectl create namespace micropets-run --dry-run=client -o yaml | kubectl apply -f -
 kubectl get namespace micropets-run 
- 
 ytt --ignore-unknown-comments  -f kapp | kapp deploy --yes --into-ns micropets-run -a micropet-gui-service -f-
 make[1]: Leaving directory `/Users/benoitmoussaud/Workspace/bmoussaud/micropets-app/gui'
  
