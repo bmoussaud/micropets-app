@@ -126,7 +126,7 @@ func QueryBackendService() Config {
 func GetK8SServices(clientset *kubernetes.Clientset, ctx context.Context,
 	namespace string) ([]v1.Service, error) {
 	listOptions := metav1.ListOptions{
-		LabelSelector: "app.kubernetes.io/part-of=micro-pet, app.kubernetes.io/component=backend",
+		LabelSelector: "app.kubernetes.io/part-of=micro-pet, micropets/kind=backend",
 		Limit:         100,
 	}
 
