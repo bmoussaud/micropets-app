@@ -4,25 +4,7 @@
     "listen": "true"
   },
   "backends": [
-    {
-      "name": "cats",
-      "host": "front.mytanzu.xyz",
-      "port": "80",
-      "context": "/cats/v1/data"
-    },
-    {
-      "name": "dogs",
-      "host": "front.mytanzu.xyz",
-      "port": "80",
-      "context": "/dogs/v1/data"
-    },
-    {
-      "name": "fishes",
-      "host": "front.mytanzu.xyz",
-      "port": "80",
-      "context": "/fishes/v1/data"
-    }
-  ],
+      ],
   "observability": {
     "enable": false,
     "application": "micropets",

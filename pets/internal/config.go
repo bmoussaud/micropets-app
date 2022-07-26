@@ -96,6 +96,7 @@ func DumpBackendConfig(config Config) {
 }
 
 func QueryBackendService() Config {
+	fmt.Printf("* QueryBackendService ")
 	var config Config
 	ctx := context.Background()
 	k8sconfig := ctrl.GetConfigOrDie()
@@ -120,6 +121,7 @@ func QueryBackendService() Config {
 			}{svcName, fmt.Sprintf("%s.%s.svc.cluster.local", svcName, namespace), strconv.FormatUint(uint64(svcPort), 10), fmt.Sprintf("/%s/v1/data", svcName)})
 		}
 	}
+	fmt.Printf("* QueryBackendService config %+v", config)
 	return config
 }
 
@@ -130,10 +132,13 @@ func GetK8SServices(clientset *kubernetes.Clientset, ctx context.Context,
 		Limit:         100,
 	}
 
+	fmt.Printf("* GetK8SServices in %s: labelSelector is %s\n", namespace, listOptions.LabelSelector)
+
 	list, err := clientset.CoreV1().Services(namespace).
 		List(ctx, listOptions)
 	if err != nil {
 		return nil, err
 	}
+	fmt.Printf("* GetK8SServices found size:%d", len(list.Items))
 	return list.Items, nil
 }
