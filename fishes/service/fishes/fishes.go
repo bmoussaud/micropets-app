@@ -16,7 +16,7 @@ import (
 	. "moussaud.org/fishes/internal"
 )
 
-//Fish Struct
+// Fish Struct
 type Fish struct {
 	Index int
 	Name  string
@@ -27,7 +27,7 @@ type Fish struct {
 	URI   string
 }
 
-//fishes Struct
+// fishes Struct
 type Fishes struct {
 	Total    int
 	Hostname string
@@ -62,7 +62,7 @@ func db() Fishes {
 	fishes := Fishes{4,
 		host,
 		[]Fish{
-			{70, "Nemo", "Fish Clown", 14,
+			{70, "Nemo benoit", "Fish Clown", 14,
 				"https://www.sciencesetavenir.fr/assets/img/2019/07/10/cover-r4x3w1000-5d258790dd324-f96f05d4901fc6ce0ab038a685e4d5c99f6cdfe2-jpg.jpg", GlobalConfig.Service.From, "/fishes/v1/data/0"},
 			{71, "Glumpy", "Neon Tetra", 11,
 				"https://www.fishkeepingworld.com/wp-content/uploads/2018/02/Neon-Tetra-New.jpg", GlobalConfig.Service.From, "/fishes/v1/data/1"},
@@ -154,7 +154,7 @@ func single(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//GetLocation returns the full path of the config file based on the current executable location or using SERVICE_CONFIG_DIR env
+// GetLocation returns the full path of the config file based on the current executable location or using SERVICE_CONFIG_DIR env
 func GetLocation(file string) string {
 	if serviceConfigDirectory := os.Getenv("SERVICE_CONFIG_DIR"); serviceConfigDirectory != "" {
 		fmt.Printf("Load configuration from %s\n", serviceConfigDirectory)
