@@ -23,7 +23,7 @@ import (
 
 var calls = 0
 
-//Pet Structure
+// Pet Structure
 type Pet struct {
 	Index    int
 	Name     string
@@ -36,13 +36,13 @@ type Pet struct {
 	URI      string
 }
 
-//Path Structure
+// Path Structure
 type Path struct {
 	Service  string
 	Hostname string
 }
 
-//Pets Structure
+// Pets Structure
 type Pets struct {
 	Total     int
 	Hostname  string
@@ -280,6 +280,7 @@ func Start() {
 		http.HandleFunc("/public", readiness_and_liveness)
 		http.HandleFunc("/pets", pets)
 		http.HandleFunc("/pets/", detail)
+		http.HandleFunc("/", pets)
 		fmt.Printf("******* Starting to the Pets service on port %s\n", port)
 		for i, backend := range config.Backends {
 			fmt.Printf("* Managing %d\t %s\t %s:%s%s\n", i, backend.Name, backend.Host, backend.Port, backend.Context)
