@@ -184,6 +184,8 @@ func Start() {
 	http.HandleFunc("/liveness", readiness_and_liveness)
 	http.HandleFunc("/readiness", readiness_and_liveness)
 
+	http.HandleFunc("/", index)
+
 	//http.HandleFunc("/", fallback)
 
 	rand.Seed(time.Now().UnixNano())

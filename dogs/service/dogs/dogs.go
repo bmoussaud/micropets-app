@@ -16,7 +16,7 @@ import (
 	. "moussaud.org/dogs/internal"
 )
 
-//Dog type
+// Dog type
 type Dog struct {
 	Index int
 	Name  string
@@ -27,7 +27,7 @@ type Dog struct {
 	URI   string
 }
 
-//Dogs type
+// Dogs type
 type Dogs struct {
 	Total    int
 	Hostname string
@@ -151,7 +151,7 @@ func single(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//GetLocation returns the full path of the config file based on the current executable location or using SERVICE_CONFIG_DIR env
+// GetLocation returns the full path of the config file based on the current executable location or using SERVICE_CONFIG_DIR env
 func GetLocation(file string) string {
 	if serviceConfigDirectory := os.Getenv("SERVICE_CONFIG_DIR"); serviceConfigDirectory != "" {
 		fmt.Printf("Load configuration from %s\n", serviceConfigDirectory)
@@ -186,7 +186,7 @@ func Start() {
 	http.HandleFunc("/liveness", readiness_and_liveness)
 	http.HandleFunc("/readiness", readiness_and_liveness)
 
-	//http.HandleFunc("/", fallback)
+	http.HandleFunc("/", index)
 
 	rand.Seed(time.Now().UnixNano())
 	shift = rand.Intn(100)

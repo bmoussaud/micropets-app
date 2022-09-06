@@ -189,7 +189,7 @@ func Start() {
 	http.HandleFunc("/liveness", readiness_and_liveness)
 	http.HandleFunc("/readiness", readiness_and_liveness)
 
-	//http.HandleFunc("/", fallback)
+	http.HandleFunc("/", index)
 
 	rand.Seed(time.Now().UnixNano())
 	shift = rand.Intn(100)
