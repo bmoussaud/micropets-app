@@ -48,6 +48,8 @@ var GlobalConfig Config
 // LoadConfiguration method
 func LoadConfiguration() Config {
 	if !GlobalConfig.setup {
+		var LocalConfig Config;
+
 		viper.SetConfigType("json")
 		viper.SetEnvPrefix("mp")           // will be uppercased automatically eg. MP_OBSERVABILITY.TOKEN=$(TO_TOKEN)
 		viper.SetConfigName("pets_config") // name of config file (without extension)
@@ -68,20 +70,24 @@ func LoadConfiguration() Config {
 			panic(fmt.Errorf("fatal error config file: %s ", err))
 		}
 
-		err = viper.Unmarshal(&GlobalConfig)
+		fmt.Printf("* Unmarshal config!\n")
+		err = viper.Unmarshal(&LocalConfig)
 		if err != nil {
 			panic(fmt.Errorf("unable to decode into struct, %v", err))
 		}
 
-		if len(GlobalConfig.Backends) == 0 {
+		if len(LocalConfig.Backends) == 0 {
 			fmt.Printf("* No defined backends, use dynamic mode!\n")
 			var dynamicConfig = QueryBackendService()
-			GlobalConfig.Backends = dynamicConfig.Backends
-			DumpBackendConfig(GlobalConfig)
+			LocalConfig.Backends = dynamicConfig.Backends
+			DumpBackendConfig(LocalConfig)
 		}
 
-		GlobalConfig.setup = false
+		
 		fmt.Printf("Resolved Configuration\n")
+		GlobalConfig=LocalConfig
+		//re-read the configuration again & again
+		GlobalConfig.setup = false
 		fmt.Printf("%+v\n", GlobalConfig)
 
 	}
