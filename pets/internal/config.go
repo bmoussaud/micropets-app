@@ -15,7 +15,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
-//Config Structure
+// Config Structure
 type Config struct {
 	Service struct {
 		Port   string
@@ -45,7 +45,7 @@ type Config struct {
 
 var GlobalConfig Config
 
-//LoadConfiguration method
+// LoadConfiguration method
 func LoadConfiguration() Config {
 	if !GlobalConfig.setup {
 		viper.SetConfigType("json")
@@ -80,7 +80,7 @@ func LoadConfiguration() Config {
 			DumpBackendConfig(GlobalConfig)
 		}
 
-		GlobalConfig.setup = true
+		GlobalConfig.setup = false
 		fmt.Printf("Resolved Configuration\n")
 		fmt.Printf("%+v\n", GlobalConfig)
 
