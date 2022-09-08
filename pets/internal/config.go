@@ -9,8 +9,10 @@ import (
 
 	"github.com/spf13/viper"
 
-	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/kubernetes"
 	ctrl "sigs.k8s.io/controller-runtime"
 )
@@ -48,7 +50,7 @@ var GlobalConfig Config
 // LoadConfiguration method
 func LoadConfiguration() Config {
 	if !GlobalConfig.setup {
-		var LocalConfig Config;
+		var LocalConfig Config
 
 		viper.SetConfigType("json")
 		viper.SetEnvPrefix("mp")           // will be uppercased automatically eg. MP_OBSERVABILITY.TOKEN=$(TO_TOKEN)
@@ -83,9 +85,8 @@ func LoadConfiguration() Config {
 			DumpBackendConfig(LocalConfig)
 		}
 
-		
 		fmt.Printf("Resolved Configuration\n")
-		GlobalConfig=LocalConfig
+		GlobalConfig = LocalConfig
 		//re-read the configuration again & again
 		GlobalConfig.setup = false
 		fmt.Printf("%+v\n", GlobalConfig)
@@ -104,19 +105,48 @@ func DumpBackendConfig(config Config) {
 func QueryBackendService() Config {
 	fmt.Printf("* QueryBackendService....\n")
 	var config Config
-	ctx := context.Background()
-	k8sconfig := ctrl.GetConfigOrDie()
-	clientset := kubernetes.NewForConfigOrDie(k8sconfig)
 
 	//TODO: manage namespace
 	namespace := "dev-tap"
-	items, err := GetK8SServices(clientset, ctx, namespace)
+	config, err := GetK8SKNativeServices(namespace)
 
 	if err != nil {
 		fmt.Println(err)
 		return config
 	} else {
-		for _, item := range items {
+
+		if len(config.Backends) == 0 {
+			fmt.Printf("* No KNative services switch back to Svc....\n")
+			config, _ := GetK8SServices(namespace)
+			fmt.Printf("* QueryBackendService config %+v\n", config)
+			return config
+		}
+
+	}
+	fmt.Printf("* QueryBackendService config %+v\n", config)
+	return config
+}
+
+func GetK8SServices(namespace string) (Config, error) {
+
+	ctx := context.Background()
+	k8sconfig := ctrl.GetConfigOrDie()
+	clientset := kubernetes.NewForConfigOrDie(k8sconfig)
+
+	listOptions := metav1.ListOptions{
+		LabelSelector: "app.kubernetes.io/part-of=micro-pet, micropets/kind=backend",
+		Limit:         100,
+	}
+
+	fmt.Printf("* GetK8SServices in %s: labelSelector is %s\n", namespace, listOptions.LabelSelector)
+	var config Config
+	items, err := clientset.CoreV1().Services(namespace).
+		List(ctx, listOptions)
+	if err != nil {
+		return config, err
+	} else {
+		fmt.Printf("* GetK8SServices found size:%d\n", len(items.Items))
+		for _, item := range items.Items {
 			var svcName = item.ObjectMeta.Name
 			var svcPort int32 = item.Spec.Ports[0].Port
 			config.Backends = append(config.Backends, struct {
@@ -127,24 +157,43 @@ func QueryBackendService() Config {
 			}{svcName, fmt.Sprintf("%s.%s.svc.cluster.local", svcName, namespace), strconv.FormatUint(uint64(svcPort), 10), fmt.Sprintf("/%s/v1/data", svcName)})
 		}
 	}
-	fmt.Printf("* QueryBackendService config %+v\n", config)
-	return config
+
+	return config, nil
 }
 
-func GetK8SServices(clientset *kubernetes.Clientset, ctx context.Context,
-	namespace string) ([]v1.Service, error) {
+func GetK8SKNativeServices(namespace string) (Config, error) {
+	var config Config
+	ksvcRes := schema.GroupVersionResource{Group: "serving.knative.dev", Version: "v1", Resource: "services"}
 	listOptions := metav1.ListOptions{
 		LabelSelector: "app.kubernetes.io/part-of=micro-pet, micropets/kind=backend",
 		Limit:         100,
 	}
 
-	fmt.Printf("* GetK8SServices in %s: labelSelector is %s\n", namespace, listOptions.LabelSelector)
+	fmt.Printf("* GetK8SKNativeServices in %s: labelSelector is %s\n", namespace, listOptions.LabelSelector)
+	ctx := context.Background()
+	k8sconfig := ctrl.GetConfigOrDie()
+	client := dynamic.NewForConfigOrDie(k8sconfig)
 
-	list, err := clientset.CoreV1().Services(namespace).
-		List(ctx, listOptions)
+	list, err := client.Resource(ksvcRes).Namespace(namespace).List(ctx, listOptions)
 	if err != nil {
-		return nil, err
+		return config, err
 	}
-	fmt.Printf("* GetK8SServices found size:%d\n", len(list.Items))
-	return list.Items, nil
+	fmt.Printf("* GetK8SKNativeServices found size:%d\n", len(list.Items))
+	for _, d := range list.Items {
+		address, found, err := unstructured.NestedMap(d.Object, "status", "address")
+		url := address["url"]
+		if err != nil || !found {
+			fmt.Printf("ERR: URL not found for ksvc %s: error=%s\n", d.GetName(), err)
+			continue
+		}
+		fmt.Printf(" * %s -> url : %s \n", d.GetName(), url)
+
+		config.Backends = append(config.Backends, struct {
+			Name    string "json:\"name\""
+			Host    string "json:\"host\""
+			Port    string "json:\"port\""
+			Context string "json:\"context\""
+		}{d.GetName(), fmt.Sprintf("%s", url), "80", fmt.Sprintf("/%s/v1/data", d.GetName())})
+	}
+	return config, nil
 }
