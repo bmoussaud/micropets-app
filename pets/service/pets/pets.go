@@ -10,6 +10,7 @@ import (
 	"os"
 	"regexp"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/imroc/req"
@@ -175,7 +176,13 @@ func pets(w http.ResponseWriter, r *http.Request) {
 	all.Hostnames = []Path{path}
 
 	for i, backend := range config.Backends {
-		URL := fmt.Sprintf("http://%s:%s%s", backend.Host, backend.Port, backend.Context)
+		var URL string
+		if strings.HasPrefix(backend.Host, "http") {
+			URL = fmt.Sprintf("%s:%s%s", backend.Host, backend.Port, backend.Context)
+		} else {
+			URL = fmt.Sprintf("http://%s:%s%s", backend.Host, backend.Port, backend.Context)
+		}
+
 		lookupService(backend.Host)
 		fmt.Printf("* Accessing %d\t %s\t %s\n", i, backend.Name, URL)
 		pets, err := queryPets(span.Context(), URL)
@@ -244,7 +251,13 @@ func detail(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Display a specific pet with ID %s ... => %s %s \n", r.URL.Path, service, id)
 	for _, backend := range config.Backends {
 		if service == backend.Name {
-			URL := fmt.Sprintf("http://%s:%s%s/%s", backend.Host, backend.Port, backend.Context, id)
+			var URL string
+			if strings.HasPrefix(backend.Host, "http") {
+				URL = fmt.Sprintf("%s:%s%s/%s", backend.Host, backend.Port, backend.Context, id)
+			} else {
+				URL = fmt.Sprintf("http://%s:%s%s/%s", backend.Host, backend.Port, backend.Context, id)
+			}
+
 			fmt.Printf("* Accessing %s\t %s\n", backend.Name, URL)
 			pet, err := queryPet(span.Context(), URL)
 			fmt.Printf("* result pet from queryPet %+v\n", pet)
