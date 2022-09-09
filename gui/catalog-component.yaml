@@ -16,7 +16,7 @@ metadata:
       title: "Micropets GUI "
       icon: locallibrary
 spec:
-  type: service
+  type: website
   lifecycle: experimental
   owner: the-pet-team
   system: micropets
