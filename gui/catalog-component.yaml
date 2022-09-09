@@ -9,11 +9,11 @@ metadata:
     - js
     - ui  
   annotations:
-    'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/name=gui'
+    'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/name=gui' 
     'github.com/project-slug': 'bmoussaud/microgui-app/gui'
   links:
     - url: http://www.micropets.apps.eu.aks.mytanzu.xyz/
-      title: 'Micropets UI '
+      title: 'Micropets GUI '
       icon: locallibrary
 spec:
   type: website
