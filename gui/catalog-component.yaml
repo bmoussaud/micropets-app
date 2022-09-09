@@ -12,7 +12,7 @@ metadata:
     'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/name=gui' 
     'github.com/project-slug': 'bmoussaud/microgui-app/gui'
   links:
-    - url: http://www.micropets.apps.eu.aks.mytanzu.xyz/
+    - url: http://gui.dev-tap.apps.eu.aks.mytanzu.xyz/
       title: 'Micropets GUI '
       icon: locallibrary
 spec:
