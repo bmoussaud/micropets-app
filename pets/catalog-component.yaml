@@ -22,7 +22,6 @@ spec:
   dependsOn: [Component:cats,Component:dogs,Component:fishes]
   providesApis:
     - pets-api
-  
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -35,4 +34,4 @@ spec:
   owner: the-pet-team
   system: micropets
   definition: 
-    $text: https://github.com/bmoussaud/micropets-app/blob/main/backstage/apis/insurance-apis-swagger.yaml
+    $text: https://github.com/bmoussaud/micropets-app/blob/master/pets/pets-api-swagger.yaml
