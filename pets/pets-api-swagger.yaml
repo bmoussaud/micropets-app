@@ -17,7 +17,7 @@ paths:
       summary: List all pets
     produces:
     - "application/json"
-  /pets/{kind}/{id}:
+  /pets/{kind}/v1/data/{id}:
     get:
       summary: Retrieve details about the {kind} pet based on its {id}
     produces:
@@ -25,7 +25,7 @@ paths:
     parameters:
     - name: "kind"
       in: "path"
-      description: "kind of pets"
+      description: "kind of pets (cats,dogs,fishes)"
       required: true
       type: "string"          
     - name: "id"
