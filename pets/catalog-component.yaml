@@ -34,19 +34,5 @@ spec:
   lifecycle: production  
   owner: the-pet-team
   system: micropets
-  definition: |
-    openapi: "3.0.0"
-    info:
-      version: 1.0.0
-      title: PET API
-      license:
-        name: MIT
-    servers:
-      - url: /pets
-    paths:
-      /pets:
-        get:
-          summary: List all pets
-      /pets/{kind}/{id}:
-        get:
-          summary: Retrieve details about the {kind} pet based on its {id}
+  definition: 
+    $text: https://github.com/bmoussaud/micropets-app/blob/main/backstage/apis/insurance-apis-swagger.yaml
