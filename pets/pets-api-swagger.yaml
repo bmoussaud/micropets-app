@@ -15,27 +15,31 @@ paths:
   /pets:
     get:
       summary: List all pets
-    produces:
-    - "application/json"
+      tags:
+      - "Data collection"      
+      produces:
+      - "application/json"
   /pets/{kind}/v1/data/{id}:
     get:
       summary: Retrieve details about the {kind} pet based on its {id}
-    produces:
-    - "application/json"
-    parameters:
-    - name: "kind"
-      in: "path"
-      description: "kind of pets (cats,dogs,fishes)"
-      required: true
-      type: "string"          
-    - name: "id"
-      in: "path"
-      description: "ID of pet to get detail"
-      required: true
-      type: "integer"
-      format: "int64"
-    responses:
-      200:
-        description: "successful data collection"
-      400:
-        description: "Invalid pet identifier"
+      tags:
+      - "Data collection"      
+      produces:
+      - "application/json"
+      parameters:
+      - name: "kind"
+        in: "path"
+        description: "kind of pets (cats,dogs,fishes)"
+        required: true
+        type: "string"          
+      - name: "id"
+        in: "path"
+        description: "ID of pet to get detail"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful data collection"
+        400:
+          description: "Invalid pet identifier"
