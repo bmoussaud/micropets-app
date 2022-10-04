@@ -27,7 +27,7 @@ apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
   name: pets-api
-  description: Manage Pets 
+  description: Manage Pets Service
 spec:
   type: openapi
   lifecycle: production  
