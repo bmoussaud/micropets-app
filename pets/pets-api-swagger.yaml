@@ -19,6 +19,11 @@ paths:
       - "Data collection"      
       produces:
       - "application/json"
+      responses:
+        '200':
+          description: OK
+          content:
+            "application/json"
   /pets/{kind}/v1/data/{id}:
     get:
       summary: Retrieve details about the {kind} pet based on its {id}
