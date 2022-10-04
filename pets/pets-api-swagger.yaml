@@ -20,16 +20,13 @@ paths:
       produces:
       - "application/json"
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  Total:
-                    type: string
-                    description: Total items returned                                    
+        responses:
+        200:
+          description: "Successful data collection"
+        501:
+          description: "Invalid pet identifier"
+        503:
+          description: "Invalid kind identifier"
   /pets/{kind}/v1/data/{id}:
     get:
       summary: Retrieve details about the {kind} pet based on its {id}
