@@ -19,8 +19,7 @@ paths:
       - "Data collection"      
       produces:
       - "application/json"
-      responses:
-        responses:
+      responses:        
         200:
           description: "Successful data collection"
         501:
