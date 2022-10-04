@@ -34,4 +34,4 @@ spec:
   owner: the-pet-team
   system: micropets
   definition: 
-    $text: https://github.com/bmoussaud/micropets-app/blob/master/pets/pets-api-swagger.yaml
+    $text: https://raw.githubusercontent.com/bmoussaud/micropets-app/master/pets/pets-api-swagger.yaml
