@@ -23,7 +23,13 @@ paths:
         '200':
           description: OK
           content:
-            "application/json"
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Total:
+                    type: string
+                    description: Total items returned                                    
   /pets/{kind}/v1/data/{id}:
     get:
       summary: Retrieve details about the {kind} pet based on its {id}
