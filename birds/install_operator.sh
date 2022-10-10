@@ -2,7 +2,7 @@
 set -x
 
 TANZU_USERNAME=bmoussaud@vmware.com
-TANZU_PASSWORD=j[YjNv2T@
+TANZU_PASSWORD=xxxxxxxxxxx
 
 helm registry login registry.tanzu.vmware.com --username=${TANZU_USERNAME} --password=${TANZU_PASSWORD}
 
