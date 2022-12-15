@@ -165,7 +165,7 @@ func GetK8SKNativeServices(namespace string) (Config, error) {
 	var config Config
 	ksvcRes := schema.GroupVersionResource{Group: "serving.knative.dev", Version: "v1", Resource: "services"}
 	listOptions := metav1.ListOptions{
-		LabelSelector: "app.kubernetes.io/part-of=micropets-app, micropets/kind=backend",
+		LabelSelector: "micropets/kind=backend",
 		Limit:         100,
 	}
 
