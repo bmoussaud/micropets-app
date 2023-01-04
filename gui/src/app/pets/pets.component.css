@@ -1,13 +1,21 @@
-.cat {
+.cats {
     background-color: rgb(136, 176, 75)
 }
 
-.dog {
-    background-color: RGB(152, 180, 212)
+.dogs {
+    background-color: rgb(105, 78, 29)
 }
 
-.fish {
+.fishes {
     background-color: rgb(245, 223, 77)
+}
+
+.elephants {
+    background-color: rgb(220, 220, 220)
+}
+
+.birds {
+    background-color: rgb(100, 215, 219)
 }
 
 .petscontainer {
