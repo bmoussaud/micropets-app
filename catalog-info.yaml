@@ -16,5 +16,6 @@ spec:
     - ./catalog/micropet-system.yaml
     - ./catalog/cloudapps-domain.yaml
     - ./catalog/the-pet-team.yaml
+    - https://github.com/bmoussaud/micropets-elephants/blob/main/catalog-component.yaml
     
  
