@@ -19,3 +19,4 @@ gui_
 replicate_makefile.sh
 */target/golist.json
 .vscode
+build

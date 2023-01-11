@@ -113,6 +113,7 @@ func single(w http.ResponseWriter, r *http.Request) {
 
 func index(w http.ResponseWriter, r *http.Request) {
 
+	fmt.Printf("%s", r.Method)
 	span := NewServerSpan(r, "index")
 	defer span.Finish()
 
@@ -126,7 +127,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	calls = calls + 1
 	if GlobalConfig.Service.Mode == "RANDOM_NUMBER" {
 		total := rand.Intn(cats.Total) + 1
-		fmt.Printf("reduce results to total %d/%d\n", total, cats.Total)
+		//fmt.Printf("reduce results to total %d/%d\n", total, cats.Total)
 		for i := 1; i < total; i++ {
 			cats.Cats = cats.Cats[:len(cats.Cats)-1]
 			cats.Total = cats.Total - 1
@@ -172,6 +173,13 @@ func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("ok"))
 }
 
+func logRequest(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Printf("%s %s %s\n", r.RemoteAddr, r.Method, r.URL)
+		handler.ServeHTTP(w, r)
+	})
+}
+
 func Start() {
 	config := LoadConfiguration()
 
@@ -195,5 +203,5 @@ func Start() {
 	fmt.Printf("******* Delay Period %d Amplitude %f shift %d \n", config.Service.Delay.Period, config.Service.Delay.Amplitude, shift)
 	fmt.Printf("******* Frequency Error %d\n", config.Service.FrequencyError)
 
-	log.Fatal(http.ListenAndServe(config.Service.Port, nil))
+	log.Fatal(http.ListenAndServe(config.Service.Port, logRequest(http.DefaultServeMux)))
 }

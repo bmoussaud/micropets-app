@@ -3,9 +3,9 @@ kind: Workload
 metadata:
   name: cats
   labels:
-    app.tanzu.vmware.com/workload-type: micropet-service-git
-spec:
-  serviceAccountName: cartographer-workload-sa
+    apps.tanzu.vmware.com/workload-type: web
+    app.kubernetes.io/part-of: cats
+spec:  
   source:
     git:
       url: https://github.com/bmoussaud/micropets-app/
