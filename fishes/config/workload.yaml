@@ -1,28 +1,28 @@
 apiVersion: carto.run/v1alpha1
 kind: Workload
 metadata:
-  name: cats
+  name: fishes
   labels:
     apps.tanzu.vmware.com/workload-type: web
-    app.kubernetes.io/part-of: cats
+    app.kubernetes.io/part-of: fishes
 spec:
   source:
     git:
       url: https://github.com/bmoussaud/micropets-app/
       ref:
         branch: master
-    subPath: cats
+    subPath: fishes
   serviceClaims:
     - name: app-config
       ref:
         apiVersion: v1
         kind: Secret
-        name: cats-config
+        name: fishes-config
   params:
     - name: mode
       value: "RANDOM_NUMBER"
     - name: port
-      value: 7002
+      value: 7004
     - name: observability
       value: true
     - name: annotations

@@ -177,6 +177,13 @@ func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("ok"))
 }
 
+func logRequest(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Printf("%s %s %s\n", r.RemoteAddr, r.Method, r.URL)
+		handler.ServeHTTP(w, r)
+	})
+}
+
 func Start() {
 	config := LoadConfiguration()
 
@@ -197,5 +204,6 @@ func Start() {
 	fmt.Printf("******* Starting to the fishes service on port %s, mode %s\n", config.Service.Port, config.Service.Mode)
 	fmt.Printf("******* Delay Period %d Amplitude %f shift %d \n", config.Service.Delay.Period, config.Service.Delay.Amplitude, shift)
 	fmt.Printf("******* Frequency Error %d\n", config.Service.FrequencyError)
-	log.Fatal(http.ListenAndServe(config.Service.Port, nil))
+
+	log.Fatal(http.ListenAndServe(config.Service.Port, logRequest(http.DefaultServeMux)))
 }
