@@ -1,0 +1,24 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pets-config
+  labels:
+    app.kubernetes.io/part-of: pets
+type: Opaque
+stringData:
+  type: app-configuration
+  pets_config.json: |-
+    {
+      "service": {
+        "port": ":8181",
+        "listen": "true"        
+      },
+      "observability": {
+        "application": "micropets-pets",
+        "cluster": "us-west",
+        "shard": "primary",
+        "server": "my.wavefront.com",
+        "token": "x-y-z-y"
+      }
+    }

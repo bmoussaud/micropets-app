@@ -1,0 +1,15 @@
+target
+.git
+.github
+.idea
+.vscode
+config
+node_modules
+gui/node_modules
+.vscode
+bindings
+build
+
+
+
+

@@ -282,6 +282,13 @@ func detail(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func logRequest(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Printf("%s %s %s\n", r.RemoteAddr, r.Method, r.URL)
+		handler.ServeHTTP(w, r)
+	})
+}
+
 func Start() {
 
 	config := LoadConfiguration()
@@ -298,7 +305,7 @@ func Start() {
 		for i, backend := range config.Backends {
 			fmt.Printf("* Managing %d\t %s\t %s:%s%s\n", i, backend.Name, backend.Host, backend.Port, backend.Context)
 		}
-		log.Fatal(http.ListenAndServe(port, nil))
+		log.Fatal(http.ListenAndServe(config.Service.Port, logRequest(http.DefaultServeMux)))
 	} else {
 		fmt.Printf("******* Don't Execute Pets service and exit \n")
 	}

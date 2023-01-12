@@ -57,10 +57,9 @@ func LoadConfiguration() Config {
 		viper.SetConfigName("pets_config") // name of config file (without extension)
 		viper.AutomaticEnv()
 
-		if serviceConfigDir := os.Getenv("SERVICE_CONFIG_DIR"); serviceConfigDir != "" {
-			fmt.Printf("Load configuration from %s\n", serviceConfigDir)
-			viper.AddConfigPath(serviceConfigDir)
-
+		if serviceConfigDir := os.Getenv("SERVICE_BINDING_ROOT"); serviceConfigDir != "" {
+			fmt.Printf("Load configuration from %s/app-config....\n", serviceConfigDir)
+			viper.AddConfigPath(serviceConfigDir + "/app-config")
 		}
 		//add default config path
 		viper.AddConfigPath("/etc/micropets/")  // path to look for the config file in
@@ -69,19 +68,31 @@ func LoadConfiguration() Config {
 
 		err := viper.ReadInConfig() // Find and read the config file
 		if err != nil {             // Handle errors reading the config file
-			panic(fmt.Errorf("fatal error config file: %s ", err))
-		}
-
-		fmt.Printf("* Unmarshal config!\n")
-		err = viper.Unmarshal(&LocalConfig)
-		if err != nil {
-			panic(fmt.Errorf("unable to decode into struct, %v", err))
+			fmt.Printf("Fatal error config file: %s \n....Use default configuration(:8080)\n", err)
+			GlobalConfig.Service.Port = ":8080"
+			GlobalConfig.Service.Listen = true
+		} else {
+			fmt.Printf("Config file found \n")
+			err = viper.Unmarshal(&GlobalConfig)
+			if err != nil {
+				panic(fmt.Errorf("unable to decode into struct, %v", err))
+			}
+			if port := os.Getenv("PORT"); port != "" {
+				fmt.Printf("Found Env PORT variable %s\n", port)
+				GlobalConfig.Service.Port = fmt.Sprintf(":%s", port)
+			}
 		}
 
 		if len(LocalConfig.Backends) == 0 {
 			fmt.Printf("* No defined backends, use dynamic mode!\n")
 			var dynamicConfig = QueryBackendService()
 			LocalConfig.Backends = dynamicConfig.Backends
+			LocalConfig.Service.Port = ":8080"
+			LocalConfig.Service.Listen = true
+			if port := os.Getenv("PORT"); port != "" {
+				fmt.Printf("Found Env PORT variable %s\n", port)
+				GlobalConfig.Service.Port = fmt.Sprintf(":%s", port)
+			}
 			DumpBackendConfig(LocalConfig)
 		}
 

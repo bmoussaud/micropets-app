@@ -5,6 +5,7 @@ metadata:
   labels:
     apps.tanzu.vmware.com/workload-type: web
     app.kubernetes.io/part-of: cats
+    micropets/kind: backend
 spec:
   source:
     git:
