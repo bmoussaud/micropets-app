@@ -45,27 +45,31 @@ func LoadConfiguration() Config {
 		viper.SetConfigName("pets_config") // name of config file (without extension)
 		viper.AutomaticEnv()
 
-		if serviceConfigDir := os.Getenv("SERVICE_CONFIG_DIR"); serviceConfigDir != "" {
-			fmt.Printf("Load configuration from %s\n", serviceConfigDir)
-			viper.AddConfigPath(serviceConfigDir)
+		if serviceConfigDir := os.Getenv("SERVICE_BINDING_ROOT"); serviceConfigDir != "" {
+			fmt.Printf("Load configuration from %s/app-config....\n", serviceConfigDir)
+			viper.AddConfigPath(serviceConfigDir + "/app-config")
 
 		}
 		//add default config path
-		viper.AddConfigPath("/config/")         // path to look for the config file in
 		viper.AddConfigPath("/etc/micropets/")  // path to look for the config file in
 		viper.AddConfigPath("$HOME/.micropets") // call multiple times to add many search paths
 		viper.AddConfigPath(".")                // optionally look for config in the working directory
 
 		err := viper.ReadInConfig() // Find and read the config file
 		if err != nil {             // Handle errors reading the config file
-			fmt.Printf("fatal error config file: %s ....use default configuration", err)
+			fmt.Printf("fatal error config file: %s \n....use default configuration\n", err)
 			GlobalConfig.Service.Port = ":8080"
 			GlobalConfig.Service.Listen = true
 			GlobalConfig.Service.Mode = "RANDOM_NUMBER"
 		} else {
+			fmt.Printf("config file found \n")
 			err = viper.Unmarshal(&GlobalConfig)
 			if err != nil {
 				panic(fmt.Errorf("unable to decode into struct, %v", err))
+			}
+			if port := os.Getenv("PORT"); port != "" {
+				fmt.Printf("Found Env PORT variable %s\n", port)
+				GlobalConfig.Service.Port = fmt.Sprintf(":%s", port)
 			}
 		}
 

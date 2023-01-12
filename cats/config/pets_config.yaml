@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cats-config
+  labels:
+    app.kubernetes.io/part-of: cats
+type: Opaque
+stringData:
+  type: app-configuration
+  pets_config.json: |-
+    {
+      "service": {
+        "port": ":8181",
+        "listen": "true",
+        "mode": "RANDOM_NUMBER",
+        "frequencyError": 10,
+        "delay": {
+          "period": 200,
+          "amplitude": 0.3
+        }
+      },
+      "observability": {
+        "enable": false,
+        "application": "micropets",
+        "service": "pets",
+        "cluster": "us-west",
+        "shard": "primary",
+        "server": "xxxx.wavefront.com",
+        "token": "x-y-z-y"
+      }
+    }
