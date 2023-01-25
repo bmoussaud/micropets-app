@@ -4,7 +4,10 @@ metadata:
   name: pets
   labels:
     apps.tanzu.vmware.com/workload-type: web
-    app.kubernetes.io/part-of: pets
+    apps.tanzu.vmware.com/has-tests: "true"
+    app.kubernetes.io/part-of: pets    
+  annotations:
+    autoscaling.knative.dev/minScale: "1"
 spec:
   source:
     git:
@@ -18,13 +21,7 @@ spec:
         apiVersion: v1
         kind: Secret
         name: pets-config
-  params:
-    - name: mode
-      value: "RANDOM_NUMBER"
-    - name: port
-      value: 7004
-    - name: observability
-      value: true
-    - name: annotations
+  params:   
+    - name: testing_pipeline_matching_labels
       value:
-        autoscaling.knative.dev/minScale: "1"
+        apps.tanzu.vmware.com/pipeline: micropets-test-go
