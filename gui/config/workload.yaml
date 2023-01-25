@@ -1,0 +1,27 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: gui
+  labels:
+    apps.tanzu.vmware.com/workload-type: web
+    apps.tanzu.vmware.com/has-tests: "true"
+    app.kubernetes.io/part-of: gui    
+  annotations:
+    autoscaling.knative.dev/minScale: "1"
+spec:
+  source:
+    git:
+      url: https://github.com/bmoussaud/micropets-app/
+      ref:
+        branch: master
+    subPath: gui
+  serviceClaims:
+    - name: app-config
+      ref:
+        apiVersion: v1
+        kind: Secret
+        name: gui-config
+  params:   
+    - name: testing_pipeline_matching_labels
+      value:
+        apps.tanzu.vmware.com/pipeline: micropets-test-angular
