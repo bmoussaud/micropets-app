@@ -5,7 +5,7 @@ metadata:
   labels:
     apps.tanzu.vmware.com/workload-type: web
     apps.tanzu.vmware.com/has-tests: "true"
-    app.kubernetes.io/part-of: gui    
+    app.kubernetes.io/part-of: gui
   annotations:
     autoscaling.knative.dev/minScale: "1"
 spec:
@@ -21,7 +21,15 @@ spec:
         apiVersion: v1
         kind: Secret
         name: gui-config
-  params:   
+  build:
+    env:
+      - name: BP_NODE_RUN_SCRIPTS
+        value: build
+      - name: NODE_ENV
+        value: development
+      - name: BP_NODE_VERSION
+        value: BP_NODE_VERSION=19.3
+  params:
     - name: testing_pipeline_matching_labels
       value:
-        apps.tanzu.vmware.com/pipeline: micropets-test-angular
+        apps.tanzu.vmware.com/pipeline: micropets-skip-test

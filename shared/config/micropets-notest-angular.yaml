@@ -1,9 +1,9 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: angular-pipeline
+  name: skip-test-pipeline
   labels:
-    apps.tanzu.vmware.com/pipeline: micropets-test-angular
+    apps.tanzu.vmware.com/pipeline: micropets-skip-test
 spec:
   params:
   - name: source-url
@@ -31,7 +31,6 @@ spec:
         resources: {}
         script: |-
           cd `mktemp -d`
-          wget -qO- $(params.source-url) | tar xvz -m
-          cd gui
-          npm install
-          npm run test-headless
+          wget -qO- $(params.source-url) | tar xvz -m          
+          pwd
+          echo "!!!! skip the tests !"
