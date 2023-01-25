@@ -10,7 +10,7 @@ stringData:
   type: app-configuration
   config.json: |-
     {  
-      "petServiceUrl": "/pets",
+      "petServiceUrl": "https://pets.dev-tap.tap4.eu.aks.mytanzu.xyz",
       "stage": "demo",
       "debug": "False",
       "stage_color": "red",

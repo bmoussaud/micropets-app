@@ -21,14 +21,9 @@ spec:
         apiVersion: v1
         kind: Secret
         name: gui-config
-  build:
-    env:
-      - name: BP_NODE_RUN_SCRIPTS
-        value: build
-      - name: NODE_ENV
-        value: development
-      - name: BP_NODE_VERSION
-        value: BP_NODE_VERSION=19.3
+  env:
+    - name: SERVICE_BINDING_ROOT
+      value: "/workspace/dist/assets"
   params:
     - name: testing_pipeline_matching_labels
       value:

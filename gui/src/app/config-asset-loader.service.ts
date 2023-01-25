@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {shareReplay} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 
 export interface Configuration {
   petServiceUrl: string;
@@ -10,10 +10,10 @@ export interface Configuration {
   load_one_by_one: string
 }
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class ConfigAssetLoaderService {
 
-  private readonly CONFIG_URL = 'assets/config.json';
+  private readonly CONFIG_URL = 'assets/app-config/config.json';
   private configuration$!: Observable<Configuration>;
 
   constructor(private http: HttpClient) {
