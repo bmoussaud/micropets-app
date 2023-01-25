@@ -5,7 +5,8 @@ metadata:
   labels:
     apps.tanzu.vmware.com/workload-type: web
     apps.tanzu.vmware.com/has-tests: "true"
-    app.kubernetes.io/part-of: gui
+    app.kubernetes.io/part-of: micropets
+    app.kubernetes.io/name: gui
   annotations:
     autoscaling.knative.dev/minScale: "1"
 spec:
@@ -28,9 +29,4 @@ spec:
     - name: testing_pipeline_matching_labels
       value:
         apps.tanzu.vmware.com/pipeline: micropets-skip-test
-    - name: gitops_server_address
-      value: https://github.com/
-    - name: gitops_repository_owner
-      value: bmoussaud
-    - name: gitops_repository_name
-      value: micropets-app-gitops
+   

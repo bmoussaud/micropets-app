@@ -5,7 +5,8 @@ metadata:
   labels:
     apps.tanzu.vmware.com/workload-type: web
     apps.tanzu.vmware.com/has-tests: "true"
-    app.kubernetes.io/part-of: dogs
+    app.kubernetes.io/part-of: micropets
+    app.kubernetes.io/name: dogs
     micropets/kind: backend
   annotations:
     autoscaling.knative.dev/minScale: "1"
