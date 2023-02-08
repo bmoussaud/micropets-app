@@ -11,8 +11,8 @@ stringData:
   config.json: |-
     {  
       "petServiceUrl": "https://pets.dev-tap.tap4.eu.aks.mytanzu.xyz",
-      "stage": "demo",
+      "stage": "Demo",
       "debug": "False",
-      "stage_color": "red",
+      "stage_color": "green",
       "load_one_by_one": "True"
     }
