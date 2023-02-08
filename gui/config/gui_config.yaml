@@ -10,7 +10,7 @@ stringData:
   type: app-configuration
   config.json: |-
     {  
-      "petServiceUrl": "https://pets.dev-tap.tap4.eu.aks.mytanzu.xyz",
+      "petServiceUrl": "https://pets-golang.dev-tap.tap4.eu.aks.mytanzu.xyz",
       "stage": "Demo",
       "debug": "False",
       "stage_color": "green",
