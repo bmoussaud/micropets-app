@@ -11,7 +11,7 @@ stringData:
   pets_config.json: |-
     {
       "service": {
-        "port": ":8181",
+        "port": ":8080",
         "listen": "true"        
       },
       "observability": {

@@ -3,15 +3,14 @@
     "port": ":9000",
     "listen": "true"
   },
-  "backends": [
-      ],
+  "backends": [],
   "observability": {
     "enable": false,
     "application": "micropets",
     "service": "pets",
     "cluster": "us-west",
     "shard": "primary",
-    "server": "https://vmware.wavefront.com",    
+    "server": "https://vmware.wavefront.com",
     "token": "xxxx-xxx-yyyy-zzzz"
   }
 }

@@ -183,8 +183,10 @@ func pets(w http.ResponseWriter, r *http.Request) {
 			URL = fmt.Sprintf("http://%s:%s%s", backend.Host, backend.Port, backend.Context)
 		}
 
+		fmt.Printf("* Accessing %d\t %s\t %s .....\n", i, backend.Name, URL)
+		
 		lookupService(backend.Host)
-		fmt.Printf("* Accessing %d\t %s\t %s\n", i, backend.Name, URL)
+
 		pets, err := queryPets(span.Context(), URL)
 		if err != nil {
 			fmt.Printf("* ERROR * Accessing backend [%s][%s]:[%s]\n", backend.Name, URL, err)
@@ -305,7 +307,9 @@ func Start() {
 		for i, backend := range config.Backends {
 			fmt.Printf("* Managing %d\t %s\t %s:%s%s\n", i, backend.Name, backend.Host, backend.Port, backend.Context)
 		}
-		log.Fatal(http.ListenAndServe(config.Service.Port, logRequest(http.DefaultServeMux)))
+		fmt.Printf("> \n")
+		//log.Fatal(http.ListenAndServe(config.Service.Port, logRequest(http.DefaultServeMux)))
+		log.Fatal(http.ListenAndServe(config.Service.Port, nil))
 	} else {
 		fmt.Printf("******* Don't Execute Pets service and exit \n")
 	}
