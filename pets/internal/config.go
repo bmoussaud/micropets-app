@@ -168,7 +168,7 @@ func GetK8SServices(namespace string) (Config, error) {
 				Host    string "json:\"host\""
 				Port    string "json:\"port\""
 				Context string "json:\"context\""
-			}{svcName, fmt.Sprintf("%s.%s.svc.cluster.local", svcName, namespace), strconv.FormatUint(uint64(svcPort), 10), fmt.Sprintf("/%s/v1/data", context)})
+			}{context, fmt.Sprintf("%s.%s.svc.cluster.local", svcName, namespace), strconv.FormatUint(uint64(svcPort), 10), fmt.Sprintf("/%s/v1/data", context)})
 		}
 	}
 
@@ -201,15 +201,22 @@ func GetK8SKNativeServices(namespace string) (Config, error) {
 			continue
 		}
 		fmt.Printf(" * %s -> url : %s \n", d.GetName(), url)
-		var context = strings.Split(d.GetName(), "-")[0]
-		fmt.Printf(" * context -> %s \n", context)
+
+		var context string
+		val, ok := d.GetLabels()["app.kubernetes.io/name"]
+		if ok {
+			context = val
+		} else {
+			context = strings.Split(d.GetName(), "-")[0]
+		}
+		//fmt.Printf(" * context -> %s \n", context)
 
 		config.Backends = append(config.Backends, struct {
 			Name    string "json:\"name\""
 			Host    string "json:\"host\""
 			Port    string "json:\"port\""
 			Context string "json:\"context\""
-		}{d.GetName(), fmt.Sprintf("%s", url), "80", fmt.Sprintf("/%s/v1/data", context)})
+		}{context, fmt.Sprintf("%s", url), "80", fmt.Sprintf("/%s/v1/data", context)})
 	}
 	return config, nil
 }
