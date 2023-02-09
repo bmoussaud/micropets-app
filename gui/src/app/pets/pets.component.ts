@@ -32,7 +32,7 @@ export class PetsComponent implements OnInit {
 
     this.configService.loadConfigurations()
       .subscribe((data: Configuration) => this.config = {
-        petServiceUrl: data.petServiceUrl,
+        petServiceUrl: '/',
         stage: data.stage,
         stage_color: data.stage_color,
         load_one_by_one: data.load_one_by_one
@@ -56,8 +56,8 @@ export class PetsComponent implements OnInit {
   }
 
   private refresh_all() {
-    //console.log("------------------- refresh")
-    //console.log(this.config.petServiceUrl)
+    console.log("------------------- refresh")
+    console.log(this.config.petServiceUrl)
     this.petsService.getPetsData(this.config.petServiceUrl)
       .pipe(map(result => result))
       .subscribe(result => {
