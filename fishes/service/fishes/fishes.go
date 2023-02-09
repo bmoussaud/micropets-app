@@ -85,6 +85,10 @@ func index(w http.ResponseWriter, r *http.Request) {
 	calls = calls + 1
 	fishes := db()
 
+	for i := 1; i < fishes.Total; i++ {
+		fishes.Fishes[i].From = GlobalConfig.Service.From
+	}
+
 	time.Sleep(time.Duration(len(fishes.Fishes)) * time.Millisecond)
 	db_authentication(r)
 
@@ -143,6 +147,7 @@ func single(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, fmt.Sprintf("invalid index %d", id), http.StatusInternalServerError)
 	} else {
 		element := fishes.Fishes[id]
+		element.From = GlobalConfig.Service.From
 		fmt.Println(element)
 		w.Header().Set("Content-Type", "application/json")
 		js, err := json.Marshal(element)

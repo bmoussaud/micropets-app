@@ -100,6 +100,7 @@ func single(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, fmt.Sprintf("invalid index %d", id), http.StatusInternalServerError)
 	} else {
 		element := cats.Cats[id]
+		element.From = GlobalConfig.Service.From
 		fmt.Println(element)
 		w.Header().Set("Content-Type", "application/json")
 		js, err := json.Marshal(element)
@@ -123,6 +124,10 @@ func index(w http.ResponseWriter, r *http.Request) {
 	db_authentication(r)
 
 	cats := db()
+
+	for i := 1; i < cats.Total; i++ {
+		cats.Cats[i].From = GlobalConfig.Service.From
+	}
 
 	calls = calls + 1
 	if GlobalConfig.Service.Mode == "RANDOM_NUMBER" {

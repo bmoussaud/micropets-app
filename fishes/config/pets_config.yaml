@@ -18,7 +18,8 @@ stringData:
         "delay": {
           "period": 200,
           "amplitude": 0.3
-        }
+        },
+        "from":"Europ"
       },
       "observability": {
         "enable": false,
