@@ -1,1 +1,1 @@
-tanzu apps workload apply -f config/workload.yaml --live-update --local-path . --source-image akseutap4registry.azurecr.io/gui --namespace dev-tap --yes  --update-strategy merge
+tanzu apps workload apply -f config/workload.yaml -e "PETS_SERVICE=http://pets-golang.dev-tap/pets" --live-update --local-path . --source-image akseutap4registry.azurecr.io/gui --namespace dev-tap --yes  --update-strategy merge
