@@ -28,5 +28,4 @@ spec:
   params:
     - name: testing_pipeline_matching_labels
       value:
-        apps.tanzu.vmware.com/pipeline: micropets-skip-test
-   
+        apps.tanzu.vmware.com/pipeline: skip-test

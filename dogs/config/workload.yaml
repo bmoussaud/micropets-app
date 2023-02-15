@@ -26,4 +26,4 @@ spec:
   params:   
     - name: testing_pipeline_matching_labels
       value:
-        apps.tanzu.vmware.com/pipeline: micropets-test-go
+        apps.tanzu.vmware.com/pipeline: test-golang
