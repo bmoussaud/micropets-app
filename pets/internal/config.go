@@ -3,6 +3,7 @@ package internal
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"strings"
 
 	"os"
@@ -114,12 +115,19 @@ func DumpBackendConfig(config Config) {
 	}
 }
 
+func GetCurrentNamespace() (string, error) {
+	if data, err := ioutil.ReadFile("/var/run/secrets/kubernetes.io/serviceaccount/namespace"); err == nil {
+		return string(data), nil
+	} else {
+		return "", err
+	}
+}
 func QueryBackendService() Config {
 	fmt.Printf("* QueryBackendService....\n")
 	var config Config
 
 	//TODO: manage namespace
-	namespace := "dev-tap"
+	namespace, _ := GetCurrentNamespace()
 	config, err := GetK8SKNativeServices(namespace)
 
 	if err != nil {
