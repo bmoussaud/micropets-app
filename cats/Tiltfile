@@ -1,6 +1,6 @@
 SOURCE_IMAGE = os.getenv("SOURCE_X_IMAGE", default='akseutap4registry.azurecr.io/cats-source')
 LOCAL_PATH = os.getenv("LOCAL_PATH", default='.')
-NAMESPACE = os.getenv("NAMESPACE", default='dev-tap')
+NAMESPACE = os.getenv("NAMESPACE", default='micropets-dev')
 OUTPUT_TO_NULL_COMMAND = os.getenv("OUTPUT_TO_NULL_COMMAND", default=' > /dev/null ')
 
 compile_cmd = 'CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o build/cats -buildmode pie -trimpath ./cmd/cats/main.go'
