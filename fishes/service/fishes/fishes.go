@@ -144,7 +144,7 @@ func single(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(submatchall[4])
 
 	if id >= len(fishes.Fishes) {
-		http.Error(w, fmt.Sprintf("invalid index %d", id), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("Invalid index %d", id), http.StatusInternalServerError)
 	} else {
 		element := fishes.Fishes[id]
 		element.From = GlobalConfig.Service.From

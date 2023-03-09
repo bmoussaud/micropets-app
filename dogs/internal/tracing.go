@@ -34,7 +34,7 @@ func NewGlobalTracer() io.Closer {
 				log.Fatalf("error creating wavefront sender: %q", err)
 			}
 
-			log.Printf("* Enabled Observability %s \n", ObservabilityConfig.Server)
+			log.Printf("* Enabled Observability on %s \n", ObservabilityConfig.Server)
 
 		} else {
 			log.Fatalf("Not enough configuration parameter has been specified for sender.")
