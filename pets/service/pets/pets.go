@@ -14,10 +14,6 @@ import (
 	"time"
 
 	"github.com/imroc/req"
-	"github.com/opentracing/opentracing-go"
-
-	otrext "github.com/opentracing/opentracing-go/ext"
-	otrlog "github.com/opentracing/opentracing-go/log"
 
 	. "moussaud.org/pets/internal"
 )
@@ -73,7 +69,7 @@ func lookupService(service string) string {
 	return service
 }
 
-func queryPets(spanCtx opentracing.SpanContext, backend string) (Pets, error) {
+func queryPets(backend string) (Pets, error) {
 
 	var pets Pets
 	req.Debug = true
@@ -87,7 +83,8 @@ func queryPets(spanCtx opentracing.SpanContext, backend string) (Pets, error) {
 
 	//Inject the opentracing header
 	if LoadConfiguration().Observability.Enable {
-		opentracing.GlobalTracer().Inject(spanCtx, opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(req.Header))
+		//_, span := otel.Tracer("pets").Start(ctx, backend)
+		//defer span.End()
 	}
 
 	response, err := http.DefaultClient.Do(req)
@@ -106,7 +103,7 @@ func queryPets(spanCtx opentracing.SpanContext, backend string) (Pets, error) {
 	return pets, nil
 }
 
-func queryPet(spanCtx opentracing.SpanContext, backend string) (Pet, error) {
+func queryPet(backend string) (Pet, error) {
 
 	var pet Pet
 	req.Debug = true
@@ -120,7 +117,8 @@ func queryPet(spanCtx opentracing.SpanContext, backend string) (Pet, error) {
 
 	//Inject the opentracing header
 	if LoadConfiguration().Observability.Enable {
-		opentracing.GlobalTracer().Inject(spanCtx, opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(req.Header))
+		//_, span := otel.Tracer("pets").Start(ctx, backend)
+		//defer span.End()
 	}
 
 	response, err := http.DefaultClient.Do(req)
@@ -142,8 +140,7 @@ func queryPet(spanCtx opentracing.SpanContext, backend string) (Pet, error) {
 }
 
 func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
-	span := NewServerSpan(r, "readiness_and_liveness")
-	defer span.Finish()
+	NewServerSpan(r, "readiness_and_liveness")
 
 	setupResponse(&w, r)
 	//fmt.Printf("Handling %+v\n", r)
@@ -160,8 +157,8 @@ func readiness_and_liveness(w http.ResponseWriter, r *http.Request) {
 }
 
 func pets(w http.ResponseWriter, r *http.Request) {
-	span := NewServerSpan(r, "index")
-	defer span.Finish()
+	//_, span := otel.Tracer("pets").Start(ctx, "pets")
+	//defer span.End()
 
 	setupResponse(&w, r)
 	fmt.Printf("index Handling %+v\n", r)
@@ -184,10 +181,10 @@ func pets(w http.ResponseWriter, r *http.Request) {
 		}
 
 		fmt.Printf("* Accessing %d\t %s\t %s .....\n", i, backend.Name, URL)
-		
+
 		lookupService(backend.Host)
 
-		pets, err := queryPets(span.Context(), URL)
+		pets, err := queryPets(URL)
 		if err != nil {
 			fmt.Printf("* ERROR * Accessing backend [%s][%s]:[%s]\n", backend.Name, URL, err)
 		} else {
@@ -216,11 +213,11 @@ func pets(w http.ResponseWriter, r *http.Request) {
 
 	if all.Total == 0 {
 		fmt.Printf("Zero answer from all the services (1)\n")
-		otrext.Error.Set(span, true)
-		span.LogFields(
-			otrlog.String("error.kind", "global failure"),
-			otrlog.String("message", "pet service unavailable"),
-		)
+		//otrext.Error.Set(span, true)
+		//span.LogFields(
+		//		otrlog.String("error.kind", "global failure"),
+		//	otrlog.String("message", "pet service unavailable"),
+		//)
 		//http.Error(w, "Zero answer from all the services (1) ", http.StatusInternalServerError)
 		WriteError(w, "no answer from all the pets services", http.StatusServiceUnavailable)
 		return
@@ -236,8 +233,8 @@ func pets(w http.ResponseWriter, r *http.Request) {
 }
 
 func detail(w http.ResponseWriter, r *http.Request) {
-	span := NewServerSpan(r, "detail")
-	defer span.Finish()
+	//_, span := otel.Tracer("pets").Start(ctx, "detail")
+	//defer span.End()
 
 	setupResponse(&w, r)
 	fmt.Printf("index Handling %+v\n", r)
@@ -261,7 +258,7 @@ func detail(w http.ResponseWriter, r *http.Request) {
 			}
 
 			fmt.Printf("* Accessing %s\t %s\n", backend.Name, URL)
-			pet, err := queryPet(span.Context(), URL)
+			pet, err := queryPet(URL)
 			fmt.Printf("* result pet from queryPet %+v\n", pet)
 			if err != nil {
 				fmt.Printf("* ERROR * Accessing backend [%s][%s]:[%s]\n", backend.Name, URL, err)
