@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { concatMap, map, mergeMap } from 'rxjs/operators'
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ConfigAssetLoaderService, Configuration } from '../config-asset-loader.service';
 import { PetsService, PetsData, PetsEntity, HostnamesEntity } from '../pets.service';
 import { from } from 'rxjs';
