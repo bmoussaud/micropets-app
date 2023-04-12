@@ -6,8 +6,7 @@ metadata:
   annotations:
     'backstage.io/techdocs-ref': dir:.
 spec:
-  targets:    
-    - https://github.com/bmoussaud/micropets-cats-golang/blob/main/catalog-component.yaml
+  targets:        
     - https://github.com/bmoussaud/micropets-dogs-golang/blob/main/catalog-component.yaml
     - https://github.com/bmoussaud/micropets-fishes-golang/blob/main/catalog-component.yaml
     - https://github.com/bmoussaud/micropets-pets-golang/blob/main/catalog-component.yaml
