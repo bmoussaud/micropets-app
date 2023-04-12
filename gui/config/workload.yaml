@@ -10,6 +10,16 @@ metadata:
   annotations:
     autoscaling.knative.dev/minScale: "1"
 spec:
+  build:
+    env:
+      - name: X_BP_NODE_OPTIMIZE_MEMORY
+        value: "true"
+      - name: LOG_LEVEL
+        value: DEBUG
+      - name: NODE_OPTIONS
+        value: "--max_old_space_size=3072"
+      - name: MEMORY_AVAILABLE
+        value: "4096"
   source:
     git:
       url: https://github.com/bmoussaud/micropets-app/

@@ -7,12 +7,12 @@ metadata:
     'backstage.io/techdocs-ref': dir:.
 
 spec:
-  targets:
-    - ./cats/catalog-component.yaml
-    - ./dogs/catalog-component.yaml
-    - ./fishes/catalog-component.yaml
-    - ./pets/catalog-component.yaml
-    - ./gui/catalog-component.yaml
+  targets:    
+    - https://github.com/bmoussaud/micropets-cats-golang/blob/main/catalog-component.yaml
+    - https://github.com/bmoussaud/micropets-dogs-golang/blob/main/catalog-component.yaml
+    - https://github.com/bmoussaud/micropets-fishes-golang/blob/main/catalog-component.yaml
+    - https://github.com/bmoussaud/micropets-pets-golang/blob/main/catalog-component.yaml
+    - https://github.com/bmoussaud/micropets-gui-angular-js/blob/main/catalog-component.yaml
     - ./catalog/micropet-system.yaml
     - ./catalog/cloudapps-domain.yaml
     - ./catalog/the-pet-team.yaml

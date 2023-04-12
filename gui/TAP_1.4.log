@@ -1,0 +1,219 @@
+[0;36m===> PREPARE
+[0mBuild reason(s): CONFIG
+CONFIG:
+	[32m+[0m [32menv:[0m
+	[32m+[0m [32m- name: BP_OCI_SOURCE[0m
+	[32m+[0m [32m  value: akseutap4registry.azurecr.io/gui:latest@sha256:6bed0469fd2de46ff722eec53f0d56ec0d81412547a85498cebe515cccb2b886[0m
+	[32m+[0m [32m- name: BP_LIVE_RELOAD_ENABLED[0m
+	[32m+[0m [32m  value: "true"[0m
+	resources: {}
+	[31m-[0m [31msource: {}[0m
+	[32m+[0m [32msource:[0m
+	[32m+[0m [32m  blob:[0m
+	[32m+[0m [32m    url: http://source-controller-manager-artifact-service.source-system.svc.cluster.local./imagerepository/micropets-int/gui-angular-js/6bed0469fd2de46ff722eec53f0d56ec0d81412547a85498cebe515cccb2b886.tar.gz[0m
+Loading secret for "akseutap4registry.azurecr.io" from secret "registries-credentials" at location "/var/build-secrets/registries-credentials"
+Loading secret for "akseutap4registry.azurecr.io" from secret "app-registry" at location "/var/build-secrets/app-registry"
+Loading cluster credential helpers
+Downloading source-controller-manager-artifact-service.source-system.svc.cluster.local./imagerepository/micropets-int/gui-angular-js/6bed0469fd2de46ff722eec53f0d56ec0d81412547a85498cebe515cccb2b886.tar.gz...
+Successfully downloaded source-controller-manager-artifact-service.source-system.svc.cluster.local./imagerepository/micropets-int/gui-angular-js/6bed0469fd2de46ff722eec53f0d56ec0d81412547a85498cebe515cccb2b886.tar.gz in path "/workspace"
+Builder:
+ Image: akseutap4registry.azurecr.io/library/tanzu-build-service/buildservice:clusterbuilder-default@sha256:023c8fc43efa3dec12fd57a206d709866742941e4ef4fbbbe03a5e505683303e 
+ Name: default 
+ Kind: ClusterBuilder 
+[0;36m===> ANALYZE
+[0mRestoring data for SBOM from previous image
+[0;36m===> DETECT
+[0m======== Output: tanzu-buildpacks/go-dist-lite@2.2.0 ========
+working directory contains deprecated 'buildpack.yml'; use environment variables for configuration
+err:  tanzu-buildpacks/go-dist-lite@2.2.0 (1)
+======== Output: tanzu-buildpacks/go-dist-lite@2.2.0 ========
+working directory contains deprecated 'buildpack.yml'; use environment variables for configuration
+err:  tanzu-buildpacks/go-dist-lite@2.2.0 (1)
+======== Output: tanzu-buildpacks/go-dist-lite@2.2.0 ========
+working directory contains deprecated 'buildpack.yml'; use environment variables for configuration
+err:  tanzu-buildpacks/go-dist-lite@2.2.0 (1)
+======== Output: tanzu-buildpacks/cpython-lite@1.8.1 ========
+working directory contains deprecated 'buildpack.yml'; use environment variables for configuration
+err:  tanzu-buildpacks/cpython-lite@1.8.1 (1)
+======== Output: tanzu-buildpacks/cpython-lite@1.8.1 ========
+working directory contains deprecated 'buildpack.yml'; use environment variables for configuration
+err:  tanzu-buildpacks/cpython-lite@1.8.1 (1)
+======== Output: tanzu-buildpacks/cpython-lite@1.8.1 ========
+working directory contains deprecated 'buildpack.yml'; use environment variables for configuration
+err:  tanzu-buildpacks/cpython-lite@1.8.1 (1)
+======== Output: tanzu-buildpacks/cpython-lite@1.8.1 ========
+working directory contains deprecated 'buildpack.yml'; use environment variables for configuration
+err:  tanzu-buildpacks/cpython-lite@1.8.1 (1)
+======== Output: tanzu-buildpacks/cpython-lite@1.8.1 ========
+working directory contains deprecated 'buildpack.yml'; use environment variables for configuration
+err:  tanzu-buildpacks/cpython-lite@1.8.1 (1)
+8 of 9 buildpacks participating
+tanzu-buildpacks/deprecation-warnings 0.0.2
+paketo-buildpacks/ca-certificates     3.5.0
+tanzu-buildpacks/watchexec-lite       2.7.0
+tanzu-buildpacks/node-engine-lite     0.16.0
+tanzu-buildpacks/npm-install          0.8.8
+tanzu-buildpacks/node-run-script      0.4.2
+tanzu-buildpacks/nginx-lite           0.11.0
+paketo-buildpacks/image-labels        4.3.0
+[0;36m===> RESTORE
+[0mRestoring metadata for "paketo-buildpacks/ca-certificates:helper" from app image
+Restoring metadata for "tanzu-buildpacks/nginx-lite:nginx" from app image
+[0;36m===> BUILD
+[0mTanzu Deprecation Warnings Buildpack 0.0.2
+  WARNINGS:
+    * Stack "io.buildpacks.stacks.bionic" is deprecated, consider upgrading to "io.buildpacks.stacks.jammy"
+
+[34m[0m
+[34m[1mPaketo Buildpack for CA Certificates[0m[34m 3.5.0[0m
+  [34;2;3mhttps://github.com/paketo-buildpacks/ca-certificates[0m
+  [34mLaunch Helper[0m: [32mReusing[0m cached layer
+[34m[0m
+[34m[1mPaketo Buildpack for Watchexec[0m[34m 2.7.0[0m
+  [34;2;3mhttps://github.com/paketo-buildpacks/watchexec[0m
+[2m    [33mDownloading[0m[2m from https://github.com/watchexec/watchexec/releases/download/cli-v1.20.5/watchexec-1.20.5-x86_64-unknown-linux-musl.tar.xz[0m
+[2m    Verifying checksum[0m
+Tanzu Node Engine Buildpack 0.16.0
+  Resolving Node Engine version
+    Candidate version sources (in priority order):
+                -> ""
+      <unknown> -> ""
+
+    Selected Node Engine version (using ): 18.12.1
+
+  Executing build process
+    Installing Node Engine 18.12.1
+      Completed in 2.871s
+
+  Generating SBOM for /layers/tanzu-buildpacks_node-engine-lite/node
+      Completed in 0s
+
+  Configuring build environment
+    NODE_ENV     -> "production"
+    NODE_HOME    -> "/layers/tanzu-buildpacks_node-engine-lite/node"
+    NODE_VERBOSE -> "false"
+    SSL_CERT_DIR -> "$SSL_CERT_DIR:/etc/ssl/certs"
+
+  Configuring launch environment
+    NODE_ENV     -> "production"
+    NODE_HOME    -> "/layers/tanzu-buildpacks_node-engine-lite/node"
+    NODE_VERBOSE -> "false"
+    SSL_CERT_DIR -> "$SSL_CERT_DIR:/etc/ssl/certs"
+
+    Writing exec.d/0-optimize-memory
+      Calculates available memory based on container limits at launch time.
+      Made available in the MEMORY_AVAILABLE environment variable.
+
+Tanzu NPM Install Buildpack 0.8.8
+  Resolving installation process
+    Process inputs:
+      node_modules      -> "Not found"
+      npm-cache         -> "Not found"
+      package-lock.json -> "Found"
+
+    Selected NPM build process: 'npm ci'
+
+  Executing build environment install process
+    Running 'npm ci --unsafe-perm --cache /layers/tanzu-buildpacks_npm-install/npm-cache'
+      Completed in 27.92s
+
+  Configuring build environment
+    NODE_ENV -> "development"
+    PATH     -> "$PATH:/layers/tanzu-buildpacks_npm-install/build-modules/node_modules/.bin"
+
+  Generating SBOM for /layers/tanzu-buildpacks_npm-install/build-modules
+      Completed in 1m6.866s
+
+
+Tanzu Node Run Script Buildpack 0.4.2
+  Executing build process
+    Running 'npm run build'
+      
+      > gui@1.0.0 build
+      > ng build
+      
+      - Generating browser application bundles (phase: setup)...
+      ✔ Browser application bundle generation complete.
+      ✔ Browser application bundle generation complete.
+      - Copying assets...
+      ✔ Copying assets complete.
+      - Generating index html...
+      ✔ Index html generation complete.
+      
+      Initial Chunk Files           | Names         |  Raw Size | Estimated Transfer Size
+      main.53c69d583a8a8a78.js      | main          | 471.06 kB |               113.10 kB
+      styles.348b061796404e0f.css   | styles        | 156.25 kB |                11.92 kB
+      polyfills.5c07d6c104a47775.js | polyfills     |  45.13 kB |                13.85 kB
+      runtime.a2974ed6a8d46980.js   | runtime       |   1.08 kB |               601 bytes
+      
+      | Initial Total | 673.51 kB |               139.46 kB
+      
+      Build at: 2023-03-17T07:29:50.656Z - Hash: 2b4c8ef973ccba17 - Time: 29123ms
+      
+      Warning: bundle initial exceeded maximum budget. Budget 500.00 kB was not met by 173.51 kB with a total of 673.51 kB.
+      
+      
+      npm notice 
+      npm notice New major version of npm available! 8.19.2 -> 9.6.2
+      npm notice Changelog: <https://github.com/npm/cli/releases/tag/v9.6.2>
+      npm notice Run `npm install -g npm@9.6.2` to update!
+      npm notice 
+
+    Completed in 32.451s
+
+Tanzu Nginx Server Buildpack 0.11.0
+  Resolving Nginx Server version
+    Candidate version sources (in priority order):
+      buildpack.yml -> "1.21.*"
+
+    Selected Nginx Server version (using buildpack.yml): 1.21.6
+
+    WARNING: Setting the server version through buildpack.yml will be deprecated soon in Nginx Server Buildpack v1.0.0.
+    Please specify the version through the $BP_NGINX_VERSION environment variable instead. See docs for more information.
+
+  Reusing cached layer /layers/tanzu-buildpacks_nginx-lite/nginx
+
+[34m[0m
+[34m[1mPaketo Buildpack for Image Labels[0m[34m 4.3.0[0m
+  [34;2;3mhttps://github.com/paketo-buildpacks/image-labels[0m
+  [2mBuild Configuration:[0m
+[2m    $BP_IMAGE_LABELS                                                                                                                        arbitrary image labels[0m
+[2m    $BP_OCI_AUTHORS                                                                                                                         the org.opencontainers.image.authors image label[0m
+[2m    $BP_OCI_CREATED                                                                                                                         the org.opencontainers.image.created image label[0m
+[2m    $BP_OCI_DESCRIPTION                                                                                                                     the org.opencontainers.image.description image label[0m
+[2m    $BP_OCI_DOCUMENTATION                                                                                                                   the org.opencontainers.image.documentation image label[0m
+[2m    $BP_OCI_LICENSES                                                                                                                        the org.opencontainers.image.licenses image label[0m
+[2m    $BP_OCI_REF_NAME                                                                                                                        the org.opencontainers.image.ref.name image label[0m
+[2m    $BP_OCI_REVISION                                                                                                                        the org.opencontainers.image.revision image label[0m
+[2m    $BP_OCI_SOURCE         akseutap4registry.azurecr.io/gui:latest@sha256:6bed0469fd2de46ff722eec53f0d56ec0d81412547a85498cebe515cccb2b886  the org.opencontainers.image.revision image label[0m
+[2m    $BP_OCI_TITLE                                                                                                                           the org.opencontainers.image.title image label[0m
+[2m    $BP_OCI_URL                                                                                                                             the org.opencontainers.image.url image label[0m
+[2m    $BP_OCI_VENDOR                                                                                                                          the org.opencontainers.image.vendor image label[0m
+[2m    $BP_OCI_VERSION                                                                                                                         the org.opencontainers.image.version image label[0m
+  Image labels:
+    org.opencontainers.image.source
+[0;36m===> EXPORT
+[0mReusing layers from image 'akseutap4registry.azurecr.io/library/tanzu-supply-chain/gui-angular-js-micropets-int@sha256:e99da64b00e8ecfd0f59221ef202453d62f61fecd88eb713bfc1cb88f691e3a8'
+Reusing layer 'paketo-buildpacks/ca-certificates:helper'
+Adding layer 'tanzu-buildpacks/watchexec-lite:watchexec'
+Reusing layer 'tanzu-buildpacks/nginx-lite:nginx'
+Adding layer 'launch.sbom'
+Adding 1/1 app layer(s)
+Reusing layer 'launcher'
+Adding layer 'config'
+Adding layer 'process-types'
+Adding label 'io.buildpacks.lifecycle.metadata'
+Adding label 'io.buildpacks.build.metadata'
+Adding label 'io.buildpacks.project.metadata'
+Adding label 'org.opencontainers.image.source'
+Setting default process type 'web'
+Saving akseutap4registry.azurecr.io/library/tanzu-supply-chain/gui-angular-js-micropets-int...
+*** Images (sha256:dfd064bc8e7ae1dfd9b8980633908a3279054245b27cc3f6fc514ddf3b0338e5):
+      akseutap4registry.azurecr.io/library/tanzu-supply-chain/gui-angular-js-micropets-int
+      akseutap4registry.azurecr.io/library/tanzu-supply-chain/gui-angular-js-micropets-int:b1.20230317.072703
+Adding cache layer 'tanzu-buildpacks/node-engine-lite:node'
+Adding cache layer 'tanzu-buildpacks/npm-install:build-modules'
+Adding cache layer 'tanzu-buildpacks/npm-install:npm-cache'
+Adding cache layer 'cache.sbom'
+[0;36m===> COMPLETION
+[0mBuild successful
