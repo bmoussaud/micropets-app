@@ -5,7 +5,6 @@ metadata:
   description: The catalog for the micropets application
   annotations:
     'backstage.io/techdocs-ref': dir:.
-
 spec:
   targets:    
     - https://github.com/bmoussaud/micropets-cats-golang/blob/main/catalog-component.yaml
