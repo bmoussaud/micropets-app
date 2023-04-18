@@ -5,7 +5,7 @@ info:
   description: "Swagger API definition for the pets apis"
   license:
     name: MIT
-host: pets.dev-tap.apps.eu.aks.mytanzu.xyz
+host: pets-golang.micropets-dev.tap5.eu.aks.mytanzu.xyz
 tags:
 - name: "Data collection"
   description: "Data collection (read-only) APIs"
