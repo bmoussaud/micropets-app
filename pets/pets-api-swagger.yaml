@@ -10,7 +10,7 @@ tags:
 - name: "Data collection"
   description: "Data collection (read-only) APIs"
 schemes:
-- "http"
+- "https"
 paths:
   /pets:
     get:
