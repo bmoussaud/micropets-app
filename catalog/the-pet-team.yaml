@@ -9,7 +9,7 @@ spec:
     # Intentional no displayName for testing
     displayName: The Famous Pet Team
     email: team-a@example.com
-    picture: https://avatars.dicebear.com/api/identicon/team-a@example.com.svg?background=%23fff&margin=25
+    picture: https://api.dicebear.com/6.x/bottts/svg?seed=Daisy
   #parent: development
   children: []
 
@@ -21,6 +21,18 @@ metadata:
 spec:
   profile:
     displayName: Benoit Moussaud
-    email: guest1@example.com
+    email: benoit@example.com
     picture: https://avatars.githubusercontent.com/u/283453?v=4
   memberOf: [the-pet-team]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: acastellan
+spec:
+  profile:
+    displayName: Arnaud Castellan
+    email: arnaud@example.com
+    picture: https://api.dicebear.com/6.x/notionists/svg?seed=Precious
+  memberOf: [the-pet-team]
+ 
