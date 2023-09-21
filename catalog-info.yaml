@@ -4,16 +4,15 @@ metadata:
   name: micropets-catalog-location
   description: The catalog for the micropets application
   annotations:
-    'backstage.io/techdocs-ref': dir:.
+    "backstage.io/techdocs-ref": dir:.
 spec:
-  targets:        
-    - https://github.com/bmoussaud/micropets-dogs-golang/blob/main/catalog-component.yaml
-    - https://github.com/bmoussaud/micropets-fishes-golang/blob/main/catalog-component.yaml
+  targets:
+    - https://github.com/bmoussaud/micropets-cats-golang/blob/main/catalog-component.yaml
+    - https://github.com/bmoussaud/micropets-dogs-springboot/blob/main/catalog-info.yaml
+    - https://github.com/bmoussaud/micropets-fishes-python/blob/main/catalog/catalog-info.yaml
     - https://github.com/bmoussaud/micropets-pets-golang/blob/main/catalog-component.yaml
     - https://github.com/bmoussaud/micropets-gui-angular-js/blob/main/catalog-component.yaml
+    - https://github.com/bmoussaud/micropets-elephants/blob/main/catalog-component.yaml
     - ./catalog/micropet-system.yaml
     - ./catalog/cloudapps-domain.yaml
     - ./catalog/the-pet-team.yaml
-    - https://github.com/bmoussaud/micropets-elephants/blob/main/catalog-component.yaml
-    
- 
