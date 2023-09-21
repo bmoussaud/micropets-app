@@ -35,4 +35,15 @@ spec:
     email: arnaud@example.com
     picture: https://api.dicebear.com/6.x/notionists/svg?seed=Precious
   memberOf: [the-pet-team]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: mrateau
+spec:
+  profile:
+    displayName: Martin Rateay
+    email: mrateau@example.com
+    picture: https://api.dicebear.com/7.x/personas/svg?seed=Casper
+  memberOf: [the-pet-team]
  
