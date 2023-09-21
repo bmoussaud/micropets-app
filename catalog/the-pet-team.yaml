@@ -42,7 +42,7 @@ metadata:
   name: mrateau
 spec:
   profile:
-    displayName: Martin Rateay
+    displayName: Martin Rateau
     email: mrateau@example.com
     picture: https://api.dicebear.com/7.x/personas/svg?seed=Casper
   memberOf: [the-pet-team]
